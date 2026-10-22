@@ -1,6 +1,6 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import Modal from '../../../components/Modal/Modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import { setNewEntityGroupData } from './menuCategorySlice';
 import EntityGroupForm from './EntityGroupForm/EntityGroupForm';
@@ -17,25 +17,25 @@ interface CreateEntityGroupModalProps {
 }
 
 const CreateEntityGroupModal: React.FC<CreateEntityGroupModalProps> = ({ trigger, menuItemId }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const type = useSelector((state: ReduxState) => state.menuCategory.newEntityGroupData?.type);
-  const entityType = useSelector(
+  const type = useAppSelector((state: ReduxState) => state.menuCategory.newEntityGroupData?.type);
+  const entityType = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.entityType,
   );
-  const entityIdOfType = useSelector(
+  const entityIdOfType = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.entityIdOfType,
   );
-  const contentId = useSelector(
+  const contentId = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.contentId,
   );
-  const startEntityGroupId = useSelector(
+  const startEntityGroupId = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.startEntityGroupId,
   );
-  const targetEntityGroupId = useSelector(
+  const targetEntityGroupId = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.targetEntityGroupId,
   );
-  const targetPosition = useSelector(
+  const targetPosition = useAppSelector(
     (state: ReduxState) => state.menuCategory.newEntityGroupData?.targetPosition,
   );
 

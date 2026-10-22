@@ -6,7 +6,7 @@ import EditorImageModalTabUrl from './EditorImageModalTabUrl';
 import ImageModalTabUpload from '../../../ImageModal/ImageModalTabUpload';
 import ImageModalTabYourImages from '../../../ImageModal/ImageModalTabYourImages';
 import { INSERT_INLINE_IMAGE_COMMAND } from '../../plugins/InlineImagePlugin';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import EditorImageAttributes from './EditorImageAttributes';
 import { styled } from '../../../../styles/stitches.config';
@@ -50,10 +50,10 @@ const EditorImageModalContent: React.FC<EditorImageModalContentProps> = ({
   nodeKey,
   setOpen,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = React.useState(ImageModalTabs.Url);
-  const payload = useSelector((state: ReduxState) => state.editorImageModal.inlineImagePayload);
-  const selectedVariant = useSelector((state: ReduxState) => state.imageModal.selectedVariant);
+  const payload = useAppSelector((state: ReduxState) => state.editorImageModal.inlineImagePayload);
+  const selectedVariant = useAppSelector((state: ReduxState) => state.imageModal.selectedVariant);
   const [isCloudflareImage, setIsCloudflareImage] = React.useState(false);
 
   useEffect(() => {

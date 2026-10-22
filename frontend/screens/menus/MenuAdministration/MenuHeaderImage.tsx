@@ -20,7 +20,8 @@ const MenuHeaderImage: React.FC<MenuHeaderImageProps> = ({ menuId }) => {
   const { mutate: updateMenu, isPending: isPending, error } = useUpdateMenu();
 
   const changeMenuHeaderImage = useCallback(
-    (image: PbImage) => {
+    (image: PbImage | undefined) => {
+      if (!image) return;
       updateMenu({
         menuId,
         body: {

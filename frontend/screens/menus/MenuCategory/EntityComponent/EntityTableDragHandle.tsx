@@ -19,7 +19,6 @@ const EntityTableDragHandle: React.FC<EntityTableDragHandleProps> = ({
     attributes,
     listeners,
     setNodeRef: setDraggableRef,
-    isDragging,
   } = useDraggable({
     id: `${entityId}_${entityType}_new-entity`,
     disabled: false,

@@ -1,6 +1,6 @@
 import { PbUser } from '../generated/api-types/data-contracts';
 import { ReduxState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useCookies } from 'react-cookie';
 import { CookieMap } from '../utils/cookies/cookieMap';
 import { useEffect, useMemo } from 'react';
@@ -12,10 +12,10 @@ export type Auth = {
 };
 
 export function useAuth(): Auth {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [cookies] = useCookies<string, CookieMap>(['access_token_present']);
 
-  const user = useSelector((state: ReduxState) => state.auth.user);
+  const user = useAppSelector((state: ReduxState) => state.auth.user);
   const isLoggedIn = cookies.access_token_present ?? false;
 
   useEffect(() => {

@@ -1,8 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Col, Row } from '../../../../../components/Flex/Flex';
 import { TitleH2 } from '../../../../../components/Typography/Title';
-import { useUrlModuleId } from '../../../../../hooks/useUrlModuleId';
-import { useGetMapPinTypesAndGroups } from '../../../../../api/maps/useGetMapPinTypesAndGroups';
 import { Label } from '../../../../../components/Typography/Label';
 import { Button } from '../../../../../components/Button/Button';
 import { Text } from '../../../../../components/Typography/Text';
@@ -13,17 +11,7 @@ interface PinTypeActionsProps {
   pinTypeId: number;
 }
 
-const PinTypeActions: React.FC<PinTypeActionsProps> = ({ pinTypeId }) => {
-  const moduleId = useUrlModuleId();
-  const { data: mapPinTypesAndGroups, isFetching: isPending } = useGetMapPinTypesAndGroups({
-    variables: moduleId,
-  });
-
-  const pinData = useMemo(
-    () => (mapPinTypesAndGroups?.pinTypes ?? []).find((x) => x.id === pinTypeId),
-    [mapPinTypesAndGroups, pinTypeId],
-  );
-
+const PinTypeActions: React.FC<PinTypeActionsProps> = () => {
   return (
     <Col gap="lg" fullWidth>
       <TitleH2>Actions</TitleH2>

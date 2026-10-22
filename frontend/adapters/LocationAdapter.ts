@@ -29,7 +29,10 @@ export const locationSelectors = LocationAdapter.getSelectors<ReduxState>(
 
 export const selectLocationsByIds = createSelector(
   [locationSelectors.selectEntities, (_, ids: number[]) => ids],
-  (entities, ids) => ids.map((id) => entities[id]).filter(Boolean),
+  (entities, ids) =>
+    ids
+      .map((id) => entities[id])
+      .filter((location): location is PbLocation => location !== undefined),
 );
 
 // And then use the selectors to retrieve values

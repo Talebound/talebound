@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import MenuCategory from '../../screens/menus/MenuCategory/MenuCategory';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { setOpenedUrlPrefix } from '../../screens/menus/MenuCategory/menuCategorySlice';
 
 interface MenuCategoryProps {
@@ -17,7 +17,7 @@ const MenuCategoryPage: React.FC<MenuCategoryProps> = ({
   menuId,
   canEdit,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const m = router.query['menuCategory'];

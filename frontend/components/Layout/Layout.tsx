@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, Suspense, useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../component-sections/header/Header';
 import Footer from '../../component-sections/footer/Footer';
@@ -68,7 +68,11 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <PageWrapper>
       <Client>
-        {isLoggedIn && <Header />}
+        {isLoggedIn && (
+          <Suspense fallback={null}>
+            <Header />
+          </Suspense>
+        )}
         {!isLoggedIn && <HomepageHeader />}
       </Client>
       <ContentWrapper>

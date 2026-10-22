@@ -10,8 +10,13 @@ export type CreateEntityGroupContentParams = {
 };
 
 export const useCreateEntityGroupContent = createMutation({
-  mutationFn: async (variables: CreateEntityGroupContentParams) =>
-    EntitiesCollection.entitiesCreateEntityGroupContent(variables.entityGroupId, variables.body),
+  mutationFn: async (variables: CreateEntityGroupContentParams) => {
+    if (!variables.entityGroupId) throw new Error('An entity group is required');
+    return EntitiesCollection.entitiesCreateEntityGroupContent(
+      variables.entityGroupId,
+      variables.body,
+    );
+  },
   onSuccess: (data, variables) => {
     const entityGroupContent = data.data;
     if (entityGroupContent) {
@@ -29,7 +34,8 @@ export const useCreateEntityGroupContent = createMutation({
               ...oldData,
               contents: [
                 ...cachedData.map((c) => {
-                  if (!c.position) return c;
+                  if (c.position === undefined || entityGroupContent.position === undefined)
+                    return c;
 
                   let position = c.position;
                   if (

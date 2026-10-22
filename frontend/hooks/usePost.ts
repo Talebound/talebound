@@ -2,7 +2,7 @@ import { PbPost } from '../generated/api-types/data-contracts';
 import { useMemo } from 'react';
 import { TaleboundError } from '../utils/types/error';
 import { useGetPostById } from '../api/posts/useGetPostById';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { postSelectors } from '../adapters/PostAdapter';
 
 interface UsePostResponse {
@@ -13,7 +13,7 @@ interface UsePostResponse {
 
 export const usePost = (postId: number | undefined): UsePostResponse => {
   const { isFetching, error } = useGetPostById({ variables: postId });
-  const post = useSelector((state) => postSelectors.selectById(state, postId ?? 0));
+  const post = useAppSelector((state) => postSelectors.selectById(state, postId ?? 0));
 
   return useMemo(
     () => ({

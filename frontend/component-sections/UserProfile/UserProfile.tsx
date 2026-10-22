@@ -10,7 +10,7 @@ import { Button } from '../../components/Button/Button';
 import { useGetAverageUserEvaluationByType } from '../../api/users/useGetAverageUserEvaluationByType';
 import { PbEvaluationType } from '../../generated/api-types/data-contracts';
 import Evaluation from '../../components/Evaluation/Evaluation';
-import Avatar from '../../components/Avatar/Avatar';
+import AvatarById from '../../components/AvatarById/AvatarById';
 import Loading from '../../components/Loading/Loading';
 
 export interface UserProfileProps {
@@ -40,7 +40,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
       <Col css={{ flexGrow: 5, flexBasis: '10rem' }}>
         <ContentSection direction="row" flexBasis="100%">
           <Col gap="sm">
-            <Avatar type="user" size="2xl" url={data?.avatarImageUrl} />
+            <AvatarById type="user" size="2xl" imageId={data?.imgId} />
             <Button fullWidth color="primaryOutline">
               Edit
             </Button>

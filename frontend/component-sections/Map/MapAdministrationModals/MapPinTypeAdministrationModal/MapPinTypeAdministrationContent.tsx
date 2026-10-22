@@ -23,9 +23,7 @@ interface MapPinTypeAdministrationContentProps {
   mapId: number;
 }
 
-const MapPinTypeAdministrationContent: React.FC<MapPinTypeAdministrationContentProps> = ({
-  mapId,
-}) => {
+const MapPinTypeAdministrationContent: React.FC<MapPinTypeAdministrationContentProps> = () => {
   const [state, dispatch] = useReducer(
     mapPinTypeAdministrationReducer,
     mapPinTypeAdministrationInitialState,

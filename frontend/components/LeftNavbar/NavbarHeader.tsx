@@ -1,6 +1,6 @@
 import { styled } from '../../styles/stitches.config';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 import { ReduxState } from '../../store';
 
 const NavbarHeaderComponent = styled('div', {
@@ -48,7 +48,7 @@ interface NavbarHeaderProps {
 }
 
 const NavbarHeader: React.FC<NavbarHeaderProps> = ({ title, customImage }) => {
-  const image = useSelector((state: ReduxState) => state.global.menuImage);
+  const image = useAppSelector((state: ReduxState) => state.global.menuImage);
 
   return (
     <NavbarHeaderComponent>

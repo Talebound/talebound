@@ -7,7 +7,7 @@ import LoadingText from '../../../components/Loading/LoadingText';
 import ErrorText from '../../../components/ErrorText/ErrorText';
 import MenuCategoryContent from './MenuCategoryContent';
 import { DndContext, DragEndEvent, DragStartEvent, pointerWithin } from '@dnd-kit/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import {
   MenuCategoryDraggingData,
@@ -41,8 +41,8 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
   worldImageThumbnail,
   canEdit = false,
 }) => {
-  const dispatch = useDispatch();
-  const editMode = useSelector((state: ReduxState) => state.menuCategory.editMode);
+  const dispatch = useAppDispatch();
+  const editMode = useAppSelector((state: ReduxState) => state.menuCategory.editMode);
   const { data: menuItemsData = [] } = useGetMenuItems({ variables: menuId });
 
   const {

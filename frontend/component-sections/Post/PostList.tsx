@@ -3,7 +3,7 @@ import { PAGE_SIZE_POSTS, useGetPosts } from '../../api/posts/useGetPosts';
 import PostsTable from './PostsTable';
 import { selectPostsByIds } from '../../adapters/PostAdapter';
 import { ReduxState } from '../../store';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 import { EntityTableType, Tables } from '../../utils/types/tables';
 
 interface PostListProps {
@@ -35,7 +35,7 @@ const PostList: React.FC<PostListProps> = ({
     [postsDataPages],
   );
 
-  const postsData = useSelector((state: ReduxState) => selectPostsByIds(state, postIds), [postIds]);
+  const postsData = useAppSelector((state: ReduxState) => selectPostsByIds(state, postIds));
 
   useEffect(() => {
     if (

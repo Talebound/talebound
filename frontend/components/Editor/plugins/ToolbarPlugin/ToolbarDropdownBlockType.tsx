@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { $getSelection, $isRangeSelection, $createParagraphNode, LexicalEditor } from 'lexical';
 import { $wrapNodes } from '@lexical/selection';
 import {

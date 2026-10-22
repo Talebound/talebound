@@ -3,10 +3,11 @@ import Textarea from '../../components/Textarea/Textarea';
 import { useInput } from '../../hooks/useInput';
 import Input from '../../components/Input/Input';
 import { Col, Row } from '../../components/Flex/Flex';
-import Avatar from '../../components/Avatar/Avatar';
+import AvatarById from '../../components/AvatarById/AvatarById';
+import { useGetModuleId } from '../../api/modules/useGetModuleId';
 import { Label } from '../../components/Typography/Label';
 import ImageModal from '../../components/ImageModal/ImageModal';
-import { PbImage, PbModule, PbViewLocation } from '../../generated/api-types/data-contracts';
+import { PbImage, PbViewModule, PbLocation } from '../../generated/api-types/data-contracts';
 import ErrorText from '../../components/ErrorText/ErrorText';
 import { Button } from '../../components/Button/Button';
 import { useCreateLocation } from '../../api/locations/useCreateLocation';
@@ -16,12 +17,12 @@ const textareaPlaceholder =
   'Short description of the post. What information does this post contain?';
 
 interface LocationFormProps {
-  module: PbModule;
+  module: PbViewModule;
   canChangeName?: boolean;
   canChangeDescription?: boolean;
   canChangeThumbnail?: boolean;
   onFinishCallback?: () => void;
-  location?: PbViewLocation;
+  location?: PbLocation;
 }
 
 const LocationForm: React.FC<LocationFormProps> = ({
@@ -32,6 +33,7 @@ const LocationForm: React.FC<LocationFormProps> = ({
   onFinishCallback,
   location,
 }) => {
+  const { data: moduleId } = useGetModuleId({ variables: module });
   const {
     mutate: createLocation,
     isPending: isPendingCreate,
@@ -48,9 +50,6 @@ const LocationForm: React.FC<LocationFormProps> = ({
   const [thumbnailImageId, setThumbnailImageId] = useState<number | undefined>(
     location ? location.thumbnailImageId : undefined,
   );
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | undefined>(
-    location ? location.thumbnailImageUrl : undefined,
-  );
   const { value: name, onChange: onChangeName } = useInput<string>(
     location ? location.name ?? '' : '',
   );
@@ -63,17 +62,16 @@ const LocationForm: React.FC<LocationFormProps> = ({
   }, []);
 
   const changeThumbnailImage = useCallback(
-    (image: PbImage) => {
-      if (canChangeThumbnail) {
+    (image: PbImage | undefined) => {
+      if (canChangeThumbnail && image) {
         setThumbnailImageId(image.id);
-        setThumbnailImageUrl(image.baseUrl);
       }
     },
     [canChangeThumbnail],
   );
 
   const createLocationHandler = useCallback(() => {
-    if (module !== undefined) {
+    if (moduleId) {
       const options = {
         onSuccess: () => {
           if (onFinishCallback) onFinishCallback();
@@ -92,7 +90,6 @@ const LocationForm: React.FC<LocationFormProps> = ({
           updateLocation(
             {
               locationId: location.id,
-              module,
               body,
             },
             options,
@@ -103,13 +100,14 @@ const LocationForm: React.FC<LocationFormProps> = ({
         createLocation(
           {
             ...body,
+            moduleId,
           },
           options,
         );
       }
     }
   }, [
-    module,
+    moduleId,
     canChangeName,
     name,
     canChangeDescription,
@@ -151,11 +149,11 @@ const LocationForm: React.FC<LocationFormProps> = ({
         {canChangeThumbnail && (
           <Col gap="md" alignItems="center" padding="xl">
             <Label css={{ width: 'auto' }}>Thumbnail</Label>
-            <Avatar
+            <AvatarById
               loading={pending}
               onClick={toggleImageModal}
               size="xl"
-              url={thumbnailImageUrl}
+              imageId={thumbnailImageId}
             />
           </Col>
         )}

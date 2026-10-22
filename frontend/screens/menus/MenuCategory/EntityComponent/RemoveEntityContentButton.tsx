@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { MdClose } from 'react-icons/md';
 import { Button } from '../../../../components/Button/Button';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import { styled } from '../../../../styles/stitches.config';
 import { useDeleteEntityGroupContent } from '../../../../api/entities/useDeleteEntityGroupContent';
@@ -28,18 +28,14 @@ interface RemoveEntityButtonProps {
 }
 
 const RemoveEntityContentButton: React.FC<RemoveEntityButtonProps> = ({ contentId }) => {
-  const menuItemId = useSelector((state: ReduxState) => state.menuCategory.menuItemId);
+  const menuItemId = useAppSelector((state: ReduxState) => state.menuCategory.menuItemId);
   const { data: menuItemContent } = useGetMenuItemContent({
     variables: { menuItemId },
   });
 
   const mainEntityGroupId = menuItemContent?.mainGroupId ?? 0;
 
-  const {
-    mutate: deleteEntityGroupContent,
-    isPending: isPendingDelete,
-    error: errorDelete,
-  } = useDeleteEntityGroupContent();
+  const { mutate: deleteEntityGroupContent } = useDeleteEntityGroupContent();
 
   const handleRemoveEntity = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {

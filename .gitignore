@@ -1,2 +1,10 @@
 .DS_Store
 .worktrees/
+
+# Generated local worktree configuration and runtime state
+.talebound/
+.local-dev/
+.env.worktree
+backend/app.env.worktree
+frontend/.env.worktree
+__pycache__/

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, WheelEventHandler } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePanning } from './usePanning';
 
 export type AspectRatioOffset =

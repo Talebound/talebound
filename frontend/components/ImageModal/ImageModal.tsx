@@ -3,7 +3,7 @@ import ImageModalContent, { ImageModalContentProps } from './ImageModalContent';
 import Modal from '../Modal/Modal';
 import { PbImage } from '../../generated/api-types/data-contracts';
 import { ImageVariant } from '../../utils/images/imageUtils';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { resetImageModalState, setSelectedImage, setSelectedVariant } from './imageModalSlice';
 
 interface ImageModalProps extends ImageModalContentProps {
@@ -21,7 +21,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   defaultVariant,
   ...contentProps
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (open) {

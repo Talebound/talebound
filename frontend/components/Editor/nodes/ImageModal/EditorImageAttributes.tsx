@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useInput } from '../../../../hooks/useInput';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import { updateInlineImagePayload } from './editorImageModalSlice';
 import { Col } from '../../../Flex/Flex';
@@ -20,11 +20,11 @@ const options: SelectOptions = {
 };
 
 const EditorImageAttributes: React.FC = () => {
-  const dispatch = useDispatch();
-  const showCaption = useSelector(
+  const dispatch = useAppDispatch();
+  const showCaption = useAppSelector(
     (state: ReduxState) => state.editorImageModal.inlineImagePayload.showCaption,
   );
-  const position = useSelector(
+  const position = useAppSelector(
     (state: ReduxState) => state.editorImageModal.inlineImagePayload.position,
   );
   const { value: altValue, onChange: onChangeAlt } = useInput<string>('');

@@ -41,9 +41,7 @@ const GenericEntityAvatarView: React.FC<GenericEntityAvatarViewProps> = ({
   children,
   contentId,
   entityId,
-  title,
   avatarImageId,
-  editModeInfo,
   editMode = false,
 }) => {
   const { component: LinkEntity } = useLinkEntity(entityId, !editMode);

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { useAuth } from '../../hooks/useAuth';
 import { useLogout } from '../../api/auth/useLogout';
 import { resetAuth } from '../../utils/auth/userSlice';
@@ -15,7 +15,7 @@ import { useImage } from '../../hooks/useImage';
 
 const UserDropdown: React.FC = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { user } = useAuth();
   const { image } = useImage(user?.imgId ?? 0);
 

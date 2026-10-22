@@ -1,0 +1,319 @@
+#!/usr/bin/env python3
+"""Linux/WSL worktree lifecycle; requires only Python's standard library and Docker."""
+
+import argparse
+import contextlib
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import secrets
+import socket
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+LOCAL = ROOT / '.talebound'
+STATE = LOCAL / 'state.json'
+SERVICES = ('postgres', 'redis', 'mailpit', 'backend', 'frontend')
+VOLUMES = ('postgres-data', 'redis-data', 'mail-data', 'go-modules', 'go-build')
+EXTERNAL_KEYS = {
+    'CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID',
+    'NEXT_PUBLIC_CLOUDFLARE_HOSTNAME', 'NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH',
+    'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
+}
+
+
+def run(*args, capture=False, **kwargs):
+    return subprocess.run(args, check=True, text=True, cwd=ROOT,
+                          stdout=subprocess.PIPE if capture else None, **kwargs)
+
+
+def git(*args):
+    return run('git', *args, capture=True).stdout.strip()
+
+
+def atomic_write(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_name(path.name + '.tmp')
+    with temp.open('w') as handle:
+        os.chmod(temp, 0o600)
+        handle.write(content)
+    temp.replace(path)
+
+
+@contextlib.contextmanager
+def locked(path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('a') as handle:
+        os.chmod(path, 0o600)
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        yield
+
+
+def identity():
+    return 'talebound-' + hashlib.sha256(str(ROOT).encode()).hexdigest()[:12]
+
+
+def load_state():
+    state = json.loads(STATE.read_text())
+    if state.get('version') != 1 or state.get('root') != str(ROOT) or state.get('project') != identity():
+        raise RuntimeError('Local state belongs to another path/version. Never copy .talebound between worktrees.')
+    if not state['host'].startswith('127.64.'):
+        raise RuntimeError('Worktree services must bind to their allocated loopback address.')
+    return state
+
+
+def port_available(host, port):
+    with socket.socket() as sock:
+        try:
+            sock.bind((host, port))
+            return True
+        except OSError:
+            return False
+
+
+def create_state():
+    # Reserve addresses and ports even while stopped; serialize simultaneous setups.
+    registry_dir = Path(git('rev-parse', '--path-format=absolute', '--git-common-dir')) / 'talebound-dev'
+    with locked(registry_dir / 'registry.lock'):
+        registry_path = registry_dir / 'registry.json'
+        registry = json.loads(registry_path.read_text()) if registry_path.exists() else {}
+        if STATE.exists():
+            return load_state()
+        if str(ROOT) in registry:
+            raise RuntimeError('State is missing for a registered worktree. Restore .talebound/state.json before proceeding.')
+        used_hosts = {item['host'] for item in registry.values()}
+        used_ports = {port for item in registry.values() for port in item['ports'].values()}
+        seed = int(hashlib.sha256(str(ROOT).encode()).hexdigest()[:8], 16)
+        for offset in range(65534):
+            address = (seed + offset) % 65534 + 1
+            host = f'127.64.{address // 256}.{address % 256}'
+            if host not in used_hosts:
+                break
+        else:
+            raise RuntimeError('No free worktree loopback addresses.')
+        ports = {}
+        for name in ('web', 'api', 'db', 'mail'):
+            for port in range(20000, 45000):
+                if port not in used_ports and port_available('127.0.0.1', port) and port_available(host, port):
+                    ports[name] = port
+                    used_ports.add(port)
+                    break
+            else:
+                raise RuntimeError('No free worktree ports.')
+        state = dict(version=1, root=str(ROOT), project=identity(), host=host, ports=ports,
+                     db_password=secrets.token_hex(20), token_key=secrets.token_hex(16))
+        atomic_write(STATE, json.dumps(state, indent=2) + '\n')
+        registry[str(ROOT)] = dict(host=host, ports=ports)
+        atomic_write(registry_path, json.dumps(registry, indent=2) + '\n')
+        return state
+
+
+def forget_state():
+    registry_dir = Path(git('rev-parse', '--path-format=absolute', '--git-common-dir')) / 'talebound-dev'
+    with locked(registry_dir / 'registry.lock'):
+        registry_path = registry_dir / 'registry.json'
+        registry = json.loads(registry_path.read_text()) if registry_path.exists() else {}
+        registry.pop(str(ROOT), None)
+        atomic_write(registry_path, json.dumps(registry, indent=2) + '\n')
+        for path in (STATE, ROOT / '.env.worktree', ROOT / 'backend/app.env.worktree',
+                     ROOT / 'frontend/.env.worktree', LOCAL / 'database.env'):
+            path.unlink(missing_ok=True)
+
+
+def write_env(path, values):
+    # Single-quoted dotenv values disable Compose interpolation (including $).
+    lines = ['# Generated by talebound-worktree-dev. Do not commit or copy.']
+    for key, value in values.items():
+        value = str(value)
+        if any(char in value for char in "\n\r'\\"):
+            raise RuntimeError(f'Unsupported character in {key}; values must be single-line literals.')
+        lines.append(f"{key}='{value}'")
+    atomic_write(path, '\n'.join(lines) + '\n')
+
+
+def integrations():
+    path = LOCAL / 'integrations.env'
+    if not path.exists():
+        atomic_write(path, '# Optional development-only Cloudflare settings. No shell expansion.\n'
+                     '# CLOUDFLARE_API_TOKEN=\n# CLOUDFLARE_ACCOUNT_ID=\n'
+                     '# NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH=\n')
+    result = {}
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        key, separator, value = line.partition('=')
+        if not separator or key not in EXTERNAL_KEYS:
+            raise RuntimeError(f'Unsupported setting in {path}: {key}')
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        result[key] = value
+    return result
+
+
+def generate_env(state):
+    host, ports = state['host'], state['ports']
+    external = integrations()
+    root_env = dict(TB_ROOT=ROOT, TB_PROJECT=state['project'], TB_HOST=host,
+                    TB_UID=os.getuid(), TB_GID=os.getgid(), TB_DB_PASSWORD=state['db_password'])
+    root_env.update({f'TB_{name.upper()}_PORT': value for name, value in ports.items()})
+    write_env(ROOT / '.env.worktree', root_env)
+    backend = dict(
+        ENVIRONMENT='development', DB_DRIVER='postgres',
+        DB_SOURCE=f"postgresql://root:{state['db_password']}@postgres:5432/talebound?sslmode=disable",
+        HTTP_SERVER_ADDRESS='0.0.0.0:8080', GRPC_SERVER_ADDRESS='0.0.0.0:9090',
+        REDIS_ADDRESS='redis:6379', TOKEN_SYMMETRIC_KEY=state['token_key'],
+        ACCESS_TOKEN_DURATION='15m', REFRESH_TOKEN_DURATION='24h',
+        COOKIE_DOMAIN='', FULL_DOMAIN=f"http://{host}:{ports['web']}",
+        EMAIL_SENDER_NAME='Talebound-local', EMAIL_SENDER_ADDRESS='noreply@talebound.test',
+        SMTP_ENDPOINT='mailpit:1025', SMTP_USERNAME='', SMTP_PASSWORD='',
+        SENTRY_DSN='', SENTRY_TRACES_SAMPLE_RATE='0',
+        CLOUDFLARE_API_TOKEN=external.get('CLOUDFLARE_API_TOKEN', ''),
+        CLOUDFLARE_ACCOUNT_ID=external.get('CLOUDFLARE_ACCOUNT_ID', ''),
+    )
+    write_env(ROOT / 'backend/app.env.worktree', backend)
+    frontend = dict(
+        NEXT_PUBLIC_API_URL=f"http://{host}:{ports['api']}",
+        NEXT_PUBLIC_RECAPTCHA_SITE_KEY='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+        NEXT_PUBLIC_CLOUDFLARE_HOSTNAME='imagedelivery.net', NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH='',
+    )
+    frontend.update({key: value for key, value in external.items() if key.startswith('NEXT_PUBLIC_')})
+    write_env(ROOT / 'frontend/.env.worktree', frontend)
+    write_env(LOCAL / 'database.env', dict(
+        PGHOST=host, PGPORT=ports['db'], PGDATABASE='talebound', PGUSER='root',
+        PGPASSWORD=state['db_password'], PGSSLMODE='disable'))
+
+
+def compose(state, *args, **kwargs):
+    # Ambient COMPOSE_* and TB_* variables must not redirect the selected stack.
+    env = {key: value for key, value in os.environ.items()
+           if not key.startswith(('COMPOSE_', 'TB_'))}
+    return run('docker', 'compose', '--project-name', state['project'],
+               '--env-file', str(ROOT / '.env.worktree'),
+               '-f', str(ROOT / 'scripts/worktree-dev/compose.yaml'), *args, env=env, **kwargs)
+
+
+def expected_labels(state):
+    return {'com.talebound.managed': 'worktree-dev', 'com.talebound.worktree': str(ROOT),
+            'com.talebound.identity': state['project']}
+
+
+def assert_owned(state):
+    """Inspect before mutations, including resources bearing only Compose labels."""
+    project = state['project']
+    containers = run('docker', 'ps', '-aq', '--filter', f'label=com.docker.compose.project={project}', capture=True).stdout.split()
+    resources = [('container', name) for name in containers]
+    names = set(run('docker', 'ps', '-a', '--format', '{{.Names}}', capture=True).stdout.split())
+    resources.extend(('container', f'{project}-{service}-1') for service in SERVICES
+                     if f'{project}-{service}-1' in names)
+    for kind, candidates in [('volume', [f'{project}_{v}' for v in VOLUMES]),
+                             ('network', [f'{project}_default'])]:
+        existing = set(run('docker', kind, 'ls', '--format', '{{.Name}}', capture=True).stdout.split())
+        resources.extend((kind, name) for name in candidates if name in existing)
+        labelled = run('docker', kind, 'ls', '--filter', f'label=com.docker.compose.project={project}',
+                       '--format', '{{.Name}}', capture=True).stdout.split()
+        resources.extend((kind, name) for name in labelled)
+    for kind, name in sorted(set(resources)):
+        data = json.loads(run('docker', kind, 'inspect', name, capture=True).stdout)[0]
+        labels = (data['Config'].get('Labels') if kind == 'container' else data.get('Labels')) or {}
+        if any(labels.get(key) != value for key, value in expected_labels(state).items()):
+            raise RuntimeError(f'Refusing to touch {kind} {name}: worktree ownership labels do not match.')
+
+
+def setup(state, services_only=False):
+    generate_env(state)
+    assert_owned(state)
+    compose(state, 'up', '-d', '--wait', '--wait-timeout', '120', 'postgres', 'redis', 'mailpit')
+    if not services_only:
+        compose(state, 'run', '--rm', '--no-deps', 'frontend',
+                'node', '.yarn/releases/yarn-3.6.1.cjs', 'install', '--immutable')
+        compose(state, 'run', '--rm', '--no-deps', 'backend', 'migrate')
+
+
+def status(state, as_json=False):
+    public = dict(root=str(ROOT), project=state['project'], host=state['host'], ports=state['ports'],
+                  frontend=f"http://{state['host']}:{state['ports']['web']}",
+                  api=f"http://{state['host']}:{state['ports']['api']}",
+                  inbox=f"http://{state['host']}:{state['ports']['mail']}")
+    if as_json:
+        print(json.dumps(public, indent=2))
+        return
+    print(f"Worktree: {ROOT}\nProject:  {state['project']}\nFrontend: {public['frontend']}\n"
+          f"API:      {public['api']}\nSwagger:  {public['api']}/swagger/\nInbox:    {public['inbox']}\n"
+          f"Database: {state['host']}:{state['ports']['db']}/talebound\n"
+          f"DB login: {LOCAL / 'database.env'}", flush=True)
+    compose(state, 'ps', '--all')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_subparsers(dest='command', required=True)
+    for name in ('setup', 'up'):
+        sub = commands.add_parser(name, help='Provision this worktree' if name == 'setup' else 'Provision and start the app')
+        if name == 'setup':
+            sub.add_argument('--services-only', action='store_true', help='Start data services only; skip dependencies and migrations')
+    sub = commands.add_parser('status', help='Show addresses and container status, without secrets')
+    sub.add_argument('--json', action='store_true')
+    sub = commands.add_parser('down', help='Stop this worktree, retaining data by default')
+    sub.add_argument('--purge-data', action='store_true', help='Delete only this worktree\'s labelled containers, network and volumes')
+    sub = commands.add_parser('logs', help='Show recent logs')
+    sub.add_argument('service', choices=SERVICES, nargs='?')
+    sub = commands.add_parser('restart', help='Reload the backend source snapshot or frontend configuration')
+    sub.add_argument('service', choices=('backend', 'frontend'), nargs='?', default='backend')
+    commands.add_parser('migrate', help='Apply migrations to this worktree database')
+    commands.add_parser('test-backend', help='Run Go short tests against this worktree database')
+    commands.add_parser('db', help='Run psql; accepts SQL on stdin')
+    args = parser.parse_args()
+    if Path(git('rev-parse', '--show-toplevel')).resolve() != ROOT:
+        raise RuntimeError('Run this from a Talebound Git checkout.')
+    LOCAL.mkdir(mode=0o700, exist_ok=True)
+    os.chmod(LOCAL, 0o700)
+    with locked(LOCAL / 'lifecycle.lock'):
+        if args.command in ('setup', 'up'):
+            state = create_state()
+            setup(state, getattr(args, 'services_only', False))
+            if args.command == 'up':
+                compose(state, 'up', '-d', '--force-recreate', '--wait', '--wait-timeout', '600', 'backend', 'frontend')
+            status(state)
+            return
+        if not STATE.exists():
+            if args.command == 'status':
+                print('This worktree is not set up. Run scripts/worktree-dev/bootstrap-worktree.sh')
+                return
+            raise RuntimeError('Run setup first.')
+        state = load_state()
+        if args.command == 'status':
+            status(state, args.json)
+            return
+        assert_owned(state)
+        if args.command == 'down':
+            if args.purge_data:
+                print(f"Purging only {state['project']} at {ROOT}: {', '.join(VOLUMES)}", flush=True)
+                compose(state, 'down', '--volumes')
+                forget_state()
+            else:
+                compose(state, 'stop')
+        elif args.command == 'logs':
+            compose(state, 'logs', '--tail', '100', *([args.service] if args.service else []))
+        elif args.command == 'restart':
+            generate_env(state)
+            compose(state, 'up', '-d', '--no-deps', '--force-recreate', '--wait', '--wait-timeout', '600', args.service)
+        elif args.command in ('migrate', 'test-backend'):
+            generate_env(state)
+            compose(state, 'run', '--rm', '--no-deps', 'backend',
+                    'migrate' if args.command == 'migrate' else 'test')
+        elif args.command == 'db':
+            compose(state, 'exec', '-T', 'postgres', 'psql', '-X', '-v', 'ON_ERROR_STOP=1', '-U', 'root', '-d', 'talebound')
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (RuntimeError, OSError, ValueError, subprocess.CalledProcessError) as error:
+        print(f'Error: {error}', file=sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        sys.exit(130)

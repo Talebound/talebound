@@ -14,8 +14,7 @@ export const useGetImages = createInfiniteQuery<
   primaryKey: 'useGetImages',
   queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
     const { data } = await ImagesCollection.imagesGetImages({
-      userId: variables?.userId,
-      imageTypeId: variables?.imageTypeId,
+      ...variables,
       limit: PAGE_SIZE,
       offset,
     });

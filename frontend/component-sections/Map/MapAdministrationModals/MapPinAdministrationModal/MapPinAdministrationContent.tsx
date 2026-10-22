@@ -12,7 +12,7 @@ interface MapPinAdministrationContentProps {
   mapId: number;
 }
 
-const MapPinAdministrationContent: React.FC<MapPinAdministrationContentProps> = ({ mapId }) => {
+const MapPinAdministrationContent: React.FC<MapPinAdministrationContentProps> = () => {
   return (
     <Row alignItems="start" gap="md" wrap>
       <ContentWrapper>

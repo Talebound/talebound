@@ -110,7 +110,7 @@ func runDBMigration(migrationURL string, dbSource string, migrationObjectsURL st
 }
 
 func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
-	mailer := mail.NewAwsSesSender(config.EmailSenderName, config.EmailSenderAddress, config.SmtpUsername, config.SmtpPassword)
+	mailer := mail.NewSMTPSender(config.EmailSenderName, config.EmailSenderAddress, config.SmtpEndpoint, config.SmtpUsername, config.SmtpPassword)
 	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer, config)
 	log.Info().Msg("starting task processor")
 	err := taskProcessor.Start()

@@ -1,0 +1,122 @@
+x-labels: &labels
+  com.talebound.managed: worktree-dev
+  com.talebound.worktree: ${TB_ROOT:?Run setup first}
+  com.talebound.identity: ${TB_PROJECT:?Run setup first}
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    labels: *labels
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: ${TB_DB_PASSWORD:?Run setup first}
+      POSTGRES_DB: talebound
+    ports:
+      - '${TB_HOST}:${TB_DB_PORT}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root -d talebound']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    labels: *labels
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:v1.27.4
+    labels: *labels
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    ports:
+      - '${TB_HOST}:${TB_MAIL_PORT}:8025'
+    volumes:
+      - mail-data:/data
+    healthcheck:
+      test: ['CMD', '/mailpit', 'readyz']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    image: golang:1.23-bookworm
+    labels: *labels
+    init: true
+    entrypoint: ['bash', '/tooling/backend-entrypoint.sh']
+    command: ['serve']
+    env_file:
+      - ${TB_ROOT}/backend/app.env.worktree
+    ports:
+      - '${TB_HOST}:${TB_API_PORT}:8080'
+    volumes:
+      - ${TB_ROOT}/backend:/source:ro
+      - ${TB_ROOT}/backend/app.env.worktree:/runtime/backend.env:ro
+      - ${TB_ROOT}/scripts/worktree-dev:/tooling:ro
+      - go-modules:/go
+      - go-build:/root/.cache/go-build
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:8080/swagger/talebound.swagger.json >/dev/null']
+      interval: 5s
+      timeout: 3s
+      start_period: 120s
+      retries: 60
+
+  frontend:
+    image: node:22-bookworm-slim
+    labels: *labels
+    init: true
+    user: '${TB_UID}:${TB_GID}'
+    working_dir: /app
+    command: ['node', '.yarn/releases/yarn-3.6.1.cjs', 'dev', '--hostname', '0.0.0.0']
+    environment:
+      NEXT_TELEMETRY_DISABLED: '1'
+      YARN_CACHE_FOLDER: /app/.yarn/cache
+      YARN_GLOBAL_FOLDER: /tmp/yarn-global
+    env_file:
+      - ${TB_ROOT}/frontend/.env.worktree
+    ports:
+      - '${TB_HOST}:${TB_WEB_PORT}:4000'
+    volumes:
+      - ${TB_ROOT}/frontend:/app
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'fetch("http://127.0.0.1:4000").then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))']
+      interval: 10s
+      timeout: 10s
+      start_period: 90s
+      retries: 30
+
+networks:
+  default:
+    labels: *labels
+
+volumes:
+  postgres-data:
+    labels: *labels
+  redis-data:
+    labels: *labels
+  mail-data:
+    labels: *labels
+  go-modules:
+    labels: *labels
+  go-build:
+    labels: *labels

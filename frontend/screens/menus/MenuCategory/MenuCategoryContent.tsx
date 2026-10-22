@@ -1,7 +1,7 @@
 import React from 'react';
 import MenuItemContentElement from './MenuItemContentElement';
 import { DragOverlay } from '@dnd-kit/core';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import MenuItemContentElementEntityGroup from './MenuItemContentElementEntityGroup';
 import { useGetMenuItemContentHierarchy } from '../../../hooks/useGetMenuItemContentHierarchy';
@@ -18,8 +18,8 @@ const MenuCategoryContent: React.FC<MenuCategoryContentProps> = ({
   menuItemId,
   isPending = false,
 }) => {
-  const editMode = useSelector((state: ReduxState) => state.menuCategory.editMode);
-  const draggingData = useSelector((state: ReduxState) => state.menuCategory.draggingData);
+  const editMode = useAppSelector((state: ReduxState) => state.menuCategory.editMode);
+  const draggingData = useAppSelector((state: ReduxState) => state.menuCategory.draggingData);
   const menuItemContent = useGetMenuItemContentHierarchy(menuItemId);
 
   console.log('MENU ITEM CONTENT: ', menuItemContent);

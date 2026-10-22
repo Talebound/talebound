@@ -6,21 +6,22 @@ import ContentSection from '../../components/ContentSection/ContentSection';
 import { UploadUserAvatarRequest, useUploadUserAvatar } from '../../api/users/useUploadUserAvatar';
 import { useAuth } from '../../hooks/useAuth';
 import { updateUser } from '../../utils/auth/userSlice';
-import { useDispatch } from 'react-redux';
-import Avatar from '../../components/Avatar/Avatar';
+import { useAppDispatch } from '../../store/hooks';
+import AvatarById from '../../components/AvatarById/AvatarById';
+import { imageAdapterSlice } from '../../adapters/ImageAdapter';
 import Loading from '../../components/Loading/Loading';
 import { fileInputChanged } from '../../utils/functions/fileInputChanged';
 
 const AvatarChange: React.FC = () => {
   const { user } = useAuth();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const doUploadAvatar = useUploadUserAvatar({
     onSuccess: (data) => {
+      if (data.data.image) dispatch(imageAdapterSlice.actions.upsertImage(data.data.image));
       dispatch(
         updateUser({
           imgId: data.data.image?.id,
-          img: data.data.image,
         }),
       );
     },
@@ -64,7 +65,7 @@ const AvatarChange: React.FC = () => {
           {doUploadAvatar.isPending ? <Loading color="currentColor" size="xs" /> : 'Upload'}
         </Button>
       </Col>
-      <Avatar size="xl" type="user" url={user?.img?.url} />
+      <AvatarById size="xl" type="user" imageId={user?.imgId} />
     </ContentSection>
   );
 };
