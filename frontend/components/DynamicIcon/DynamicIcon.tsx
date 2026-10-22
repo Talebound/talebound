@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
+/* oxlint-disable typescript/no-unsafe-assignment,typescript/no-unsafe-member-access */
 import React, { CSSProperties, lazy, Suspense, SVGAttributes, useMemo } from 'react';
+import type { IconType } from 'react-icons';
 import { styled } from '../../styles/stitches.config';
 import { isKeyOfObject } from '../../utils/functions/isKeyOfObject';
 
@@ -33,37 +34,37 @@ type IconPackages =
   | 'vsc'
   | 'cg';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 const reactIconPackages: Record<IconPackages, any> = {
-  ai: () => import(`react-icons/ai/index.js`),
-  bs: () => import(`react-icons/bs/index.js`),
-  bi: () => import(`react-icons/bi/index.js`),
-  ci: () => import(`react-icons/ci/index.js`),
-  di: () => import(`react-icons/di/index.js`),
-  fi: () => import(`react-icons/fi/index.js`),
-  fc: () => import(`react-icons/fc/index.js`),
-  fa: () => import(`react-icons/fa/index.js`),
-  gi: () => import(`react-icons/gi/index.js`),
-  go: () => import(`react-icons/go/index.js`),
-  gr: () => import(`react-icons/gr/index.js`),
-  hi: () => import(`react-icons/hi/index.js`),
-  hi2: () => import(`react-icons/hi2/index.js`),
-  im: () => import(`react-icons/im/index.js`),
-  io: () => import(`react-icons/io/index.js`),
-  io5: () => import(`react-icons/io5/index.js`),
-  md: () => import(`react-icons/md/index.js`),
-  rx: () => import(`react-icons/rx/index.js`),
-  ri: () => import(`react-icons/ri/index.js`),
-  si: () => import(`react-icons/si/index.js`),
-  sl: () => import(`react-icons/sl/index.js`),
-  tb: () => import(`react-icons/ti/index.js`),
-  tfi: () => import(`react-icons/ti/index.js`),
-  vsc: () => import(`react-icons/vsc/index.js`),
-  wi: () => import(`react-icons/wi/index.js`),
-  cg: () => import(`react-icons/cg/index.js`),
+  ai: () => import(`react-icons/ai`),
+  bs: () => import(`react-icons/bs`),
+  bi: () => import(`react-icons/bi`),
+  ci: () => import(`react-icons/ci`),
+  di: () => import(`react-icons/di`),
+  fi: () => import(`react-icons/fi`),
+  fc: () => import(`react-icons/fc`),
+  fa: () => import(`react-icons/fa`),
+  gi: () => import(`react-icons/gi`),
+  go: () => import(`react-icons/go`),
+  gr: () => import(`react-icons/gr`),
+  hi: () => import(`react-icons/hi`),
+  hi2: () => import(`react-icons/hi2`),
+  im: () => import(`react-icons/im`),
+  io: () => import(`react-icons/io`),
+  io5: () => import(`react-icons/io5`),
+  md: () => import(`react-icons/md`),
+  rx: () => import(`react-icons/rx`),
+  ri: () => import(`react-icons/ri`),
+  si: () => import(`react-icons/si`),
+  sl: () => import(`react-icons/sl`),
+  tb: () => import(`react-icons/ti`),
+  tfi: () => import(`react-icons/ti`),
+  vsc: () => import(`react-icons/vsc`),
+  wi: () => import(`react-icons/wi`),
+  cg: () => import(`react-icons/cg`),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 const loadedPackages: Record<IconPackages, any> = {
   ai: undefined,
   bi: undefined,
@@ -135,11 +136,18 @@ interface DynamicIconProps {
   className?: string;
   style?: CSSProperties;
   attr?: SVGAttributes<SVGElement>;
-  fallback?: JSX.Element | null;
+  fallback?: React.JSX.Element | null;
   onClick?: () => void;
   showWrapper?: boolean;
   small?: boolean;
 }
+
+// Preserve names stored before react-icons normalized these exports in v5.
+const legacyIconNames: Record<string, string> = {
+  Gi3DHammer: 'Gi3dHammer',
+  Gi3DMeeple: 'Gi3dMeeple',
+  Gi3DStairs: 'Gi3dStairs',
+};
 
 const DynamicIcon: React.FC<DynamicIconProps> = ({
   fallback = null,
@@ -170,20 +178,20 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
 
   const Icon = useMemo(
     () =>
-      lazy(async () => {
+      lazy<IconType>(async () => {
         const lib = possibleLibraries[0];
-        const iconName = props.icon;
+        const iconName = legacyIconNames[props.icon] ?? props.icon;
         if (isKeyOfObject(lib, reactIconPackages)) {
           let module = loadedPackages[lib] ? loadedPackages[lib] : await reactIconPackages[lib]();
           if (isKeyOfObject(iconName, module)) {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            // oxlint-disable-next-line typescript/no-unnecessary-condition
             if (iconName !== 'default') return { default: module[iconName] };
           } else if (possibleLibraries.length > 1) {
             const lib = possibleLibraries[1];
             if (isKeyOfObject(lib, reactIconPackages)) {
               module = loadedPackages[lib] ? loadedPackages[lib] : await reactIconPackages[lib]();
               if (isKeyOfObject(iconName, module)) {
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                // oxlint-disable-next-line typescript/no-unnecessary-condition
                 if (iconName !== 'default') return { default: module[iconName] };
               }
             }

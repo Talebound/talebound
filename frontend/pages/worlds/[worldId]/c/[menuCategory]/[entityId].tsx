@@ -2,9 +2,7 @@ import React, { Suspense } from 'react';
 import useNumericParam from '../../../../../hooks/useNumericParam';
 import ModuleCategory from '../../../../../component-sections/Module/ModuleCategory';
 
-interface MenuItemPostProps {}
-
-const MenuItemPostPageWorlds: React.FC<MenuItemPostProps> = () => {
+const MenuItemPostPageWorlds: React.FC = () => {
   const entityId = useNumericParam('entityId') ?? 0;
 
   return (

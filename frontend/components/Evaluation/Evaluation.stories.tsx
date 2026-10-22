@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs';
 import Evaluation from './Evaluation';
 import { PbAverageEvaluationVote } from '../../generated/api-types/data-contracts';
 

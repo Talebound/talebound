@@ -11,7 +11,7 @@ import ImageCard from '../../../components/ImageCard/ImageCard';
 import { TitleH2 } from '../../../components/Typography/Title';
 import { Text } from '../../../components/Typography/Text';
 import { Button } from '../../../components/Button/Button';
-import { LuGlobe2 } from 'react-icons/lu';
+import { LuGlobe } from 'react-icons/lu';
 import { useCreateCharacter } from '../../../api/characters/useCreateCharacter';
 import ErrorText from '../../../components/ErrorText/ErrorText';
 import ArticleCharacterCreation from '../../../articles/Characters/ArticleCharacterCreation';
@@ -129,7 +129,7 @@ const CreateCharacter: React.FC = () => {
                   onClick={onSubmit}
                 >
                   Create character
-                  <LuGlobe2 />
+                  <LuGlobe />
                 </Button>
                 <ErrorText error={createCharacterMutation.error} />
               </Col>

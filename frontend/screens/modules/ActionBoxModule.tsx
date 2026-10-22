@@ -95,7 +95,7 @@ const ActionBoxModule: React.FC<ActionBoxModuleProps> = ({ moduleId, activeButto
           )}
           <Badge
             color={theme.colors.primary.toString()}
-            size="default"
+            size="medium"
             count={moduleAdminRequests.length}
             title={`${moduleAdminRequests.length} request${
               moduleAdminRequests.length > 1 ? 's' : ''

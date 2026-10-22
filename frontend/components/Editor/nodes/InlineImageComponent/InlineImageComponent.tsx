@@ -1,6 +1,6 @@
 import type { ImagePosition } from '../InlineImageNode/InlineImageNode';
 import { $isInlineImageNode } from '../InlineImageNode/InlineImageNode';
-import type { GridSelection, LexicalEditor, NodeKey, NodeSelection, RangeSelection } from 'lexical';
+import type { LexicalEditor, NodeKey, BaseSelection } from 'lexical';
 import {
   $getNodeByKey,
   $getSelection,
@@ -18,7 +18,7 @@ import {
 
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { LexicalNestedComposer } from '@lexical/react/LexicalNestedComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection';
@@ -121,7 +121,7 @@ export default function InlineImageComponent({
   maxWidth: number;
   position: ImagePosition;
   resizable?: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { historyState } = useSharedHistoryContext();
   const imageRef = useRef<null | HTMLImageElement>(null);
@@ -129,9 +129,7 @@ export default function InlineImageComponent({
   const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
   const isResizing = false;
   const [editor] = useLexicalComposerContext();
-  const [selection, setSelection] = useState<RangeSelection | NodeSelection | GridSelection | null>(
-    null,
-  );
+  const [selection, setSelection] = useState<BaseSelection | null>(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const activeEditorRef = useRef<LexicalEditor | null>(null);
 
@@ -151,7 +149,7 @@ export default function InlineImageComponent({
   );
 
   const onEnter = useCallback(
-    (event: KeyboardEvent) => {
+    (event: KeyboardEvent | null) => {
       const latestSelection = $getSelection();
       const buttonElem = buttonRef.current;
       if (
@@ -162,11 +160,11 @@ export default function InlineImageComponent({
         if (showCaption) {
           // Move focus into nested editor
           $setSelection(null);
-          event.preventDefault();
+          event?.preventDefault();
           caption.focus();
           return true;
         } else if (buttonElem !== null && buttonElem !== document.activeElement) {
-          event.preventDefault();
+          event?.preventDefault();
           buttonElem.focus();
           return true;
         }
@@ -199,7 +197,7 @@ export default function InlineImageComponent({
     const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         if (isMounted) {
-          setSelection(editorState.read(() => $getSelection()));
+          setSelection(editorState.read(() => $getSelection(), { editor }));
         }
       }),
       editor.registerCommand(

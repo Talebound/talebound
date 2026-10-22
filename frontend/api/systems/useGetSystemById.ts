@@ -6,8 +6,8 @@ import { systemAdapterSlice, systemSelectors } from '../../adapters/SystemAdapte
 import { store } from '../../store';
 
 export const useGetSystemById = createSuspenseQuery<PbSystem, number, TaleboundError>({
-  primaryKey: 'useGetSystemById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetSystemById'],
+  fetcher: async (variables) => {
     if (variables === 0) return {};
 
     const system = systemSelectors.selectById(store.getState(), variables);

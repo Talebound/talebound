@@ -9,11 +9,12 @@ import {
   FORMAT_TEXT_COMMAND,
   $getSelection,
   $isRangeSelection,
+  $isRootOrShadowRoot,
   ElementFormatType,
 } from 'lexical';
 import { $isLinkNode } from '@lexical/link';
 import { $isParentElementRTL } from '@lexical/selection';
-import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
+import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import { $isListNode, ListNode } from '@lexical/list';
 import { createPortal } from 'react-dom';
 import { $isHeadingNode } from '@lexical/rich-text';
@@ -62,7 +63,10 @@ const ToolbarPlugin: React.FC<ToolbarPluginProps> = ({ disabled = false }) => {
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode();
       const element =
-        anchorNode.getKey() === 'root' ? anchorNode : anchorNode.getTopLevelElementOrThrow();
+        anchorNode.getKey() === 'root'
+          ? anchorNode
+          : ($findMatchingParent(anchorNode, (node) => $isRootOrShadowRoot(node.getParent())) ??
+            anchorNode.getTopLevelElementOrThrow());
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
       if (elementDOM !== null) {
@@ -74,7 +78,7 @@ const ToolbarPlugin: React.FC<ToolbarPluginProps> = ({ disabled = false }) => {
         } else {
           const type: BlockType = $isHeadingNode(element)
             ? element.getTag()
-            : // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            : // oxlint-disable-next-line typescript/consistent-type-assertions
               (element.getType() as BlockType);
           setBlockType(type);
           if ($isCodeNode(element)) {
@@ -106,9 +110,12 @@ const ToolbarPlugin: React.FC<ToolbarPluginProps> = ({ disabled = false }) => {
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          updateToolbar();
-        });
+        editorState.read(
+          () => {
+            updateToolbar();
+          },
+          { editor },
+        );
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,

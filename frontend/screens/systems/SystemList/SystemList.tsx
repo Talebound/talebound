@@ -66,13 +66,12 @@ const SystemList: React.FC = () => {
             </ContentSection>
 
             <Row gap="md" alignItems="start" wrap>
-              {systemsData?.pages.map(
-                (page) =>
-                  page.systemIds?.map((systemId) => (
-                    <Suspense fallback={null} key={systemId}>
-                      <SystemCard systemId={systemId} />
-                    </Suspense>
-                  )),
+              {systemsData?.pages.map((page) =>
+                page.systemIds?.map((systemId) => (
+                  <Suspense fallback={null} key={systemId}>
+                    <SystemCard systemId={systemId} />
+                  </Suspense>
+                )),
               )}
               {hasNextPage && !isFetching && (
                 <InfiniteScrollObserver runOnObserve={fetchNextPage} />

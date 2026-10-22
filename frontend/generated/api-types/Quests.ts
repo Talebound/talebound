@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -122,6 +122,7 @@ export class Quests<SecurityDataType = unknown> {
       path: `/quests/${questId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -149,6 +150,7 @@ export class Quests<SecurityDataType = unknown> {
       path: `/quests/${questId}/images`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

@@ -24,7 +24,7 @@ const ToolbarDropdownFormattingText = ({
   isStrikethrough,
   isCode,
   isLink,
-}: ToolbarDropdownFormattingTextProps): JSX.Element => {
+}: ToolbarDropdownFormattingTextProps): React.JSX.Element => {
   const insertLink = useCallback(() => {
     if (!isLink) {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');

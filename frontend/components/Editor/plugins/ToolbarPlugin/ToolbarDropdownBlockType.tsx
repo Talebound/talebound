@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { $getSelection, $isRangeSelection, $createParagraphNode, LexicalEditor } from 'lexical';
-import { $wrapNodes } from '@lexical/selection';
+import { $setBlocksType } from '@lexical/selection';
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -34,14 +34,14 @@ const ToolbarDropdownBlockType = ({
   trigger,
   editor,
   blockType,
-}: ToolbarDropdownBlockTypeProps): JSX.Element => {
+}: ToolbarDropdownBlockTypeProps): React.JSX.Element => {
   const formatParagraph = useCallback(() => {
     if (blockType !== 'paragraph') {
       editor.update(() => {
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createParagraphNode());
+          $setBlocksType(selection, () => $createParagraphNode());
         }
       });
     }
@@ -53,7 +53,7 @@ const ToolbarDropdownBlockType = ({
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode('h1'));
+          $setBlocksType(selection, () => $createHeadingNode('h1'));
         }
       });
     }
@@ -65,7 +65,7 @@ const ToolbarDropdownBlockType = ({
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode('h2'));
+          $setBlocksType(selection, () => $createHeadingNode('h2'));
         }
       });
     }
@@ -93,7 +93,7 @@ const ToolbarDropdownBlockType = ({
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createQuoteNode());
+          $setBlocksType(selection, () => $createQuoteNode());
         }
       });
     }
@@ -105,7 +105,7 @@ const ToolbarDropdownBlockType = ({
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createCodeNode());
+          $setBlocksType(selection, () => $createCodeNode());
         }
       });
     }

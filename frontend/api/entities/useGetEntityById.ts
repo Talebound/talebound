@@ -6,8 +6,8 @@ import { entityAdapterSlice, entitySelectors } from '../../adapters/EntityAdapte
 import { store } from '../../store';
 
 export const useGetEntityById = createSuspenseQuery<PbViewEntity, number, TaleboundError>({
-  primaryKey: 'useGetEntityById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetEntityById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const entity = entitySelectors.selectById(store.getState(), variables);
     if (!entity) {

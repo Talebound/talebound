@@ -11,8 +11,8 @@ export const useGetWorlds = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetWorlds',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetWorlds'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const tags = (variables.tags?.length ?? 0) > 0 ? variables.tags : undefined;
 
     const { data } = await WorldsCollection.worldsGetWorlds({

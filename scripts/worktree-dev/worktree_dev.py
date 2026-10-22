@@ -229,7 +229,7 @@ def setup(state, services_only=False):
     compose(state, 'up', '-d', '--wait', '--wait-timeout', '120', 'postgres', 'redis', 'mailpit')
     if not services_only:
         compose(state, 'run', '--rm', '--no-deps', 'frontend',
-                'node', '.yarn/releases/yarn-3.6.1.cjs', 'install', '--immutable')
+                'node', '.yarn/releases/yarn-4.18.1.cjs', 'install', '--immutable')
         compose(state, 'run', '--rm', '--no-deps', 'backend', 'migrate')
 
 

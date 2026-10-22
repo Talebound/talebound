@@ -19,8 +19,8 @@ export const useGetPosts = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetPosts',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetPosts'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const { data } = await PostsCollection.postsGetPosts({
       ...variables,
       limit: PAGE_SIZE_POSTS,

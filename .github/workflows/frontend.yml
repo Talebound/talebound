@@ -5,12 +5,14 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'backend/doc/swagger/**'
       - 'Makefile'
       - '.github/workflows/frontend.yml'
   pull_request:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'backend/doc/swagger/**'
       - 'Makefile'
       - '.github/workflows/frontend.yml'
   workflow_dispatch:
@@ -27,14 +29,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: '1'
+      STORYBOOK_DISABLE_TELEMETRY: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24.22.1'
       - name: Install dependencies
-        run: node .yarn/releases/yarn-3.6.1.cjs install --immutable
+        run: node .yarn/releases/yarn-4.18.1.cjs install --immutable
       - name: Lint
-        run: node .yarn/releases/yarn-3.6.1.cjs lint
+        run: node .yarn/releases/yarn-4.18.1.cjs lint
+      - name: Check formatting
+        run: node .yarn/releases/yarn-4.18.1.cjs format:check
+      - name: Verify generated API client
+        run: |
+          node .yarn/releases/yarn-4.18.1.cjs generate
+          git diff --exit-code -- generated/api-types
+      - name: Type check
+        run: node .yarn/releases/yarn-4.18.1.cjs typecheck
       - name: Build
-        run: node .yarn/releases/yarn-3.6.1.cjs build
+        run: node .yarn/releases/yarn-4.18.1.cjs build
+      - name: Build Storybook
+        run: node .yarn/releases/yarn-4.18.1.cjs build-storybook

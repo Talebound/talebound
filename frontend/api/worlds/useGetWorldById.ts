@@ -6,8 +6,8 @@ import { worldAdapterSlice, worldSelectors } from '../../adapters/WorldAdapter';
 import { store } from '../../store';
 
 export const useGetWorldById = createSuspenseQuery<PbWorld, number, TaleboundError>({
-  primaryKey: 'useGetWorldById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetWorldById'],
+  fetcher: async (variables) => {
     if (variables === 0) return {};
 
     const world = worldSelectors.selectById(store.getState(), variables);

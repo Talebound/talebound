@@ -1,6 +1,5 @@
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
-import { Table } from 'antd';
-import { TablePaginationConfig, TableProps } from 'antd/lib';
+import { Table, type TablePaginationConfig, type TableProps } from 'antd';
 import { Button } from '../../components/Button/Button';
 import { MdEdit, MdOpenInNew } from 'react-icons/md';
 import { PbEntityType, PbPost } from '../../generated/api-types/data-contracts';
@@ -190,7 +189,7 @@ const PostsTable: React.FC<PostsTableProps> = ({
       showSizeChanger: false,
       total: totalCount,
       pageSize: PAGE_SIZE_POSTS,
-      size: 'default',
+      size: 'medium',
       onChange: onPageChange,
       disabled: loading,
     };

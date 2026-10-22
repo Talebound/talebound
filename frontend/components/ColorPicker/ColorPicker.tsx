@@ -25,7 +25,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ title, value, onChange }) => 
     }
   }, [value]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((value: CSSProperties['color']) => {
       if (onChange) onChange(value);

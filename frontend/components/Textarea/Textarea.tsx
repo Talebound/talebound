@@ -1,6 +1,6 @@
 import { styled } from '../../styles/stitches.config';
 import React, { forwardRef, useMemo } from 'react';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 import { Col, Flex } from '../Flex/Flex';
 import { Label } from '../Typography/Label';
 import { Text } from '../Typography/Text';
@@ -63,8 +63,7 @@ export const StyledTextarea = styled('textarea', {
 export type TextareaVariants = Stitches.VariantProps<typeof StyledTextarea>;
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    TextareaVariants {
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>, TextareaVariants {
   id: string;
   label?: string;
   labelDirection?: 'row' | 'column';

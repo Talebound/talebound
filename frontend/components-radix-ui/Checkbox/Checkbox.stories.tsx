@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs';
 import CheckboxDemo from './CheckboxDemo';
 
 const meta: Meta<typeof CheckboxDemo> = {

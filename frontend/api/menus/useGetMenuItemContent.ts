@@ -24,8 +24,8 @@ export const useGetMenuItemContent = createQuery<
   GetMenuItemContentRequest,
   TaleboundError
 >({
-  primaryKey: 'useGetMenuItemContent',
-  queryFn: async ({ queryKey: [_, { menuItemId }] }) => {
+  queryKey: ['useGetMenuItemContent'],
+  fetcher: async ({ menuItemId }) => {
     if (menuItemId === 0)
       return {
         mainGroupId: 0,

@@ -51,10 +51,10 @@ const LocationForm: React.FC<LocationFormProps> = ({
     location ? location.thumbnailImageId : undefined,
   );
   const { value: name, onChange: onChangeName } = useInput<string>(
-    location ? location.name ?? '' : '',
+    location ? (location.name ?? '') : '',
   );
   const { value: description, onChange } = useInput<string, HTMLTextAreaElement>(
-    location ? location.description ?? '' : '',
+    location ? (location.description ?? '') : '',
   );
 
   const toggleImageModal = useCallback(() => {

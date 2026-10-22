@@ -128,7 +128,7 @@ const MenuItem: React.FC<MenuAdministrationItemProps> = ({
     [data.id, data.menuId, updateMenuItem],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((payload: UpdateMenuItemParams['body']) => {
       sendPayload(payload);
@@ -184,8 +184,8 @@ const MenuItem: React.FC<MenuAdministrationItemProps> = ({
   const codeInputMode = notUniqueCode
     ? 'error'
     : reservedCodes.includes(codeValue)
-    ? 'info'
-    : undefined;
+      ? 'info'
+      : undefined;
 
   const deleteItem = useCallback(() => {
     if (data.menuId && data.id) {

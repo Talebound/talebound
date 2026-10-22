@@ -19,7 +19,7 @@ export const expandDataForInfiniteQuery = <T>(
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type OmitLimitOffset<T extends (...args: any) => any> = Omit<
   NonNullable<Parameters<T>[0]>,
   'limit' | 'offset'

@@ -34,7 +34,7 @@ function DraggableBlockMenu(
   editor: LexicalEditor,
   anchorElem: HTMLElement,
   isEditable: boolean,
-): JSX.Element {
+): React.JSX.Element {
   const scrollerElem = anchorElem.parentElement;
 
   const menuRef = useRef<HTMLDivElement>(null);

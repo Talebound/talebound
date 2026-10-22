@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { AspectBoxIcon } from '../ControlPanel/AspectBoxIcon';
-import { LuGlobe2 } from 'react-icons/lu';
+import { LuGlobe } from 'react-icons/lu';
 import AspectDiamond from '../ControlPanel/AspectDiamond';
 import { AspectBox } from '../ControlPanel/AspectBox';
 import { PbUserModule } from '../../../generated/api-types/data-contracts';
@@ -20,7 +20,7 @@ const UserModuleWorlds: React.FC<UserModuleWorldsProps> = ({ modules }) => {
   return (
     <AspectBox x={x} y={y}>
       <AspectBoxIcon x={x} y={y}>
-        <LuGlobe2 size={20} />
+        <LuGlobe size={20} />
       </AspectBoxIcon>
       {moduleIds.length === 0 && (
         <AspectDiamond imgIdx={0} totalCount={0} index={0} x={x} y={y} text={'No worlds'} />

@@ -6,8 +6,8 @@ import { questAdapterSlice, questSelectors } from '../../adapters/QuestAdapter';
 import { store } from '../../store';
 
 export const useGetQuestById = createSuspenseQuery<PbQuest, number, TaleboundError>({
-  primaryKey: 'useGetQuestById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetQuestById'],
+  fetcher: async (variables) => {
     if (variables === 0) return {};
 
     const quest = questSelectors.selectById(store.getState(), variables);

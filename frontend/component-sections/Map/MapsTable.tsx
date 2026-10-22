@@ -1,6 +1,5 @@
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
-import { Table } from 'antd';
-import { TablePaginationConfig, TableProps } from 'antd/lib';
+import { Table, type TablePaginationConfig, type TableProps } from 'antd';
 import { Button } from '../../components/Button/Button';
 import { MdEdit, MdOpenInNew } from 'react-icons/md';
 import { Col, Row } from '../../components/Flex/Flex';
@@ -207,7 +206,7 @@ const MapsTable: React.FC<MapsTableProps> = ({
       showSizeChanger: false,
       total: totalCount,
       pageSize: PAGE_SIZE_MAPS,
-      size: 'default',
+      size: 'medium',
       onChange: onPageChange,
       disabled: loading,
     };

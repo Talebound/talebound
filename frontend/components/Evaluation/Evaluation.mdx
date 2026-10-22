@@ -1,4 +1,4 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
 import * as stories from './Evaluation.stories';
 
 <Meta of={stories} />
@@ -13,9 +13,7 @@ By default, every evaluation is rendered into its own card. In this case, it tak
 
 Example of usage - self evaluation in user settings.
 
-<Canvas>
-  <Story of={stories.StoryDefault}/>
-</Canvas>
+<Canvas of={stories.StoryDefault} />
 
 ## Compact
 
@@ -23,6 +21,4 @@ It is possible to render evaluations in a compact mode. In this case, the rating
 
 Example of usage - self evaluation view in user profile.
 
-<Canvas>
-  <Story of={stories.StoryCompact}/>
-</Canvas>
+<Canvas of={stories.StoryCompact} />

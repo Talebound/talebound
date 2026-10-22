@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -115,6 +115,7 @@ export class Systems<SecurityDataType = unknown> {
       path: `/systems/${systemId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -142,6 +143,7 @@ export class Systems<SecurityDataType = unknown> {
       path: `/systems/${systemId}/images`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

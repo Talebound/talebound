@@ -6,8 +6,8 @@ import { imageAdapterSlice, imageSelectors } from '../../adapters/ImageAdapter';
 import { store } from '../../store';
 
 export const useGetImageById = createSuspenseQuery<PbImage, number, TaleboundError>({
-  primaryKey: 'useGetImageById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetImageById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const image = imageSelectors.selectById(store.getState(), variables);
     if (!image) {

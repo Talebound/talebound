@@ -55,8 +55,8 @@ export function isFetcherKey(key: string | number | symbol): key is RunFetcherRe
 }
 
 export const useRunFetcher = createQuery<number, PbRunFetcherRequest, TaleboundError>({
-  primaryKey: 'useRunFetcher',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useRunFetcher'],
+  fetcher: async (variables) => {
     console.log('Inside of useRunFetcher');
     // const { data } = await FetcherCollection.fetcherRunFetcher({ ...variables });
     await FetcherCollection.fetcherRunFetcher({ ...variables });

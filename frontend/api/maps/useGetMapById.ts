@@ -6,8 +6,8 @@ import { mapAdapterSlice, mapSelectors } from '../../adapters/MapAdapter';
 import { store } from '../../store';
 
 export const useGetMapById = createSuspenseQuery<PbMap, number, TaleboundError>({
-  primaryKey: 'useGetMapById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetMapById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const map = mapSelectors.selectById(store.getState(), variables);
     if (!map) {

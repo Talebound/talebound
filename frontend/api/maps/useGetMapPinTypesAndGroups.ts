@@ -3,8 +3,8 @@ import { PbGetModuleMapPinTypesResponse } from '../../generated/api-types/data-c
 import { MapsCollection } from '../collections';
 
 export const useGetMapPinTypesAndGroups = createQuery<PbGetModuleMapPinTypesResponse, number>({
-  primaryKey: 'useGetMapPinTypes',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetMapPinTypes'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const { data } = await MapsCollection.mapsGetModuleMapPinTypes(variables);
     return data;

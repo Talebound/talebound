@@ -12,7 +12,7 @@ import ImageCard from '../../../components/ImageCard/ImageCard';
 import { TitleH2 } from '../../../components/Typography/Title';
 import { Text } from '../../../components/Typography/Text';
 import { Button } from '../../../components/Button/Button';
-import { LuGlobe2 } from 'react-icons/lu';
+import { LuGlobe } from 'react-icons/lu';
 import { useCreateSystem } from '../../../api/systems/useCreateSystem';
 import ErrorText from '../../../components/ErrorText/ErrorText';
 import ArticleSystemCreation from '../../../articles/Systems/ArticleSystemCreation';
@@ -147,7 +147,7 @@ const CreateSystem: React.FC = () => {
                   onClick={onSubmit}
                 >
                   Create system
-                  <LuGlobe2 />
+                  <LuGlobe />
                 </Button>
                 <ErrorText error={createSystemMutation.error} />
               </Col>

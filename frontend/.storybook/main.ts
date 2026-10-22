@@ -5,18 +5,11 @@ const config: StorybookConfig = {
     '../@(components|components-radix-ui)/**/*.mdx',
     '../@(components|components-radix-ui)/**/*.stories.@(js|jsx|ts|tsx)',
   ],
-  addons: [
-    '@storybook/addon-docs',
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-  ],
+  staticDirs: ['../public'],
+  addons: ['@storybook/addon-docs', '@storybook/addon-links'],
   framework: {
     name: '@storybook/nextjs',
     options: {},
-  },
-  docs: {
-    autodocs: 'tag',
   },
 };
 export default config;

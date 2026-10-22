@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { ColumnType } from 'antd/es/table';
+import type { TableColumnType as ColumnType, TableProps } from 'antd';
 import AvatarById from '../../components/AvatarById/AvatarById';
 import { useAppSelector } from '../../store/hooks';
 import { selectLocationsByIds } from '../../adapters/LocationAdapter';
 import { Table } from 'antd';
-import { TableProps } from 'antd/lib';
 import { Button } from '../../components/Button/Button';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import LocationFormModal from './LocationFormModal';

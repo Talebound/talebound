@@ -41,8 +41,8 @@ export interface UsePanningResponse {
 }
 
 export interface UsePanningProps {
-  ref: React.RefObject<HTMLDivElement>;
-  contentRef: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
   zoomRatio?: number;
   baseWidth: number;
   baseHeight: number;

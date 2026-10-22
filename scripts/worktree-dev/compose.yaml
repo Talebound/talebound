@@ -79,12 +79,12 @@ services:
       retries: 60
 
   frontend:
-    image: node:22-bookworm-slim
+    image: node:24.22.1-bookworm-slim
     labels: *labels
     init: true
     user: '${TB_UID}:${TB_GID}'
     working_dir: /app
-    command: ['node', '.yarn/releases/yarn-3.6.1.cjs', 'dev', '--hostname', '0.0.0.0']
+    command: ['node', '.yarn/releases/yarn-4.18.1.cjs', 'dev', '--hostname', '0.0.0.0']
     environment:
       NEXT_TELEMETRY_DISABLED: '1'
       YARN_CACHE_FOLDER: /app/.yarn/cache

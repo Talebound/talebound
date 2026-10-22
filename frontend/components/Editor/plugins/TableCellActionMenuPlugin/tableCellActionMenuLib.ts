@@ -1,20 +1,21 @@
 import {
   $getSelection,
   $isElementNode,
-  $isParagraphNode,
   $isRangeSelection,
   $isTextNode,
-  DEPRECATED_$getNodeTriplet,
-  DEPRECATED_$isGridSelection,
-  DEPRECATED_GridCellNode,
   ElementNode,
-  GridSelection,
   LexicalEditor,
 } from 'lexical';
-import { $isTableCellNode, $isTableRowNode } from '@lexical/table';
+import {
+  $isTableCellNode,
+  $isTableRowNode,
+  $getNodeTriplet,
+  $isTableSelection,
+  TableSelection,
+} from '@lexical/table';
 import invariant from '../../../../utils/functions/invariant';
 
-export function computeSelectionCount(selection: GridSelection): {
+export function computeSelectionCount(selection: TableSelection): {
   columns: number;
   rows: number;
 } {
@@ -27,7 +28,7 @@ export function computeSelectionCount(selection: GridSelection): {
 
 // This is important when merging cells as there is no good way to re-merge weird shapes (a result
 // of selecting merged cells and non-merged)
-export function isGridSelectionRectangular(selection: GridSelection): boolean {
+export function isTableSelectionRectangular(selection: TableSelection): boolean {
   const nodes = selection.getNodes();
   const currentRows: Array<number> = [];
   let currentRow = null;
@@ -64,30 +65,6 @@ export function isGridSelectionRectangular(selection: GridSelection): boolean {
   );
 }
 
-export function $canUnmerge(): boolean {
-  const selection = $getSelection();
-  if (
-    ($isRangeSelection(selection) && !selection.isCollapsed()) ||
-    (DEPRECATED_$isGridSelection(selection) && !selection.anchor.is(selection.focus)) ||
-    (!$isRangeSelection(selection) && !DEPRECATED_$isGridSelection(selection))
-  ) {
-    return false;
-  }
-  const [cell] = DEPRECATED_$getNodeTriplet(selection.anchor);
-  return cell.__colSpan > 1 || cell.__rowSpan > 1;
-}
-
-export function $cellContainsEmptyParagraph(cell: DEPRECATED_GridCellNode): boolean {
-  if (cell.getChildrenSize() !== 1) {
-    return false;
-  }
-  const firstChild = cell.getFirstChildOrThrow();
-  if (!$isParagraphNode(firstChild) || !firstChild.isEmpty()) {
-    return false;
-  }
-  return true;
-}
-
 export function $selectLastDescendant(node: ElementNode): void {
   const lastDescendant = node.getLastDescendant();
   if ($isTextNode(lastDescendant)) {
@@ -102,8 +79,8 @@ export function $selectLastDescendant(node: ElementNode): void {
 export function currentCellBackgroundColor(editor: LexicalEditor): null | string {
   return editor.getEditorState().read(() => {
     const selection = $getSelection();
-    if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
-      const [cell] = DEPRECATED_$getNodeTriplet(selection.anchor);
+    if ($isRangeSelection(selection) || $isTableSelection(selection)) {
+      const [cell] = $getNodeTriplet(selection.anchor);
       if ($isTableCellNode(cell)) {
         return cell.getBackgroundColor();
       }

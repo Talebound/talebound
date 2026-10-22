@@ -3,7 +3,7 @@ import { styled } from '../../../styles/stitches.config';
 import { TitleH4 } from '../../../components/Typography/Title';
 import { PbImage } from '../../../generated/api-types/data-contracts';
 import { Text } from '../../../components/Typography/Text';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 
 const BackgroundImage = styled('img', {
   display: 'block',

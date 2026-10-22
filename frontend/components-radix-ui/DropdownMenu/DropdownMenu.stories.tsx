@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs';
 import DropdownMenuDemo from './DropdownMenuDemo';
 
 const meta: Meta<typeof DropdownMenuDemo> = {

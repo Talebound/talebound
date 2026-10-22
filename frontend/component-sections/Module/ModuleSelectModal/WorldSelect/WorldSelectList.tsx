@@ -57,19 +57,18 @@ const WorldSelectList: React.FC<WorldSelectListProps> = ({
           </Col>
 
           <Row gap="md" alignItems="start" wrap>
-            {worldsData?.pages.map(
-              (page) =>
-                page.worldIds?.map((worldId) => (
-                  <Suspense fallback={null} key={worldId}>
-                    <WorldCard
-                      worldId={worldId}
-                      onWorldSelected={setSelectedWorldId}
-                      selected={worldId === selectedWorldId}
-                      grow={false}
-                      compact
-                    />
-                  </Suspense>
-                )),
+            {worldsData?.pages.map((page) =>
+              page.worldIds?.map((worldId) => (
+                <Suspense fallback={null} key={worldId}>
+                  <WorldCard
+                    worldId={worldId}
+                    onWorldSelected={setSelectedWorldId}
+                    selected={worldId === selectedWorldId}
+                    grow={false}
+                    compact
+                  />
+                </Suspense>
+              )),
             )}
             {hasNextPage && !isFetching && <InfiniteScrollObserver runOnObserve={fetchNextPage} />}
           </Row>

@@ -1,5 +1,5 @@
 import React from 'react';
-import useLexicalEditable from '@lexical/react/useLexicalEditable';
+import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
 import { createPortal } from 'react-dom';
 import TableCellActionMenuContainer from './TableCellActionMenuContainer';
 

@@ -66,13 +66,12 @@ const QuestList: React.FC = () => {
             </ContentSection>
 
             <Row gap="md" alignItems="start" wrap>
-              {questsData?.pages.map(
-                (page) =>
-                  page.questIds?.map((questId) => (
-                    <Suspense fallback={null} key={questId}>
-                      <QuestCard questId={questId} />
-                    </Suspense>
-                  )),
+              {questsData?.pages.map((page) =>
+                page.questIds?.map((questId) => (
+                  <Suspense fallback={null} key={questId}>
+                    <QuestCard questId={questId} />
+                  </Suspense>
+                )),
               )}
               {hasNextPage && !isFetching && (
                 <InfiniteScrollObserver runOnObserve={fetchNextPage} />

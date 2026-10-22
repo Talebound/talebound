@@ -23,6 +23,6 @@ export default function Placeholder({
 }: {
   children: ReactNode;
   className?: string;
-}): JSX.Element {
+}): React.JSX.Element {
   return <PlaceholderRoot className={className || ''}>{children}</PlaceholderRoot>;
 }

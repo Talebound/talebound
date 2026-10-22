@@ -6,8 +6,8 @@ import { locationAdapterSlice, locationSelectors } from '../../adapters/Location
 import { store } from '../../store';
 
 export const useGetLocationById = createSuspenseQuery<PbLocation, number, TaleboundError>({
-  primaryKey: 'useGetLocationById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetLocationById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const location = locationSelectors.selectById(store.getState(), variables);
     if (!location) {

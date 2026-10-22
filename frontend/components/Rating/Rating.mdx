@@ -1,4 +1,4 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
 import * as stories from './Rating.stories.tsx';
 
 <Meta of={stories} />
@@ -13,14 +13,10 @@ Uses antd's [Rate](https://ant.design/components/rate/) component with custom ic
 
 ## Default
 
-<Canvas>
-  <Story of={stories.storyDefault} />
-</Canvas>
+<Canvas of={stories.StoryDefault} />
 
 ## Disabled
 
 Note that the disabled state is not interactive - only the resulting rating is shown.
 
-<Canvas>
-  <Story of={stories.storyDisabled} />
-</Canvas>
+<Canvas of={stories.StoryDisabled} />

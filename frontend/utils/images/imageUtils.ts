@@ -11,8 +11,8 @@ export enum ImageVariant {
   '600x400' = '600x400',
   '1200x800' = '1200x800',
   '1920x300' = '1920x300',
-  'original' = 'original',
-  'public' = 'public',
+  original = 'original',
+  public = 'public',
 }
 
 export const ImageVariantWidths: Record<ImageVariant, number | undefined> = {
@@ -47,7 +47,7 @@ export const getImageVariantFromUrl = (url: string): ImageVariant | undefined =>
     if (isImageVariant(lastPart)) {
       return lastPart;
     }
-  } catch (e) {
+  } catch {
     /**/
   }
   return undefined;
@@ -69,7 +69,7 @@ export const imageUrlWithoutVariant = (url: string): string => {
     urlObject.pathname = pathParts.join('/');
 
     return urlObject.toString();
-  } catch (error) {
+  } catch {
     return url;
   }
 };

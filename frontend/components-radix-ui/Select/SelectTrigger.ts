@@ -1,6 +1,6 @@
 import * as Select from '@radix-ui/react-select';
 import { styled } from '../../styles/stitches.config';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 
 export const SelectTrigger = styled(Select.SelectTrigger, {
   display: 'flex',

@@ -57,19 +57,18 @@ const SystemSelectList: React.FC<SystemSelectListProps> = ({
           </Col>
 
           <Row gap="md" alignItems="start" wrap>
-            {systemsData?.pages.map(
-              (page) =>
-                page.systemIds?.map((systemId) => (
-                  <Suspense fallback={null} key={systemId}>
-                    <SystemCard
-                      systemId={systemId}
-                      onSystemSelected={setSelectedSystemId}
-                      selected={systemId === selectedSystemId}
-                      grow={false}
-                      compact
-                    />
-                  </Suspense>
-                )),
+            {systemsData?.pages.map((page) =>
+              page.systemIds?.map((systemId) => (
+                <Suspense fallback={null} key={systemId}>
+                  <SystemCard
+                    systemId={systemId}
+                    onSystemSelected={setSelectedSystemId}
+                    selected={systemId === selectedSystemId}
+                    grow={false}
+                    compact
+                  />
+                </Suspense>
+              )),
             )}
             {hasNextPage && !isFetching && <InfiniteScrollObserver runOnObserve={fetchNextPage} />}
           </Row>

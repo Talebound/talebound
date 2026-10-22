@@ -3,8 +3,8 @@ import { PbViewMapPin } from '../../generated/api-types/data-contracts';
 import { MapsCollection } from '../collections';
 
 export const useGetMapPins = createQuery<PbViewMapPin[], number>({
-  primaryKey: 'useGetMapPins',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetMapPins'],
+  fetcher: async (variables) => {
     if (!variables) return [];
     const { data } = await MapsCollection.mapsGetMapPins(variables);
     return data.pins ?? [];

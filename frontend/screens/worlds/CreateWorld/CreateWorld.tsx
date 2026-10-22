@@ -12,7 +12,7 @@ import ImageCard from '../../../components/ImageCard/ImageCard';
 import { TitleH2 } from '../../../components/Typography/Title';
 import { Text } from '../../../components/Typography/Text';
 import { Button } from '../../../components/Button/Button';
-import { LuGlobe2 } from 'react-icons/lu';
+import { LuGlobe } from 'react-icons/lu';
 import { useCreateWorld } from '../../../api/worlds/useCreateWorld';
 import ErrorText from '../../../components/ErrorText/ErrorText';
 import ArticleJourneyOfWorldCrafting from '../../../articles/Worlds/ArticleJourneyOfWorldCrafting';
@@ -168,7 +168,7 @@ const CreateWorld: React.FC = () => {
                   onClick={onSubmit}
                 >
                   Create world
-                  <LuGlobe2 />
+                  <LuGlobe />
                 </Button>
                 <ErrorText error={createWorldMutation.error} />
               </Col>

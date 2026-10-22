@@ -16,7 +16,7 @@ interface ToolbarDropdownAlignTypeProps {
 const ToolbarDropdownAlignType = ({
   trigger,
   editor,
-}: ToolbarDropdownAlignTypeProps): JSX.Element => {
+}: ToolbarDropdownAlignTypeProps): React.JSX.Element => {
   const leftElementCallback = useCallback(() => {
     editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
   }, [editor]);

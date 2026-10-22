@@ -5,7 +5,7 @@ export default function DraggableBlockPlugin({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element {
+}): React.JSX.Element {
   const [editor] = useLexicalComposerContext();
   return DraggableBlockMenu(editor, anchorElem, editor._editable);
 }

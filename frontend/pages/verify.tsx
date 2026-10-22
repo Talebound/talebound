@@ -39,7 +39,7 @@ export default function Verify() {
     });
 
     setAttempted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [attempted, id, secret_code]); //verify
 
   return (

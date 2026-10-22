@@ -6,9 +6,9 @@ import { store } from '../../store';
 type UseGetModuleIdRequest = Parameters<typeof ModulesCollection.modulesGetModuleId>[0];
 
 export const useGetModuleId = createQuery<number, UseGetModuleIdRequest, TaleboundError>({
-  primaryKey: 'useGetModuleId',
-  queryFn: async ({ queryKey: [_, variables] }) => {
-    if (typeof variables === 'string') return 0;
+  queryKey: ['useGetModuleId'],
+  fetcher: async (variables) => {
+    if (!variables) return 0;
     const { worldId, systemId, questId, characterId } = variables;
     if (!worldId && !systemId && !questId && !characterId) return 0;
 

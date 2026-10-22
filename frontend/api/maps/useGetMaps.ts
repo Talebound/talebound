@@ -19,8 +19,8 @@ export const useGetMaps = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetMaps',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetMaps'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const { data } = await MapsCollection.mapsGetMaps({
       ...variables,
       limit: PAGE_SIZE_MAPS,

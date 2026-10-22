@@ -1,32 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  $deleteTableColumn__EXPERIMENTAL,
-  $deleteTableRow__EXPERIMENTAL,
+  $deleteTableColumnAtSelection,
+  $deleteTableRowAtSelection,
   $getTableColumnIndexFromTableCellNode,
   $getTableNodeFromLexicalNodeOrThrow,
   $getTableRowIndexFromTableCellNode,
-  $insertTableColumn__EXPERIMENTAL,
-  $insertTableRow__EXPERIMENTAL,
+  $insertTableColumnAtSelection,
+  $insertTableRowAtSelection,
   $isTableCellNode,
   $isTableRowNode,
-  $unmergeCell,
-  getTableSelectionFromTableElement,
+  $unmergeCellNode,
+  getTableObserverFromTableElement,
   HTMLTableElementWithWithTableSelectionState,
   TableCellHeaderStates,
   TableCellNode,
+  $getNodeTriplet,
+  $isTableSelection,
+  $mergeCells,
+  TableSelection,
 } from '@lexical/table';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import {
-  $createParagraphNode,
-  $getRoot,
-  $getSelection,
-  $isParagraphNode,
-  $isRangeSelection,
-  DEPRECATED_$getNodeTriplet,
-  DEPRECATED_$isGridCellNode,
-  DEPRECATED_$isGridSelection,
-  DEPRECATED_GridCellNode,
-} from 'lexical';
+import { $getRoot, $getSelection, $isRangeSelection } from 'lexical';
 import { DropdownMenuItem } from '../../../../components-radix-ui/DropdownMenu/DropdownMenuItem';
 import { DropdownMenuRoot } from '../../../../components-radix-ui/DropdownMenu/DropdownMenuRoot';
 import { DropdownMenuTrigger } from '../../../../components-radix-ui/DropdownMenu/DropdownMenuTrigger';
@@ -34,21 +28,20 @@ import { DropdownMenuPortal } from '../../../../components-radix-ui/DropdownMenu
 import { DropdownMenuContent } from '../../../../components-radix-ui/DropdownMenu/DropdownMenuContent';
 import { DropdownMenuSeparator } from '../../../../components-radix-ui/DropdownMenu/DropdownMenuSeparator';
 import {
-  $canUnmerge,
-  $cellContainsEmptyParagraph,
   $selectLastDescendant,
   computeSelectionCount,
   currentCellBackgroundColor,
-  isGridSelectionRectangular,
+  isTableSelectionRectangular,
 } from './tableCellActionMenuLib';
 import ColorPickerModal from './ColorPickerModal';
 
 interface TableCellActionMenuProps {
   trigger: React.ReactNode;
   contextRef: { current: null | HTMLElement };
-  // showColorPickerModal: (title: string, showModal: (onClose: () => void) => JSX.Element) => void;
+  // showColorPickerModal: (title: string, showModal: (onClose: () => void) => React.JSX.Element) => void;
   tableCellNode: TableCellNode;
   cellMerge: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
@@ -56,15 +49,20 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
   tableCellNode: _tableCellNode,
   contextRef,
   cellMerge,
+  onOpenChange,
   // showColorPickerModal,
 }) => {
   const [editor] = useLexicalComposerContext();
   const dropDownRef = useRef<HTMLDivElement | null>(null);
   const [tableCellNode, updateTableCellNode] = useState(_tableCellNode);
+  useEffect(() => {
+    updateTableCellNode(_tableCellNode);
+  }, [_tableCellNode]);
   const [selectionCounts, updateSelectionCounts] = useState({
     columns: 1,
     rows: 1,
   });
+  const mergeSelectionRef = useRef<TableSelection | null>(null);
   const [canMergeCells, setCanMergeCells] = useState(false);
   const [canUnmergeCell, setCanUnmergeCell] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState(
@@ -87,19 +85,24 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
 
   const checkPossibleActions = useCallback(
     (opened: boolean) => {
+      onOpenChange(opened);
       if (!opened) return;
       editor.getEditorState().read(() => {
         const selection = $getSelection();
 
+        // Keep the cell selection while focus moves into the dropdown.
+        mergeSelectionRef.current = $isTableSelection(selection) ? selection.clone() : null;
+
         // Merge cells
-        if (DEPRECATED_$isGridSelection(selection)) {
+        if ($isTableSelection(selection)) {
           const currentSelectionCounts = computeSelectionCount(selection);
           updateSelectionCounts(computeSelectionCount(selection));
           setCanMergeCells(
-            isGridSelectionRectangular(selection) &&
+            isTableSelectionRectangular(selection) &&
               (currentSelectionCounts.columns > 1 || currentSelectionCounts.rows > 1),
           );
         } else {
+          setCanMergeCells(false);
           updateSelectionCounts({
             columns: 1,
             rows: 1,
@@ -107,10 +110,11 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
         }
 
         // Unmerge cell
-        setCanUnmergeCell($canUnmerge());
+        const cell = tableCellNode.getLatest();
+        setCanUnmergeCell(cell.getColSpan() > 1 || cell.getRowSpan() > 1);
       });
     },
-    [editor],
+    [editor, tableCellNode, onOpenChange],
   );
 
   useEffect(() => {
@@ -156,9 +160,9 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
           throw new Error('Expected to find tableElement in DOM');
         }
 
-        const tableSelection = getTableSelectionFromTableElement(tableElement);
+        const tableSelection = getTableObserverFromTableElement(tableElement);
         if (tableSelection !== null) {
-          tableSelection.clearHighlight();
+          tableSelection.$clearHighlight();
         }
 
         tableNode.markDirty();
@@ -172,52 +176,25 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
 
   const mergeTableCellsAtSelection = useCallback(() => {
     editor.update(() => {
-      const selection = $getSelection();
-      if (DEPRECATED_$isGridSelection(selection)) {
-        const { columns, rows } = computeSelectionCount(selection);
-        const nodes = selection.getNodes();
-        let firstCell: null | DEPRECATED_GridCellNode = null;
-        for (let i = 0; i < nodes.length; i++) {
-          const node = nodes[i];
-          if (DEPRECATED_$isGridCellNode(node)) {
-            if (firstCell === null) {
-              node.setColSpan(columns).setRowSpan(rows);
-              firstCell = node;
-              const isEmpty = $cellContainsEmptyParagraph(node);
-              let firstChild;
-              if (isEmpty && $isParagraphNode((firstChild = node.getFirstChild()))) {
-                firstChild.remove();
-              }
-            } else if (DEPRECATED_$isGridCellNode(firstCell)) {
-              const isEmpty = $cellContainsEmptyParagraph(node);
-              if (!isEmpty) {
-                firstCell.append(...node.getChildren());
-              }
-              node.remove();
-            }
-          }
-        }
-        if (firstCell !== null) {
-          if (firstCell.getChildrenSize() === 0) {
-            firstCell.append($createParagraphNode());
-          }
-          $selectLastDescendant(firstCell);
-        }
+      const selection = mergeSelectionRef.current;
+      if (selection) {
+        const mergedCell = $mergeCells(selection.getNodes().filter($isTableCellNode));
+        if (mergedCell) $selectLastDescendant(mergedCell);
       }
     });
   }, [editor]);
 
   const unmergeTableCellsAtSelection = useCallback(() => {
     editor.update(() => {
-      $unmergeCell();
+      $unmergeCellNode(tableCellNode);
     });
-  }, [editor]);
+  }, [editor, tableCellNode]);
 
   const insertTableRowAtSelection = useCallback(
     (shouldInsertAfter: boolean) => {
       editor.update(() => {
         for (let i = 0; i < selectionCounts.rows; i++) {
-          $insertTableRow__EXPERIMENTAL(shouldInsertAfter);
+          $insertTableRowAtSelection(shouldInsertAfter);
         }
       });
     },
@@ -228,7 +205,7 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
     (shouldInsertAfter: boolean) => {
       editor.update(() => {
         for (let i = 0; i < selectionCounts.columns; i++) {
-          $insertTableColumn__EXPERIMENTAL(shouldInsertAfter);
+          $insertTableColumnAtSelection(shouldInsertAfter);
         }
       });
     },
@@ -237,7 +214,7 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
 
   const deleteTableRowAtSelection = useCallback(() => {
     editor.update(() => {
-      $deleteTableRow__EXPERIMENTAL();
+      $deleteTableRowAtSelection();
     });
   }, [editor]);
 
@@ -252,7 +229,7 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
 
   const deleteTableColumnAtSelection = useCallback(() => {
     editor.update(() => {
-      $deleteTableColumn__EXPERIMENTAL();
+      $deleteTableColumnAtSelection();
     });
   }, [editor]);
 
@@ -324,8 +301,8 @@ const TableCellActionMenu: React.FC<TableCellActionMenuProps> = ({
     (value: string) => {
       editor.update(() => {
         const selection = $getSelection();
-        if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
-          const [cell] = DEPRECATED_$getNodeTriplet(selection.anchor);
+        if ($isRangeSelection(selection) || $isTableSelection(selection)) {
+          const [cell] = $getNodeTriplet(selection.anchor);
           if ($isTableCellNode(cell)) {
             cell.setBackgroundColor(value);
           }

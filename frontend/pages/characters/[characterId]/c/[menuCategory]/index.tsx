@@ -1,9 +1,7 @@
 import React, { Suspense } from 'react';
 import ModuleCategory from '../../../../../component-sections/Module/ModuleCategory';
 
-interface MenuCategoryProps {}
-
-const MenuCategoryPageCharacters: React.FC<MenuCategoryProps> = () => {
+const MenuCategoryPageCharacters: React.FC = () => {
   return (
     <Suspense fallback={null}>
       <ModuleCategory />

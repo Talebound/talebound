@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -8,6 +8,68 @@
  * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
  * ---------------------------------------------------------------
  */
+
+/** @default "NONE" */
+export enum PbPinShape {
+  NONE = 'NONE',
+  SQUARE = 'SQUARE',
+  TRIANGLE = 'TRIANGLE',
+  PIN = 'PIN',
+  CIRCLE = 'CIRCLE',
+  HEXAGON = 'HEXAGON',
+  OCTAGON = 'OCTAGON',
+  STAR = 'STAR',
+  DIAMOND = 'DIAMOND',
+  PENTAGON = 'PENTAGON',
+  HEART = 'HEART',
+  CLOUD = 'CLOUD',
+}
+
+/** @default "MODULE_TYPE_UNKNOWN" */
+export enum PbModuleType {
+  MODULE_TYPE_UNKNOWN = 'MODULE_TYPE_UNKNOWN',
+  MODULE_TYPE_WORLD = 'MODULE_TYPE_WORLD',
+  MODULE_TYPE_QUEST = 'MODULE_TYPE_QUEST',
+  MODULE_TYPE_SYSTEM = 'MODULE_TYPE_SYSTEM',
+  MODULE_TYPE_CHARACTER = 'MODULE_TYPE_CHARACTER',
+}
+
+/** @default "self" */
+export enum PbEvaluationType {
+  Self = 'self',
+  Dm = 'dm',
+}
+
+/** @default "ENTITY_TYPE_UNKNOWN" */
+export enum PbEntityType {
+  ENTITY_TYPE_UNKNOWN = 'ENTITY_TYPE_UNKNOWN',
+  ENTITY_TYPE_POST = 'ENTITY_TYPE_POST',
+  ENTITY_TYPE_MAP = 'ENTITY_TYPE_MAP',
+  ENTITY_TYPE_LOCATION = 'ENTITY_TYPE_LOCATION',
+  ENTITY_TYPE_CHARACTER = 'ENTITY_TYPE_CHARACTER',
+  ENTITY_TYPE_IMAGE = 'ENTITY_TYPE_IMAGE',
+}
+
+/** @default "ENTITY_GROUP_STYLE_UNKNOWN" */
+export enum PbEntityGroupStyle {
+  ENTITY_GROUP_STYLE_UNKNOWN = 'ENTITY_GROUP_STYLE_UNKNOWN',
+  ENTITY_GROUP_STYLE_FRAMED = 'ENTITY_GROUP_STYLE_FRAMED',
+  ENTITY_GROUP_STYLE_NOT_FRAMED = 'ENTITY_GROUP_STYLE_NOT_FRAMED',
+}
+
+/** @default "ENTITY_GROUP_DIRECTION_UNKNOWN" */
+export enum PbEntityGroupDirection {
+  ENTITY_GROUP_DIRECTION_UNKNOWN = 'ENTITY_GROUP_DIRECTION_UNKNOWN',
+  ENTITY_GROUP_DIRECTION_VERTICAL = 'ENTITY_GROUP_DIRECTION_VERTICAL',
+  ENTITY_GROUP_DIRECTION_HORIZONTAL = 'ENTITY_GROUP_DIRECTION_HORIZONTAL',
+}
+
+/** @default "DELETE_EGC_ACTION_UNKNOWN" */
+export enum PbDeleteEntityGroupContentAction {
+  DELETE_EGC_ACTION_UNKNOWN = 'DELETE_EGC_ACTION_UNKNOWN',
+  DELETE_EGC_ACTION_DELETE_CHILDREN = 'DELETE_EGC_ACTION_DELETE_CHILDREN',
+  DELETE_EGC_ACTION_MOVE_CHILDREN = 'DELETE_EGC_ACTION_MOVE_CHILDREN',
+}
 
 export interface PbAddRoleToUserRequest {
   /** @format int32 */
@@ -191,13 +253,6 @@ export interface PbCreateWorldResponse {
   module?: PbViewModule;
 }
 
-/** @default "DELETE_EGC_ACTION_UNKNOWN" */
-export enum PbDeleteEntityGroupContentAction {
-  DELETE_EGC_ACTION_UNKNOWN = 'DELETE_EGC_ACTION_UNKNOWN',
-  DELETE_EGC_ACTION_DELETE_CHILDREN = 'DELETE_EGC_ACTION_DELETE_CHILDREN',
-  DELETE_EGC_ACTION_MOVE_CHILDREN = 'DELETE_EGC_ACTION_MOVE_CHILDREN',
-}
-
 export interface PbDeleteEvaluationVoteResponse {
   success?: boolean;
   message?: string;
@@ -230,36 +285,12 @@ export interface PbEntityGroupContent {
   contentEntityGroupId?: number;
 }
 
-/** @default "ENTITY_GROUP_DIRECTION_UNKNOWN" */
-export enum PbEntityGroupDirection {
-  ENTITY_GROUP_DIRECTION_UNKNOWN = 'ENTITY_GROUP_DIRECTION_UNKNOWN',
-  ENTITY_GROUP_DIRECTION_VERTICAL = 'ENTITY_GROUP_DIRECTION_VERTICAL',
-  ENTITY_GROUP_DIRECTION_HORIZONTAL = 'ENTITY_GROUP_DIRECTION_HORIZONTAL',
-}
-
-/** @default "ENTITY_GROUP_STYLE_UNKNOWN" */
-export enum PbEntityGroupStyle {
-  ENTITY_GROUP_STYLE_UNKNOWN = 'ENTITY_GROUP_STYLE_UNKNOWN',
-  ENTITY_GROUP_STYLE_FRAMED = 'ENTITY_GROUP_STYLE_FRAMED',
-  ENTITY_GROUP_STYLE_NOT_FRAMED = 'ENTITY_GROUP_STYLE_NOT_FRAMED',
-}
-
 export interface PbEntityTagAvailable {
   /** @format int32 */
   id?: number;
   tag?: string;
   /** @format int32 */
   moduleId?: number;
-}
-
-/** @default "ENTITY_TYPE_UNKNOWN" */
-export enum PbEntityType {
-  ENTITY_TYPE_UNKNOWN = 'ENTITY_TYPE_UNKNOWN',
-  ENTITY_TYPE_POST = 'ENTITY_TYPE_POST',
-  ENTITY_TYPE_MAP = 'ENTITY_TYPE_MAP',
-  ENTITY_TYPE_LOCATION = 'ENTITY_TYPE_LOCATION',
-  ENTITY_TYPE_CHARACTER = 'ENTITY_TYPE_CHARACTER',
-  ENTITY_TYPE_IMAGE = 'ENTITY_TYPE_IMAGE',
 }
 
 export interface PbEntityTypeList {
@@ -272,12 +303,6 @@ export interface PbEvaluation {
   name?: string;
   description?: string;
   type?: PbEvaluationType;
-}
-
-/** @default "self" */
-export enum PbEvaluationType {
-  Self = 'self',
-  Dm = 'dm',
 }
 
 export interface PbEvaluationVote {
@@ -541,31 +566,6 @@ export interface PbModuleAdmin {
   motivationalLetter?: string;
   allowedEntityTypes?: PbEntityType[];
   allowedMenu?: boolean;
-}
-
-/** @default "MODULE_TYPE_UNKNOWN" */
-export enum PbModuleType {
-  MODULE_TYPE_UNKNOWN = 'MODULE_TYPE_UNKNOWN',
-  MODULE_TYPE_WORLD = 'MODULE_TYPE_WORLD',
-  MODULE_TYPE_QUEST = 'MODULE_TYPE_QUEST',
-  MODULE_TYPE_SYSTEM = 'MODULE_TYPE_SYSTEM',
-  MODULE_TYPE_CHARACTER = 'MODULE_TYPE_CHARACTER',
-}
-
-/** @default "NONE" */
-export enum PbPinShape {
-  NONE = 'NONE',
-  SQUARE = 'SQUARE',
-  TRIANGLE = 'TRIANGLE',
-  PIN = 'PIN',
-  CIRCLE = 'CIRCLE',
-  HEXAGON = 'HEXAGON',
-  OCTAGON = 'OCTAGON',
-  STAR = 'STAR',
-  DIAMOND = 'DIAMOND',
-  PENTAGON = 'PENTAGON',
-  HEART = 'HEART',
-  CLOUD = 'CLOUD',
 }
 
 export interface PbPost {

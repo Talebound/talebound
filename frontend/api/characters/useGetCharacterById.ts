@@ -6,8 +6,8 @@ import { characterAdapterSlice, characterSelectors } from '../../adapters/Charac
 import { store } from '../../store';
 
 export const useGetCharacterById = createSuspenseQuery<PbCharacter, number, TaleboundError>({
-  primaryKey: 'useGetCharacterById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetCharacterById'],
+  fetcher: async (variables) => {
     if (variables === 0) return {};
 
     const character = characterSelectors.selectById(store.getState(), variables);

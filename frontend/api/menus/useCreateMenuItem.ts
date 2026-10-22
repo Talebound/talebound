@@ -15,7 +15,7 @@ export const useCreateMenuItem = createMutation({
       const currentData = queryClient.getQueryData(menuItemsQueryKey) as inferData<
         typeof useGetMenuItems
       >;
-      variables.body.position = currentData?.length + 1 ?? 1;
+      variables.body.position = (currentData?.length ?? 0) + 1;
     }
 
     return MenusCollection.menusCreateMenuItem(variables.menuId, variables.body);
