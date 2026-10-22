@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -12,7 +12,7 @@ export interface UseLinkEntity {
 
 const useLinkEntity = (entityId: number, validGlobal: boolean = true) => {
   const router = useRouter();
-  const openedUrlPrefix = useSelector((state: ReduxState) => state.menuCategory.openedUrlPrefix);
+  const openedUrlPrefix = useAppSelector((state: ReduxState) => state.menuCategory.openedUrlPrefix);
   const url = `${openedUrlPrefix}/${entityId}#content`;
 
   const LinkEntity = useMemo(() => {

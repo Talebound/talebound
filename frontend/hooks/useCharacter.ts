@@ -4,7 +4,7 @@ import { useGetCharacterById } from '../api/characters/useGetCharacterById';
 import { TaleboundError } from '../utils/types/error';
 import { useModule } from './useModule';
 import { useGetModuleId } from '../api/modules/useGetModuleId';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { characterSelectors } from '../adapters/CharacterAdapter';
 
 interface UseCharacterResponse {
@@ -19,7 +19,7 @@ export const useCharacter = (characterId: number): UseCharacterResponse => {
   const { isFetching: isFetchingCharacter, error: errorCharacter } = useGetCharacterById({
     variables: characterId,
   });
-  const character = useSelector((state) => characterSelectors.selectById(state, characterId));
+  const character = useAppSelector((state) => characterSelectors.selectById(state, characterId));
 
   const { data: moduleId = 0 } = useGetModuleId({ variables: { characterId } });
 

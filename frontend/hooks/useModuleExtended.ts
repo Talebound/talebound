@@ -9,7 +9,7 @@ import {
 import { useMemo } from 'react';
 import { useGetModuleById } from '../api/modules/useGetModuleById';
 import { useGetWorldById } from '../api/worlds/useGetWorldById';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { moduleSelectors } from '../adapters/ModuleAdapter';
 import { useGetSystemById } from '../api/systems/useGetSystemById';
 import { useGetCharacterById } from '../api/characters/useGetCharacterById';
@@ -36,7 +36,7 @@ interface UseModuleExtendedResponse {
 
 export const useModuleExtended = (moduleId: number): UseModuleExtendedResponse => {
   useGetModuleById({ variables: moduleId });
-  const module = useSelector((state) => moduleSelectors.selectById(state, moduleId));
+  const module = useAppSelector((state) => moduleSelectors.selectById(state, moduleId));
   const { data: world } = useGetWorldById({ variables: module?.worldId ?? 0 });
   const { data: system } = useGetSystemById({ variables: module?.systemId ?? 0 });
   const { data: character } = useGetCharacterById({ variables: module?.characterId ?? 0 });

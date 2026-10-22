@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PbViewMapLayer } from '../../../../generated/api-types/data-contracts';
 import { Row } from '../../../../components/Flex/Flex';
-import ContentSection from '../../../../components/ContentSection/ContentSection';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useUpdateMapLayer } from '../../../../api/maps/useUpdateMapLayer';
 import { DragHandle } from '../../../../screens/menus/MenuAdministration/menuAdministrationComponents';
@@ -32,7 +31,6 @@ const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
   const {
     mutate: updateMapLayer,
     isPending: isPendingUpdate,
-    isError: isErrorUpdate,
     error: errorUpdate,
   } = useUpdateMapLayer({
     onSettled,

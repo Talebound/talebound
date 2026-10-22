@@ -69,12 +69,9 @@ existing imports and protobuf package identities. Go builds use the local
   client without changes. The Yarn lockfile installed with `--immutable`.
 - GitHub Actions workflows passed `actionlint`; Compose configuration and root
   Makefile command paths were checked.
-- The imported frontend has existing build blockers: lint reports 28 errors
-  and one warning, and a separate build with lint disabled fails type checking
-  in `frontend/api/entities/useCreateEntityGroupContent.ts` because
-  `entityGroupId` can be undefined. The source and generated client are unchanged
-  by this migration. Frontend CI will report these failures until they are fixed;
-  lint and type checking have not been disabled in the build configuration.
+- Frontend lint, TypeScript checking, and the production build pass with Node 22
+  and the checked-in Yarn lockfile. The inherited API/type mismatches and unused
+  code have been corrected; lint and type checking remain enabled.
 
 ## Builds and deployment
 

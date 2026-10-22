@@ -14,7 +14,7 @@ import { postSelectors } from '../adapters/PostAdapter';
 import { imageSelectors } from '../adapters/ImageAdapter';
 import { mapSelectors } from '../adapters/MapAdapter';
 import { locationSelectors } from '../adapters/LocationAdapter';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { entitySelectors } from '../adapters/EntityAdapter';
 
 interface UseEntityResponse {
@@ -57,7 +57,7 @@ type U =
 
 export const useEntityExtended = (entityId: number): U => {
   const { isFetching, error } = useGetEntityById({ variables: entityId });
-  const entity = useSelector((state) => entitySelectors.selectById(state, entityId));
+  const entity = useAppSelector((state) => entitySelectors.selectById(state, entityId));
 
   const post = postSelectors.selectById(store.getState(), entity?.postId ?? 0);
   const image = imageSelectors.selectById(store.getState(), entity?.imageId ?? 0);

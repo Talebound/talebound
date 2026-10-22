@@ -27,8 +27,8 @@ interface MapLayoutProps {
 }
 
 const MapLayout: React.FC<MapLayoutProps> = ({ mapId, canEdit, allLayersByDefault = false }) => {
-  const { map: mapData, isFetching: isPendingMap } = useMap(mapId);
-  const { data: mapLayers, isFetching: isPendingMapLayers } = useGetMapLayers({ variables: mapId });
+  const { map: mapData } = useMap(mapId);
+  const { data: mapLayers } = useGetMapLayers({ variables: mapId });
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [displayedLayers, setDisplayedLayers] = useState<DisplayedLayers>({});

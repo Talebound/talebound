@@ -1,14 +1,14 @@
 import { ReduxState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useEffect, useMemo } from 'react';
 import { setUserRole } from '../utils/auth/userSlice';
 import { useGetUserRoles } from '../api/users/useGetUserRoles';
 import { isUserRole, UserRole } from '../utils/auth/userUtils';
 
 export function useUserRole(): UserRole {
-  const dispatch = useDispatch();
-  const userId = useSelector((state: ReduxState) => state.auth.user?.id);
-  const userRole = useSelector((state: ReduxState) => state.auth.role);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state: ReduxState) => state.auth.user?.id);
+  const userRole = useAppSelector((state: ReduxState) => state.auth.role);
 
   const { data: roles } = useGetUserRoles({
     variables: userId ?? 0,

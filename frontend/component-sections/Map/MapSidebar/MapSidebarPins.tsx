@@ -16,7 +16,7 @@ interface MapSidebarPinsProps {
   displayedLayers: DisplayedLayers;
 }
 
-const MapSidebarPins: React.FC<MapSidebarPinsProps> = ({ mapId, displayedLayers, canEdit }) => {
+const MapSidebarPins: React.FC<MapSidebarPinsProps> = ({ mapId, canEdit }) => {
   const { data: mapPins, isFetching: isPendingMapPins } = useGetMapPins({ variables: mapId });
   const [modalOpenPins, setModalOpenPins] = useState(false);
 

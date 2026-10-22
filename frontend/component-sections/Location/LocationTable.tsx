@@ -1,12 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ColumnType } from 'antd/es/table';
-import Avatar from '../../components/Avatar/Avatar';
+import AvatarById from '../../components/AvatarById/AvatarById';
+import { useAppSelector } from '../../store/hooks';
+import { selectLocationsByIds } from '../../adapters/LocationAdapter';
 import { Table } from 'antd';
 import { TableProps } from 'antd/lib';
 import { Button } from '../../components/Button/Button';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import LocationFormModal from './LocationFormModal';
-import { PbViewLocation, PbViewModule } from '../../generated/api-types/data-contracts';
+import { PbLocation, PbViewModule } from '../../generated/api-types/data-contracts';
 import { useDeleteBulkLocation } from '../../api/locations/useDeleteBulkLocation';
 import ErrorText from '../../components/ErrorText/ErrorText';
 import { Row } from '../../components/Flex/Flex';
@@ -15,7 +17,7 @@ import AlertDialog from '../../components/AlertDialog/AlertDialog';
 import LocationTablePostCell from './LocationTablePostCell';
 
 interface LocationTableProps {
-  data: PbViewLocation[];
+  locationIds: number[];
   canEdit?: boolean;
   module: PbViewModule;
   isSelectionTable?: boolean;
@@ -23,14 +25,15 @@ interface LocationTableProps {
 }
 
 const LocationTable: React.FC<LocationTableProps> = ({
-  data,
+  locationIds,
   canEdit,
   module,
   isSelectionTable = false,
   isSelectionMultiple = false,
 }) => {
+  const data = useAppSelector((state) => selectLocationsByIds(state, locationIds));
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [updateLocation, setUpdateLocation] = useState<PbViewLocation>();
+  const [updateLocation, setUpdateLocation] = useState<PbLocation>();
 
   canEdit = canEdit && !isSelectionTable;
 
@@ -55,7 +58,7 @@ const LocationTable: React.FC<LocationTableProps> = ({
     setSelectedRowKeys(newSelectedRowKeys);
   }, []);
 
-  const rowSelection: TableProps<PbViewLocation>['rowSelection'] = useMemo(
+  const rowSelection: TableProps<PbLocation>['rowSelection'] = useMemo(
     () =>
       canEdit || isSelectionTable
         ? {
@@ -67,10 +70,10 @@ const LocationTable: React.FC<LocationTableProps> = ({
     [canEdit, selectedRowKeys, onSelectChange, isSelectionTable, isSelectionMultiple],
   );
 
-  const openEditModal = useCallback((record: PbViewLocation) => setUpdateLocation(record), []);
+  const openEditModal = useCallback((record: PbLocation) => setUpdateLocation(record), []);
 
   const deleteLocationRecord = useCallback(
-    (record: PbViewLocation) => {
+    (record: PbLocation) => {
       const { id: locationId } = record;
       if (locationId) {
         deleteLocation({ locationId });
@@ -80,7 +83,7 @@ const LocationTable: React.FC<LocationTableProps> = ({
   );
 
   const actionButtons = useCallback(
-    (record: PbViewLocation) => {
+    (record: PbLocation) => {
       const updateHandler = () => openEditModal(record);
       const deleteHandler = () => deleteLocationRecord(record);
 
@@ -106,13 +109,13 @@ const LocationTable: React.FC<LocationTableProps> = ({
     [openEditModal, deleteLocationRecord],
   );
 
-  const columns: ColumnType<PbViewLocation>[] = useMemo(() => {
-    const cols: ColumnType<PbViewLocation>[] = [
+  const columns: ColumnType<PbLocation>[] = useMemo(() => {
+    const cols: ColumnType<PbLocation>[] = [
       {
         title: '',
-        key: 'thumbnailImageUrl',
-        dataIndex: 'thumbnailImageUrl',
-        render: (value: string) => <Avatar size="lg" url={value} />,
+        key: 'thumbnailImageId',
+        dataIndex: 'thumbnailImageId',
+        render: (value: number | undefined) => <AvatarById size="lg" imageId={value} />,
       },
       {
         title: 'Name',
@@ -130,18 +133,16 @@ const LocationTable: React.FC<LocationTableProps> = ({
       },
       {
         title: 'Post',
-        key: 'postTitle',
-        dataIndex: 'postTitle',
+        key: 'postId',
+        dataIndex: 'postId',
         render: (_, record) =>
           record.id && (
             <LocationTablePostCell
               locationId={record.id}
               postId={record.postId}
-              postTitle={record.postTitle}
               canEdit={canEdit}
             />
           ),
-        sorter: (a, b) => (a.postTitle ?? '').localeCompare(b.postTitle ?? ''),
         width: '150px',
       },
     ];
@@ -157,14 +158,14 @@ const LocationTable: React.FC<LocationTableProps> = ({
     return cols;
   }, [canEdit, actionButtons]);
 
-  const summary: TableProps<PbViewLocation>['summary'] = useCallback(() => {
+  const summary: TableProps<PbLocation>['summary'] = useCallback(() => {
     if (!canEdit) return undefined;
     if (selectedRowKeys.length === 0) return undefined;
 
     const deleteBulkHandler = () => {
       const locationIds = selectedRowKeys.map((key) => parseInt(key.toString()));
       deleteBulkLocations(
-        { locationIds, module },
+        { locationIds },
         {
           onSuccess: () => {
             setSelectedRowKeys([]);
@@ -197,10 +198,10 @@ const LocationTable: React.FC<LocationTableProps> = ({
         </Table.Summary.Row>
       </Table.Summary>
     );
-  }, [canEdit, deleteBulkLocations, errorDeleteBulk, isPendingDeleteBulk, module, selectedRowKeys]);
+  }, [canEdit, deleteBulkLocations, errorDeleteBulk, isPendingDeleteBulk, selectedRowKeys]);
 
-  const onRow: TableProps<PbViewLocation>['onRow'] = useCallback(
-    (record: PbViewLocation) => {
+  const onRow: TableProps<PbLocation>['onRow'] = useCallback(
+    (record: PbLocation) => {
       if (!isSelectionTable) return {};
 
       return {
@@ -214,7 +215,7 @@ const LocationTable: React.FC<LocationTableProps> = ({
 
   return (
     <>
-      <Table<PbViewLocation>
+      <Table<PbLocation>
         loading={isPendingDelete}
         rowSelection={rowSelection}
         showSorterTooltip={false}

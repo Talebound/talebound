@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import ContentSection from '../../../components/ContentSection/ContentSection';
 import MenuItemContentElement from './MenuItemContentElement';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { DragHandle } from '../MenuAdministration/menuAdministrationComponents';
@@ -39,9 +39,9 @@ const MenuItemContentElementEntityGroup: React.FC<MenuItemContentElementEntityGr
   isTopLevelGroup = false,
   isPending,
 }) => {
-  const dispatch = useDispatch();
-  const editMode = useSelector((state: ReduxState) => state.menuCategory.editMode);
-  const menuItemId = useSelector((state: ReduxState) => state.menuCategory.menuItemId);
+  const dispatch = useAppDispatch();
+  const editMode = useAppSelector((state: ReduxState) => state.menuCategory.editMode);
+  const menuItemId = useAppSelector((state: ReduxState) => state.menuCategory.menuItemId);
 
   const {
     attributes,

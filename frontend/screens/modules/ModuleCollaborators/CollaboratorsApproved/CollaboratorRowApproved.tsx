@@ -13,7 +13,7 @@ import { useUpdateModuleAdmin } from '../../../../api/modules/useUpdateModuleAdm
 import { useDeleteModuleAdmin } from '../../../../api/modules/useDeleteModuleAdmin';
 import AlertDialog from '../../../../components/AlertDialog/AlertDialog';
 import ErrorText from '../../../../components/ErrorText/ErrorText';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import { useImage } from '../../../../hooks/useImage';
 import { useModule } from '../../../../hooks/useModule';
@@ -34,7 +34,7 @@ const CollaboratorRowApproved: React.FC<CollaboratorRowApprovedProps> = ({
   const moduleId = data.moduleId ?? 0;
   const { module } = useModule(moduleId);
   const role = useMyModuleRole(moduleId);
-  const userId = useSelector((state: ReduxState) => state.auth.user?.id);
+  const userId = useAppSelector((state: ReduxState) => state.auth.user?.id);
   const isMyRow = data.user?.id === userId;
   const profileLink = `/user/${data.user?.id}/profile`;
   const { image: imageAvatar } = useImage(data?.user?.imgId ?? 0);

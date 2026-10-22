@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { PbEntityGroupDirection } from '../../../../generated/api-types/data-contracts';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../store/hooks';
 import { ReduxState } from '../../../../store';
 import GenericEntityRowView from './GenericEntityRowView';
 import GenericEntityAvatarView from './GenericEntityRowAvatarView';
@@ -22,7 +22,7 @@ const EntityMap: React.FC<EntityMapProps> = ({
 }) => {
   const { map: mapData, isFetching: isPendingPost } = useMap(mapId);
   const mapImageId = mapData?.thumbnailImageId ?? 0;
-  const editMode = useSelector((state: ReduxState) => state.menuCategory.editMode);
+  const editMode = useAppSelector((state: ReduxState) => state.menuCategory.editMode);
 
   if (isPendingPost) return null;
 

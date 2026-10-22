@@ -1,3 +1,4 @@
+import { usePost } from '../../hooks/usePost';
 import React, { useCallback, useMemo, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useCreateLocationPost } from '../../api/locations/useCreateLocationPost';
@@ -8,16 +9,15 @@ import ErrorText from '../../components/ErrorText/ErrorText';
 interface LocationTablePostCellProps {
   locationId: number;
   postId?: number;
-  postTitle?: string;
   canEdit?: boolean;
 }
 
 const LocationTablePostCell: React.FC<LocationTablePostCellProps> = ({
   locationId,
   postId,
-  postTitle,
   canEdit,
 }) => {
+  const { post } = usePost(postId);
   const [assignPostModal, setAssignPostModal] = useState(false);
 
   const {
@@ -62,7 +62,7 @@ const LocationTablePostCell: React.FC<LocationTablePostCellProps> = ({
       </>
     );
   }
-  return <div>{postTitle}</div>;
+  return <div>{post?.title}</div>;
 };
 
 export default LocationTablePostCell;

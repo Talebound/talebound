@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
@@ -26,7 +26,7 @@ const MenuItemContentElementEntity: React.FC<MenuItemContentElementEntityProps> 
   showHandles,
   parentGroup,
 }) => {
-  const editMode = useSelector((state: ReduxState) => state.menuCategory.editMode);
+  const editMode = useAppSelector((state: ReduxState) => state.menuCategory.editMode);
 
   const groupStyle = parentGroup?.style ?? PbEntityGroupStyle.ENTITY_GROUP_STYLE_FRAMED;
   const groupDirection =

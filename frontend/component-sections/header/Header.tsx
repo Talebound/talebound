@@ -5,7 +5,7 @@ import { HeaderTransparentSection } from '../../components/HeaderTransparentSect
 import { useAuth } from '../../hooks/useAuth';
 import { UserDiamond } from './ControlPanel/UserDiamond';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 import { ReduxState } from '../../store';
 import { DEFAULT_AVATAR_URL } from '../../utils/constants';
 import UserModuleQuests from './UserModules/UserModuleQuests';
@@ -28,11 +28,11 @@ const BaseHeader = styled('div', {
 
 const Header: React.FC = () => {
   const { user } = useAuth();
-  const headerImage = useSelector((state: ReduxState) => state.global.headerImage);
+  const headerImage = useAppSelector((state: ReduxState) => state.global.headerImage);
   const { image } = useImage(user?.imgId ?? 0);
 
-  const userId = useSelector((state) => state.auth.user?.id);
-  const modules = useSelector((state) => moduleSelectors.selectAll(state));
+  const userId = useAppSelector((state) => state.auth.user?.id);
+  const modules = useAppSelector((state) => moduleSelectors.selectAll(state));
 
   const { data: moduleData } = useGetUserModules({
     variables: userId ?? 0,

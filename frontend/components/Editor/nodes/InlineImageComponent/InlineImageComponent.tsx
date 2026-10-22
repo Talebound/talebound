@@ -35,7 +35,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { useSharedHistoryContext } from '../../context/SharedHistoryContext';
 import EditorImageModal from '../ImageModal/EditorImageModal';
 import { updateInlineImagePayload } from '../ImageModal/editorImageModalSlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../../store/hooks';
 import { EditorImageModalMode } from '../ImageModal/editorImageModalLib';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 
@@ -122,12 +122,12 @@ export default function InlineImageComponent({
   position: ImagePosition;
   resizable?: boolean;
 }): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { historyState } = useSharedHistoryContext();
   const imageRef = useRef<null | HTMLImageElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
-  const [isResizing, setIsResizing] = useState<boolean>(false);
+  const isResizing = false;
   const [editor] = useLexicalComposerContext();
   const [selection, setSelection] = useState<RangeSelection | NodeSelection | GridSelection | null>(
     null,

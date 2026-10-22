@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { useInput } from '../../../../hooks/useInput';
 import Input from '../../../Input/Input';
 import { Row } from '../../../Flex/Flex';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { updateInlineImagePayload } from './editorImageModalSlice';
 import { ReduxState } from '../../../../store';
 
 const EditorImageModalTabUrl: React.FC = () => {
-  const dispatch = useDispatch();
-  const src = useSelector((state: ReduxState) => state.editorImageModal.inlineImagePayload.src);
+  const dispatch = useAppDispatch();
+  const src = useAppSelector((state: ReduxState) => state.editorImageModal.inlineImagePayload.src);
   const { value: urlValue, onChange: onChangeUrl } = useInput<string>(src);
 
   useEffect(() => {

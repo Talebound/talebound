@@ -4,7 +4,7 @@ import { useGetSystemById } from '../api/systems/useGetSystemById';
 import { TaleboundError } from '../utils/types/error';
 import { useModule } from './useModule';
 import { useGetModuleId } from '../api/modules/useGetModuleId';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { systemSelectors } from '../adapters/SystemAdapter';
 
 interface UseSystemResponse {
@@ -19,7 +19,7 @@ export const useSystem = (systemId: number): UseSystemResponse => {
   const { isFetching: isFetchingSystem, error: errorSystem } = useGetSystemById({
     variables: systemId,
   });
-  const system = useSelector((state) => systemSelectors.selectById(state, systemId));
+  const system = useAppSelector((state) => systemSelectors.selectById(state, systemId));
 
   const { data: moduleId = 0 } = useGetModuleId({ variables: { systemId } });
 

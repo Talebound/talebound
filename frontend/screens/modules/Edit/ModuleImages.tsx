@@ -75,7 +75,8 @@ const ModuleImages: React.FC<ModuleImagesProps> = ({ moduleId, disabled }) => {
   const updateModuleMutation = useUpdateModule();
 
   const changeModuleImage = useCallback(
-    (image: PbImage) => {
+    (image: PbImage | undefined) => {
+      if (!image) return;
       updateModuleMutation.mutate({
         moduleId: moduleId,
         body: {

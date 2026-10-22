@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { setHeaderImage } from '../../store/globalSlice';
 import { imageModifyVariant, ImageVariant } from '../../utils/images/imageUtils';
 import { useImage } from '../../hooks/useImage';
@@ -10,7 +10,7 @@ interface ModuleOpenedProps {
 }
 
 const ModuleOpened: React.FC<ModuleOpenedProps> = ({ moduleId }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { module } = useModule(moduleId);
   const { image: headerImg } = useImage(module?.headerImgId);
 

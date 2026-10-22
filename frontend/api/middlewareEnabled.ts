@@ -1,4 +1,4 @@
-import { Middleware, QueryHook, SuspenseQueryHook } from 'react-query-kit';
+import { Middleware, QueryHook } from 'react-query-kit';
 
 // import { Middleware, QueryHook, SuspenseQueryHook } from 'react-query-kit';
 //

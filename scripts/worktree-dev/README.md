@@ -148,7 +148,7 @@ docker compose -p "$project" --env-file .env.worktree \
 
 Replace `lint` with `build` or `generate`. Stop the frontend before `build`
 because Next.js uses the same `.next` directory for development and production
-builds. The root README records the imported frontend's existing build failures.
+builds. Both lint and type checking must stay enabled.
 For backend compilation using the same `project` variable:
 
 ```sh

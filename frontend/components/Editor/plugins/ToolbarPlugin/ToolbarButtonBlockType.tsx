@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   BsChatSquareQuote,
   BsChevronDown,
@@ -10,7 +10,6 @@ import {
   BsTypeH2,
   BsTypeH3,
 } from 'react-icons/bs';
-import { createPortal } from 'react-dom';
 import ToolbarDropdownBlockType from './ToolbarDropdownBlockType';
 import { Divider, ToolbarItemButton } from './componentsToolbar';
 import { LexicalEditor } from 'lexical';
@@ -45,8 +44,6 @@ export const TextWrapper = styled('span', {
   height: '20px',
   textAlign: 'left',
 });
-
-const supportedBlockTypes = new Set(['paragraph', 'quote', 'code', 'h1', 'h2', 'ul', 'ol']);
 
 export type BlockType =
   | 'code'

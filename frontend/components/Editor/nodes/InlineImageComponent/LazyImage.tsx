@@ -13,7 +13,7 @@ const StyledLazyImage = styled('img', {
     position: {
       left: {},
       right: {},
-      full: {},
+      none: {},
     },
 
     grabbable: {

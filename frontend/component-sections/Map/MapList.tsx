@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ReduxState } from '../../store';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 import { EntityTableType, Tables } from '../../utils/types/tables';
 import { PAGE_SIZE_MAPS, useGetMaps } from '../../api/maps/useGetMaps';
 import { selectMapsByIds } from '../../adapters/MapAdapter';
@@ -35,7 +35,7 @@ const MapList: React.FC<MapListProps> = ({
     [mapsDataPages],
   );
 
-  const mapsData = useSelector((state: ReduxState) => selectMapsByIds(state, mapIds), [mapIds]);
+  const mapsData = useAppSelector((state: ReduxState) => selectMapsByIds(state, mapIds));
 
   useEffect(() => {
     if (

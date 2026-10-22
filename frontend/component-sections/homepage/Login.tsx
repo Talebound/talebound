@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useLogin } from '../../api/auth/useLogin';
 import { useRouter } from 'next/router';
 import { setUser } from '../../utils/auth/userSlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { Client } from 'react-hydration-provider';
 import { useInput } from '../../hooks/useInput';
 import { styled } from '../../styles/stitches.config';
@@ -89,7 +89,7 @@ const ForgotPassword = styled(Link, {
 
 const Login: React.FC = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const login = useLogin({
     onSuccess: (data) => {

@@ -3,7 +3,7 @@ import NavbarHeader from './NavbarHeader';
 import { NavbarWrapper, NavbarItem, NavbarSquare } from './navbarComponents';
 import { useGetMenuItems } from '../../api/menus/useGetMenuItems';
 import { useGetMenuById } from '../../api/menus/useGetMenuById';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { setMenuImage } from '../../store/globalSlice';
 import { IMAGE_DEFAULT_MENU } from '../../utils/images/imageDefaultUrls';
 
@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({
   postfixItemsTitle = '',
   postfixItems = [],
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: menuData } = useGetMenuById({ variables: menuId });
   const { data: menuItemsData = [] } = useGetMenuItems({ variables: menuId });
 

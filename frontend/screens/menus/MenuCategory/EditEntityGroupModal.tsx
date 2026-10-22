@@ -1,6 +1,6 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import Modal from '../../../components/Modal/Modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { ReduxState } from '../../../store';
 import { setEditEntityGroupId } from './menuCategorySlice';
 import { EntityGroupObject } from '../../../hooks/useGetMenuItemContentHierarchy';
@@ -21,8 +21,8 @@ const EditEntityGroupModal: React.FC<EditEntityGroupModalProps> = ({
   entityGroups,
   menuItemId,
 }) => {
-  const dispatch = useDispatch();
-  const editEntityGroupId = useSelector(
+  const dispatch = useAppDispatch();
+  const editEntityGroupId = useAppSelector(
     (state: ReduxState) => state.menuCategory.editEntityGroupId,
   );
 

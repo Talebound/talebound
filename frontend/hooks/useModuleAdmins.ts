@@ -1,6 +1,6 @@
 import { useGetModuleAdmins } from '../api/modules/useGetModuleAdmins';
 import { PbModuleAdmin } from '../generated/api-types/data-contracts';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { UserRole } from '../utils/auth/userUtils';
 
 export enum ModuleAdminRole {
@@ -20,8 +20,8 @@ export function useModuleAdmins(moduleId: number): PbModuleAdmin[] {
 }
 
 export function useMyModuleRole(moduleId: number): ModuleAdminRole {
-  const userId = useSelector((state) => state.auth.user?.id);
-  const userRole = useSelector((state) => state.auth.role);
+  const userId = useAppSelector((state) => state.auth.user?.id);
+  const userRole = useAppSelector((state) => state.auth.role);
   const moduleAdmins = useModuleAdmins(moduleId);
 
   const myAdmin = moduleAdmins.find((moduleAdmin) => moduleAdmin.userId === userId);

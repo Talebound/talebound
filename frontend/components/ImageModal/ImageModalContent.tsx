@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { AxiosResponse } from 'axios';
 import { PbImage } from '../../generated/api-types/data-contracts';
 import { styled } from '../../styles/stitches.config';
@@ -37,10 +37,10 @@ const ImageModalContent: React.FC<ImageModalContentProps> = ({
   uploadedImageTypeId,
   isNullable = false,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = React.useState(ImageModalTabs.Upload);
-  const selectedImage = useSelector((state: ReduxState) => state.imageModal.selectedImage);
-  const selectedVariant = useSelector((state: ReduxState) => state.imageModal.selectedVariant);
+  const selectedImage = useAppSelector((state: ReduxState) => state.imageModal.selectedImage);
+  const selectedVariant = useAppSelector((state: ReduxState) => state.imageModal.selectedVariant);
   const [isCloudflareImage, setIsCloudflareImage] = React.useState(false);
 
   useEffect(() => {

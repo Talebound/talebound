@@ -1,7 +1,6 @@
 import React from 'react';
 import { isModuleCollaborator, useMyModuleRole } from '../../hooks/useModuleAdmins';
 import ModuleLayout from '../../components/Layout/ModuleLayout';
-import MapsScreen from '../../screens/menus/Maps/MapsScreen';
 import PostsScreen from '../../screens/menus/Posts/PostsScreen';
 
 interface ModulePostsProps {

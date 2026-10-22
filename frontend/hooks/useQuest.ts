@@ -4,7 +4,7 @@ import { useGetQuestById } from '../api/quests/useGetQuestById';
 import { TaleboundError } from '../utils/types/error';
 import { useModule } from './useModule';
 import { useGetModuleId } from '../api/modules/useGetModuleId';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { questSelectors } from '../adapters/QuestAdapter';
 
 interface UseQuestResponse {
@@ -19,7 +19,7 @@ export const useQuest = (questId: number): UseQuestResponse => {
   const { isFetching: isFetchingQuest, error: errorQuest } = useGetQuestById({
     variables: questId,
   });
-  const quest = useSelector((state) => questSelectors.selectById(state, questId));
+  const quest = useAppSelector((state) => questSelectors.selectById(state, questId));
 
   const { data: moduleId = 0 } = useGetModuleId({ variables: { questId } });
 

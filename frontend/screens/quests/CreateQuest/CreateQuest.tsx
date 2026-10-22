@@ -7,7 +7,6 @@ import ContentSection from '../../../components/ContentSection/ContentSection';
 import { useInput } from '../../../hooks/useInput';
 import { HelperMessage, HelperType } from '../../../utils/form/helperTypes';
 import { validateString } from '../../../utils/form/validatePassword';
-import { styled } from '../../../styles/stitches.config';
 import ImageCard from '../../../components/ImageCard/ImageCard';
 import { TitleH2 } from '../../../components/Typography/Title';
 import { Text } from '../../../components/Typography/Text';
@@ -24,19 +23,6 @@ import WorldCard from '../../../components/WorldCard/WorldCard';
 import SystemCard from '../../../components/SystemCard/SystemCard';
 import { getQuestStatSections } from '../../../components/QuestCard/QuestCard';
 import LoadingText from '../../../components/Loading/LoadingText';
-
-const InputDescription = styled('div', {
-  borderRadius: '$md',
-  padding: '$md',
-  display: 'flex',
-  flexDirection: 'column',
-  fontSize: '$sm',
-
-  'div li': {
-    listStyleType: 'none',
-    paddingLeft: '$md',
-  },
-});
 
 const CreateQuest: React.FC = () => {
   const createQuestMutation = useCreateQuest();

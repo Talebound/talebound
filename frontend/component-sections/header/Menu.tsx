@@ -8,8 +8,7 @@ import { Row } from '../../components/Flex/Flex';
 import Link from 'next/link';
 import { useUserRole } from '../../hooks/useUserRole';
 import { isAtLeastModerator, UserRole } from '../../utils/auth/userUtils';
-import { RiShieldStarLine, RiShieldUserLine } from 'react-icons/ri';
-import { TbBell, TbMessage, TbShieldHalf, TbShieldHalfFilled, TbShieldStar } from 'react-icons/tb';
+import { TbBell, TbMessage, TbShieldHalfFilled, TbShieldStar } from 'react-icons/tb';
 
 const StyledNavbar = styled('nav', {
   backgroundColor: 'rgba(255, 255, 255, 0.8)',

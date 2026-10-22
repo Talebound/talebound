@@ -63,8 +63,9 @@
   Tests write fixtures to the current worktree database; never point them at a
   shared or production database.
 - For frontend changes, run relevant lint/build checks and verify the affected
-  browser flow. The README records inherited frontend lint/type-check failures;
-  report those honestly and do not suppress checks to make a build appear green.
+  browser flow. Report failures honestly and do not suppress checks to make a
+  build appear green. Use `useAppSelector`/`useAppDispatch` from
+  `frontend/store/hooks.ts` for typed Redux access.
 - For worktree authentication/email changes, verify signup, local email delivery,
   verification, login, and isolation from another running worktree. Report the
   actual commands/results and any untested behavior before handoff.

@@ -2,7 +2,7 @@ import { PbViewEntity } from '../generated/api-types/data-contracts';
 import { useMemo } from 'react';
 import { useGetEntityById } from '../api/entities/useGetEntityById';
 import { TaleboundError } from '../utils/types/error';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import { entitySelectors } from '../adapters/EntityAdapter';
 
 interface UseEntityResponse {
@@ -13,7 +13,7 @@ interface UseEntityResponse {
 
 export const useEntity = (entityId: number): UseEntityResponse => {
   const { isFetching, error } = useGetEntityById({ variables: entityId });
-  const entity = useSelector((state) => entitySelectors.selectById(state, entityId));
+  const entity = useAppSelector((state) => entitySelectors.selectById(state, entityId));
 
   return useMemo(
     () => ({
