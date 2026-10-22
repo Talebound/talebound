@@ -1,0 +1,28 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks';
+import * as stories from './Evaluation.stories';
+
+<Meta of={stories} />
+
+# Evaluation
+
+Renders a rating component with a label and optional description, with integrated voting API endpoints.
+
+## Default
+
+By default, every evaluation is rendered into its own card. In this case, it takes up more space.
+
+Example of usage - self evaluation in user settings.
+
+<Canvas>
+  <Story of={stories.StoryDefault}/>
+</Canvas>
+
+## Compact
+
+It is possible to render evaluations in a compact mode. In this case, the rating component is rendered inline only with title and rating.
+
+Example of usage - self evaluation view in user profile.
+
+<Canvas>
+  <Story of={stories.StoryCompact}/>
+</Canvas>

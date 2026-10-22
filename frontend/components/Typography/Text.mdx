@@ -1,0 +1,134 @@
+import {Canvas, Meta} from '@storybook/addon-docs/blocks';
+import {Col, Row} from '../Flex/Flex';
+import {Text} from './Text';
+import * as stories from './Text.stories';
+
+<Meta of={stories}/>
+
+# Text
+
+Renders a span component. Expects a string as a child.
+
+## Default paragraph
+
+This is how paragraph looks with default settings:
+
+<Canvas>
+  <Text>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies
+    aliquam, nunc, nec aliquet nunc nisl eget ultricies aliquam, nunc, nec aliquet nunc, nec aliquet
+    nunc nisl eget ultricies aliquam.
+  </Text>
+  <Text>
+    Donec euismod, nisl eget ultricies aliquam, nunc, nec aliquet nunc nisl eget ultricies aliquam,
+    nunc, nec aliquet nunc, nec aliquet nunc nisl eget ultricies aliquam. Lorem ipsum dolor sit
+    amet, consectetur adipiscing elit.
+  </Text>
+</Canvas>
+
+## Sizes
+
+The component supports the following sizes:
+
+XS, SM, MD, LG
+
+<Canvas>
+  <Col gap="md">
+    <Text size="xs">Extra Small</Text>
+    <Text size="sm">Small</Text>
+    <Text size="md">Medium</Text>
+    <Text size="lg">Large</Text>
+  </Col>
+</Canvas>
+
+## Colors
+
+The component supports the following colors:
+
+Primary, secondary, tertiary, success, danger, info, warning, white, black
+
+<Canvas>
+  <Col gap="md">
+    <Text weight="bold" color="primary">
+      Primary
+    </Text>
+    <Text weight="bold" color="secondary">
+      Secondary
+    </Text>
+    <Text weight="bold" color="tertiary">
+      Tertiary
+    </Text>
+    <Text weight="bold" color="success">
+      Success
+    </Text>
+    <Text weight="bold" color="danger">
+      Danger
+    </Text>
+    <Text weight="bold" color="info">
+      Info
+    </Text>
+    <Text weight="bold" color="warning">
+      Warning
+    </Text>
+    <Text weight="bold" color="white">
+      White
+    </Text>
+    <Text weight="bold" color="black">
+      Black
+    </Text>
+  </Col>
+</Canvas>
+
+## Weights
+
+The component supports the following weights:
+
+Regular, medium, semibold, bold
+
+<Canvas>
+  <Col gap="md">
+    <Text weight="regular">Regular</Text>
+    <Text weight="medium">Medium</Text>
+    <Text weight="semibold">Semibold</Text>
+    <Text weight="bold">Bold</Text>
+  </Col>
+</Canvas>
+
+## Bold and Italic shortcuts
+
+Bold has a shortcut b
+
+Italic has a shortcut i
+
+<Canvas>
+  <Row>
+    <Col gap="md">
+      <Text b size="xs">
+        Extra Small
+      </Text>
+      <Text b size="sm">
+        Small
+      </Text>
+      <Text b size="md">
+        Medium
+      </Text>
+      <Text b size="lg">
+        Large
+      </Text>
+    </Col>
+    <Col gap="md">
+      <Text i size="xs">
+        Extra Small
+      </Text>
+      <Text i size="sm">
+        Small
+      </Text>
+      <Text i size="md">
+        Medium
+      </Text>
+      <Text i size="lg">
+        Large
+      </Text>
+    </Col>
+  </Row>
+</Canvas>

@@ -1,0 +1,44 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as stories from './Loading.stories.tsx';
+import Loading from './Loading';
+import { Text } from '../Typography/Text';
+
+<Meta of={stories} />
+
+# Loading
+
+Renders a Loading component. Comes in different sizes
+
+## Sizes
+
+xs, sm, md, lg
+
+<Canvas>
+  <Loading size="xs" />
+  <Loading size="sm" />
+  <Loading size="md" />
+  <Loading size="lg" />
+</Canvas>
+
+## Colors
+
+primary, secondary, tertiary, white, black, success, danger
+
+<Canvas>
+  <Loading color="primary" />
+  <Loading color="secondary" />
+  <Loading color="tertiary" />
+  <Loading color="white" />
+  <Loading color="black" />
+  <Loading color="success" />
+  <Loading color="danger" />
+</Canvas>
+
+It is possible to also use "currentColor". Example of Loading component inside of `<Text color="info">`
+
+<Canvas>
+  <Text color="info" size="lg">
+    <Loading color="currentColor" />
+    <Text i>Loading...</Text>
+  </Text>
+</Canvas>

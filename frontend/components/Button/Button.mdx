@@ -1,0 +1,111 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as stories from './Button.stories';
+import { Button } from './Button';
+import { Col, Row } from '../Flex/Flex';
+import { RxCross1, RxTrash } from 'react-icons/rx';
+import { Text } from '../Typography/Text';
+
+<Meta of={stories} />
+
+# Button
+
+Button component works as Flex item, centered by default.
+
+**Adding icon:**
+
+If you want to add icons as prefix/suffix, you can do it by adding them as children.
+If you do it, it is recommended to add Text component as well, because without it, everything is going to be rendered in `p` tag, which ruins centering of the icon.
+By default, icons (svg elements) inside button have font-size of 1.25em, but you can change with "size" property on icon.
+
+```
+<Button color="dangerOutline">
+  <Text>Button with slightly bigger icon</Text>
+  <RxTrash size="1.5em" />
+</Button>
+```
+
+## Colors
+
+- primaryFill = default
+- primaryOutline
+- secondaryFill
+- secondaryOutline
+- dangerFill
+- dangerOutline
+- ghost
+
+<Canvas>
+  <Button color="primaryFill">Button primaryFill (default)</Button>
+  <Button color="primaryOutline">Button primaryOutline</Button>
+  <Button color="secondaryFill">Button secondaryFill</Button>
+  <Button color="secondaryOutline">Button secondaryOutline</Button>
+  <Button color="dangerFill">Button dangerFill</Button>
+  <Button color="dangerOutline">Button dangerOutline</Button>
+  <Button color="ghost">Button ghost</Button>
+</Canvas>
+
+## Sizes
+
+sm, md (default), lg, xl
+
+<Canvas>
+  <Button size="sm">Button sm</Button>
+  <Button size="md">Button md (default)</Button>
+  <Button size="lg">Button lg</Button>
+  <Button size="xl">Button xl</Button>
+  <br />
+  <Button size="sm" icon>
+    <RxTrash />
+  </Button>
+  <Button size="md" icon>
+    <RxTrash />
+  </Button>
+  <Button size="lg" icon>
+    <RxTrash />
+  </Button>
+  <Button size="xl" icon>
+    <RxTrash />
+  </Button>
+</Canvas>
+
+## Special props
+
+- loading - renders overlay with spinner inside button (default: false)
+  <Col gap="sm">
+    <Button color="primaryFill" loading>
+      Button with loading state
+    </Button>
+    <Button color="dangerFill" loading>
+      Button with loading state
+    </Button>
+    <Button color="dangerOutline" loading>
+      Button with loading state
+    </Button>
+  </Col>
+- disabled - changes opacity to 0.7 and pointer-events to none (default: false)
+  <Button disabled>Button disabled</Button>
+- fullWidth - sets width to 100%, otherwise it is "fit-content" (default: false)
+  <Button fullWidth>Button fullWidth</Button>
+- icon - makes button as square. This type of button expects only icon as children (default: false)
+  <Button color="dangerFill" icon>
+    <RxTrash />
+  </Button>
+
+## More examples
+
+<Row gap="sm">
+  <Button>Default button setting</Button>
+  <Button color="dangerFill">
+    <RxTrash />
+    <Text>Delete</Text>
+  </Button>
+  <Button color="dangerOutline">
+    <Text>Close </Text>
+    <RxCross1 size="0.75em" />
+  </Button>
+  <Text color="danger">
+    <Button color="ghost" icon>
+      <RxCross1 size="0.75em" />
+    </Button>
+  </Text>
+</Row>

@@ -1,0 +1,109 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks';
+import * as stories from './Avatar.stories';
+import Avatar from './Avatar';
+
+<Meta of={stories} />
+
+# Avatar
+
+Renders an avatar component.
+
+## Props
+
+```typescript
+type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+type AvatarType = 'unknown' | 'user' | 'character' | 'world' | 'ruleset';
+
+interface AvatarProps {
+  url?: string;
+  type?: AvatarType; //default is 'unknown'
+  size?: AvatarSize; //default is 'lg'
+  fallbackText?: string;
+}
+```
+
+## Default
+
+By default, size is "lg"
+
+<Canvas>
+  <Story of={stories.StoryDefault}/>
+</Canvas>
+
+## No url
+
+It is possible to render default avatar, without giving out URL. If that is the case, it is possible to pass in a type, which will be used to display correct "unknown" image.
+
+Example of "unknown" user avatar:
+
+<Canvas>
+  <Story of={stories.StoryNoUrl}/>
+</Canvas>
+
+## Sizes
+
+It is possible to render different sizes of avatar. By default, size is "lg".
+
+```typescript
+xs = 16; //using 30x30 variant
+sm = 24; //using 30x30 variant
+md = 36; //using 100x100 variant
+lg = 48; //using 100x100 variant
+xl = 100; //using 100x100 variant
+2xl = 200; //using 200x200 variant
+```
+
+<Canvas>
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="xs"
+  />
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="sm"
+  />
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="md"
+  />
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="lg"
+  />
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="xl"
+  />
+  <Avatar
+    type="user"
+    url="https://imagedelivery.net/zchNIWFramhipgMjPiGPQQ/c5fba38d-0447-4e06-b04e-96f59e4e2d00/public"
+    size="2xl"
+  />
+</Canvas>
+
+## Types
+
+```typescript
+type AvatarType = 'unknown' | 'user' | 'character' | 'world' | 'ruleset';
+```
+
+<Canvas>
+  <Avatar type="unknown" />
+  <Avatar type="user" />
+  <Avatar type="character" />
+  <Avatar type="world" />
+  <Avatar type="ruleset" />
+</Canvas>
+
+## Fallback
+
+You can pass in a fallback text, which will be used if there is no URL and no type provided.
+
+<Canvas>
+  <Avatar type="unknown" fallbackText="MD" />
+</Canvas>

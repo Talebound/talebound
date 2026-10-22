@@ -1,0 +1,56 @@
+import {
+  Gi3DHammer,
+  Gi3DMeeple,
+  Gi3DStairs,
+  GiAbbotMeeple,
+  GiAbstract002,
+  GiAbstract004,
+  GiAbstract005,
+  GiAchievement,
+  GiAcid,
+  GiAcorn,
+  GiAerialSignal,
+  GiAgave,
+  GiAlienBug,
+  GiAlienFire,
+  GiAlienSkull,
+  GiAlliedStar,
+  GiAmethyst,
+  GiAmphora,
+  GiAnchor,
+  GiAncientColumns,
+  GiAncientRuins,
+  GiAncientSword,
+  GiAnglerFish,
+} from 'react-icons/gi';
+import { IconType } from 'react-icons';
+
+export const pinIconObject: Record<string, IconType> = {
+  gi3DHammer: (props) => <Gi3DHammer {...props} />,
+  gi3DMeeple: (props) => <Gi3DMeeple {...props} />,
+  gi3DStairs: (props) => <Gi3DStairs {...props} />,
+  giAbbotMeeple: (props) => <GiAbbotMeeple {...props} />,
+  giAbstract002: (props) => <GiAbstract002 {...props} />,
+  giAbstract004: (props) => <GiAbstract004 {...props} />,
+  giAbstract005: (props) => <GiAbstract005 {...props} />,
+  giAchievement: (props) => <GiAchievement {...props} />,
+  giAcid: (props) => <GiAcid {...props} />,
+  giAcorn: (props) => <GiAcorn {...props} />,
+  giAerialSignal: (props) => <GiAerialSignal {...props} />,
+  giAgave: (props) => <GiAgave {...props} />,
+  giAlienBug: (props) => <GiAlienBug {...props} />,
+  giAlienFire: (props) => <GiAlienFire {...props} />,
+  giAlienSkull: (props) => <GiAlienSkull {...props} />,
+  giAlliedStar: (props) => <GiAlliedStar {...props} />,
+  giAmethyst: (props) => <GiAmethyst {...props} />,
+  giAmphora: (props) => <GiAmphora {...props} />,
+  giAnchor: (props) => <GiAnchor {...props} />,
+  giAncientColumns: (props) => <GiAncientColumns {...props} />,
+  giAncientRuins: (props) => <GiAncientRuins {...props} />,
+  giAncientSword: (props) => <GiAncientSword {...props} />,
+  giAnglerFish: (props) => <GiAnglerFish {...props} />,
+} as const;
+
+export type PinIconType = keyof typeof pinIconObject | '';
+
+export const iterablePinIcons = ['', ...Object.keys(pinIconObject)] as PinIconType[];
