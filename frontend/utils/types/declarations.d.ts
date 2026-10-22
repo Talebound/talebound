@@ -1,6 +1,11 @@
 declare module '*.svg' {
   import type React from 'react';
-  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  const src: string;
-  export default src;
+  const Component: React.FC<React.SVGProps<SVGSVGElement>>;
+  export default Component;
+}
+
+declare module '*.svg?url' {
+  import type { StaticImageData } from 'next/image';
+  const image: StaticImageData;
+  export default image;
 }

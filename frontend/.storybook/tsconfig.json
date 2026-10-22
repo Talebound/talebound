@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "include": [
+    "../utils/types/*.d.ts",
     "./*.ts",
     "./*.tsx",
     "../components/**/*.stories.tsx",
