@@ -23,10 +23,12 @@
       "name": "Evaluations"
     },
     {
-      "name": "Fetcher"
+      "name": "Fetcher",
+      "description": "============= IMAGES ================"
     },
     {
-      "name": "Images"
+      "name": "Images",
+      "description": "============= IMAGES ================"
     },
     {
       "name": "Locations"
@@ -442,26 +444,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "shortDescription": {
-                  "type": "string"
-                },
-                "public": {
-                  "type": "boolean"
-                },
-                "worldId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "systemId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/CharactersUpdateCharacterBody"
             }
           }
         ],
@@ -502,18 +485,41 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "byte"
-                },
-                "imageTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/CharactersUploadCharacterImageBody"
             }
+          }
+        ],
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/characters/{characterId}/quests": {
+      "get": {
+        "summary": "Get character quests",
+        "description": "gets list of character quests",
+        "operationId": "Characters_GetCharacterQuests",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbGetQuestCharactersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -587,21 +593,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "style": {
-                  "$ref": "#/definitions/pbEntityGroupStyle"
-                },
-                "direction": {
-                  "$ref": "#/definitions/pbEntityGroupDirection"
-                }
-              }
+              "$ref": "#/definitions/EntitiesUpdateEntityGroupBody"
             }
           }
         ],
@@ -642,28 +634,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "contentEntityId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "contentEntityGroupId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "entityType": {
-                  "$ref": "#/definitions/pbEntityType"
-                },
-                "entityIdOfType": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/EntitiesCreateEntityGroupContentBody"
             }
           }
         ],
@@ -750,25 +721,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "newEntityGroupId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "contentEntityId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "contentEntityGroupId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/EntitiesUpdateEntityGroupContentBody"
             }
           }
         ],
@@ -1335,23 +1288,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "postId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "thumbnailImageId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/LocationsUpdateLocationBody"
             }
           }
         ],
@@ -1521,12 +1458,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/MapsCreateMapPinTypeGroupBody"
             }
           }
         ],
@@ -1613,12 +1545,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/MapsUpdateMapPinTypeGroupBody"
             }
           }
         ],
@@ -1690,36 +1617,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "mapPinTypeGroupId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "shape": {
-                  "$ref": "#/definitions/pbPinShape"
-                },
-                "backgroundColor": {
-                  "type": "string"
-                },
-                "borderColor": {
-                  "type": "string"
-                },
-                "iconColor": {
-                  "type": "string"
-                },
-                "icon": {
-                  "type": "string"
-                },
-                "iconSize": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "width": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MapsCreateMapPinTypeBody"
             }
           }
         ],
@@ -1767,35 +1665,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "shape": {
-                  "$ref": "#/definitions/pbPinShape"
-                },
-                "backgroundColor": {
-                  "type": "string"
-                },
-                "borderColor": {
-                  "type": "string"
-                },
-                "iconColor": {
-                  "type": "string"
-                },
-                "icon": {
-                  "type": "string"
-                },
-                "iconSize": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "width": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "isDefault": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/MapsUpdateMapPinTypeBody"
             }
           }
         ],
@@ -1899,25 +1769,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "thumbnailImageId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "isPrivate": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/MapsUpdateMapBody"
             }
           }
         ],
@@ -1989,23 +1841,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "imageId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "enabled": {
-                  "type": "boolean"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MapsCreateMapLayerBody"
             }
           }
         ],
@@ -2092,23 +1928,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "imageId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "enabled": {
-                  "type": "boolean"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MapsUpdateMapLayerBody"
             }
           }
         ],
@@ -2221,32 +2041,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "mapPinTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "locationId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "mapLayerId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "x": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "y": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MapsCreateMapPinBody"
             }
           }
         ],
@@ -2333,32 +2128,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "mapPinTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "locationId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "mapLayerId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "x": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "y": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MapsUpdateMapPinBody"
             }
           }
         ],
@@ -2463,16 +2233,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "type": "string"
-                },
-                "headerImgId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MenusUpdateMenuBody"
             }
           }
         ],
@@ -2585,22 +2346,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "isMain": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/MenusCreateMenuItemBody"
             }
           }
         ],
@@ -2687,26 +2433,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "position": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "isMain": {
-                  "type": "boolean"
-                },
-                "descriptionPostId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/MenusUpdateMenuItemBody"
             }
           }
         ],
@@ -2832,25 +2559,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "headerImgId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "thumbnailImgId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "avatarImgId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "descriptionPostId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/ModulesUpdateModuleBody"
             }
           }
         ],
@@ -2961,12 +2670,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "motivationalLetter": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/ModulesCreateModuleAdminBody"
             }
           }
         ],
@@ -3005,29 +2709,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "userId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "superAdmin": {
-                  "type": "boolean"
-                },
-                "approved": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "motivationalLetter": {
-                  "type": "string"
-                },
-                "allowedEntityTypes": {
-                  "$ref": "#/definitions/pbEntityTypeList"
-                },
-                "allowedMenu": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/ModulesUpdateModuleAdminBody"
             }
           }
         ],
@@ -3251,28 +2933,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "content": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "isDraft": {
-                  "type": "boolean"
-                },
-                "isPrivate": {
-                  "type": "boolean"
-                },
-                "imageThumbnailId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/PostsUpdatePostBody"
             }
           }
         ],
@@ -3424,6 +3085,26 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "canJoin",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "FINISHED_COMPLETED",
+              "FINISHED_NOT_COMPLETED"
+            ],
+            "default": "UNKNOWN"
           }
         ],
         "tags": [
@@ -3526,26 +3207,173 @@
             "in": "body",
             "required": true,
             "schema": {
+              "$ref": "#/definitions/QuestsUpdateQuestBody"
+            }
+          }
+        ],
+        "tags": [
+          "Quests"
+        ]
+      }
+    },
+    "/quests/{questId}/characters": {
+      "get": {
+        "summary": "Get quest characters",
+        "description": "gets list of quest characters",
+        "operationId": "Quests_GetQuestCharacters",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbGetQuestCharactersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Quests"
+        ]
+      }
+    },
+    "/quests/{questId}/characters/{characterId}": {
+      "delete": {
+        "summary": "Delete quest character",
+        "description": "deletes quest character",
+        "operationId": "Quests_DeleteQuestCharacter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
               "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "shortDescription": {
-                  "type": "string"
-                },
-                "public": {
-                  "type": "boolean"
-                },
-                "worldId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "systemId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Quests"
+        ]
+      },
+      "post": {
+        "summary": "Create quest character",
+        "description": "creates quest character",
+        "operationId": "Quests_CreateQuestCharacter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbQuestCharacter"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestsCreateQuestCharacterBody"
+            }
+          }
+        ],
+        "tags": [
+          "Quests"
+        ]
+      },
+      "patch": {
+        "summary": "Update quest character",
+        "description": "updates quest character properties",
+        "operationId": "Quests_UpdateQuestCharacter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbQuestCharacter"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestsUpdateQuestCharacterBody"
             }
           }
         ],
@@ -3586,17 +3414,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "byte"
-                },
-                "imageTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/QuestsUploadQuestImageBody"
             }
           }
         ],
@@ -3763,21 +3581,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "shortDescription": {
-                  "type": "string"
-                },
-                "public": {
-                  "type": "boolean"
-                },
-                "basedOn": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/SystemsUpdateSystemBody"
             }
           }
         ],
@@ -3818,17 +3622,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "byte"
-                },
-                "imageTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/SystemsUploadSystemImageBody"
             }
           }
         ],
@@ -3966,12 +3760,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "newTag": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/TagsUpdateModuleEntityAvailableTagBody"
             }
           }
         ],
@@ -4116,12 +3905,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "newTag": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/TagsUpdateModuleTypeAvailableTagBody"
             }
           }
         ],
@@ -4162,13 +3946,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "tagId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/TagsCreateEntityTagBody"
             }
           }
         ],
@@ -4250,13 +4028,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "tagId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/TagsCreateModuleTagBody"
             }
           }
         ],
@@ -4508,13 +4280,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
+              "$ref": "#/definitions/UsersUploadUserAvatarBody"
             }
           }
         ],
@@ -4586,22 +4352,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "evaluationId": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "userIdVoter": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "value": {
-                  "type": "number",
-                  "format": "double"
-                }
-              },
-              "title": "Create or update evaluation"
+              "$ref": "#/definitions/UsersCreateOrUpdateEvaluationVoteBody"
             }
           }
         ],
@@ -4768,15 +4519,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "type": "string"
-                },
-                "saveAsDraft": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/UsersUpdateUserIntroductionBody"
             }
           }
         ],
@@ -5097,21 +4840,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "shortDescription": {
-                  "type": "string"
-                },
-                "public": {
-                  "type": "boolean"
-                },
-                "basedOn": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/WorldsUpdateWorldBody"
             }
           }
         ],
@@ -5152,17 +4881,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "byte"
-                },
-                "imageTypeId": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
+              "$ref": "#/definitions/WorldsUploadWorldImageBody"
             }
           }
         ],
@@ -5173,6 +4892,639 @@
     }
   },
   "definitions": {
+    "CharactersUpdateCharacterBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "worldId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "systemId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CharactersUploadCharacterImageBody": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "imageTypeId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "EntitiesCreateEntityGroupContentBody": {
+      "type": "object",
+      "properties": {
+        "contentEntityId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "contentEntityGroupId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "entityType": {
+          "$ref": "#/definitions/pbEntityType"
+        },
+        "entityIdOfType": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "EntitiesUpdateEntityGroupBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/pbEntityGroupStyle"
+        },
+        "direction": {
+          "$ref": "#/definitions/pbEntityGroupDirection"
+        }
+      }
+    },
+    "EntitiesUpdateEntityGroupContentBody": {
+      "type": "object",
+      "properties": {
+        "newEntityGroupId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "contentEntityId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "contentEntityGroupId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "LocationsUpdateLocationBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "postId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "thumbnailImageId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsCreateMapLayerBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "imageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsCreateMapPinBody": {
+      "type": "object",
+      "properties": {
+        "mapPinTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mapLayerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "x": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "y": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsCreateMapPinTypeBody": {
+      "type": "object",
+      "properties": {
+        "mapPinTypeGroupId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "shape": {
+          "$ref": "#/definitions/pbPinShape"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "borderColor": {
+          "type": "string"
+        },
+        "iconColor": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iconSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsCreateMapPinTypeGroupBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "MapsUpdateMapBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "thumbnailImageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isPrivate": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MapsUpdateMapLayerBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "imageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsUpdateMapPinBody": {
+      "type": "object",
+      "properties": {
+        "mapPinTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mapLayerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "x": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "y": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MapsUpdateMapPinTypeBody": {
+      "type": "object",
+      "properties": {
+        "shape": {
+          "$ref": "#/definitions/pbPinShape"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "borderColor": {
+          "type": "string"
+        },
+        "iconColor": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iconSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isDefault": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MapsUpdateMapPinTypeGroupBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "MenusCreateMenuItemBody": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isMain": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MenusUpdateMenuBody": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "headerImgId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "MenusUpdateMenuItemBody": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isMain": {
+          "type": "boolean"
+        },
+        "descriptionPostId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ModulesCreateModuleAdminBody": {
+      "type": "object",
+      "properties": {
+        "motivationalLetter": {
+          "type": "string"
+        }
+      }
+    },
+    "ModulesUpdateModuleAdminBody": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "superAdmin": {
+          "type": "boolean"
+        },
+        "approved": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "motivationalLetter": {
+          "type": "string"
+        },
+        "allowedEntityTypes": {
+          "$ref": "#/definitions/pbEntityTypeList"
+        },
+        "allowedMenu": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ModulesUpdateModuleBody": {
+      "type": "object",
+      "properties": {
+        "headerImgId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "thumbnailImgId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "avatarImgId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "descriptionPostId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "PostsUpdatePostBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isDraft": {
+          "type": "boolean"
+        },
+        "isPrivate": {
+          "type": "boolean"
+        },
+        "imageThumbnailId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "QuestsCreateQuestCharacterBody": {
+      "type": "object",
+      "properties": {
+        "motivationalLetter": {
+          "type": "string"
+        }
+      }
+    },
+    "QuestsUpdateQuestBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "worldId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "systemId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "status": {
+          "$ref": "#/definitions/pbQuestStatus"
+        },
+        "canJoin": {
+          "type": "boolean"
+        }
+      }
+    },
+    "QuestsUpdateQuestCharacterBody": {
+      "type": "object",
+      "properties": {
+        "approved": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "motivationalLetter": {
+          "type": "string"
+        }
+      }
+    },
+    "QuestsUploadQuestImageBody": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "imageTypeId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "SystemsUpdateSystemBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "basedOn": {
+          "type": "string"
+        }
+      }
+    },
+    "SystemsUploadSystemImageBody": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "imageTypeId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TagsCreateEntityTagBody": {
+      "type": "object",
+      "properties": {
+        "tagId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TagsCreateModuleTagBody": {
+      "type": "object",
+      "properties": {
+        "tagId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TagsUpdateModuleEntityAvailableTagBody": {
+      "type": "object",
+      "properties": {
+        "newTag": {
+          "type": "string"
+        }
+      }
+    },
+    "TagsUpdateModuleTypeAvailableTagBody": {
+      "type": "object",
+      "properties": {
+        "newTag": {
+          "type": "string"
+        }
+      }
+    },
+    "UsersCreateOrUpdateEvaluationVoteBody": {
+      "type": "object",
+      "properties": {
+        "evaluationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userIdVoter": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "Create or update evaluation"
+    },
+    "UsersUpdateUserIntroductionBody": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "saveAsDraft": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UsersUploadUserAvatarBody": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "WorldsUpdateWorldBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "basedOn": {
+          "type": "string"
+        }
+      }
+    },
+    "WorldsUploadWorldImageBody": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "imageTypeId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "pbAddRoleToUserRequest": {
       "type": "object",
       "properties": {
@@ -6024,6 +6376,18 @@
         }
       }
     },
+    "pbGetQuestCharactersResponse": {
+      "type": "object",
+      "properties": {
+        "questCharacters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/pbQuestCharacter"
+          }
+        }
+      }
+    },
     "pbGetQuestsResponse": {
       "type": "object",
       "properties": {
@@ -6543,8 +6907,49 @@
         "systemId": {
           "type": "integer",
           "format": "int32"
+        },
+        "canJoin": {
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "#/definitions/pbQuestStatus"
         }
       }
+    },
+    "pbQuestCharacter": {
+      "type": "object",
+      "properties": {
+        "questId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "characterId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approved": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "motivationalLetter": {
+          "type": "string"
+        }
+      }
+    },
+    "pbQuestStatus": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "NOT_STARTED",
+        "IN_PROGRESS",
+        "FINISHED_COMPLETED",
+        "FINISHED_NOT_COMPLETED"
+      ],
+      "default": "UNKNOWN"
     },
     "pbRemoveRoleFromUserResponse": {
       "type": "object",
@@ -7312,7 +7717,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": true
     },
     "rpcStatus": {
       "type": "object",

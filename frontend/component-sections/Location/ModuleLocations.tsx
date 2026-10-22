@@ -8,7 +8,7 @@ interface ModuleLocationsProps {
 }
 
 const ModuleLocations: React.FC<ModuleLocationsProps> = ({ moduleId }) => {
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const canEdit = isModuleCollaborator(role);
 
   return (

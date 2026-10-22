@@ -31,8 +31,23 @@ func (server *ServiceCharacters) UpdateCharacter(ctx context.Context, req *pb.Up
 		return nil, err
 	}
 
-	// TODO - make WorldID and SystemID updateable only when they are "Universal world" or "Universal system"
-	// otherwise, another related entities can be out of sync with what is possible
+	// A character's applications must remain compatible with their quests.
+	if req.WorldId != nil || req.SystemId != nil {
+		current, err := server.Store.GetCharacterByID(ctx, req.GetCharacterId())
+		if err != nil {
+			return nil, err
+		}
+		changed := (req.WorldId != nil && req.GetWorldId() != current.WorldID.Int32) || (req.SystemId != nil && req.GetSystemId() != current.SystemID.Int32)
+		if changed {
+			applications, err := server.Store.GetQuestCharactersByCharacterID(ctx, req.GetCharacterId())
+			if err != nil {
+				return nil, err
+			}
+			if len(applications) > 0 {
+				return nil, status.Error(codes.FailedPrecondition, "withdraw quest applications before changing the character's world or system")
+			}
+		}
+	}
 
 	arg := db.UpdateCharacterParams{
 		CharacterID:      req.GetCharacterId(),

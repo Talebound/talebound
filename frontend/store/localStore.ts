@@ -1,11 +1,14 @@
 import { PbUser } from '../generated/api-types/data-contracts';
+import { ModuleListLayoutMap } from './lib/ModuleListLayout/moduleLayoutLocalStore';
 
 export enum LSKey {
   USER = 'user',
+  MODULE_LIST_LAYOUT = 'module-list-layout',
 }
 
 export interface LSValues {
   [LSKey.USER]?: PbUser;
+  [LSKey.MODULE_LIST_LAYOUT]?: ModuleListLayoutMap;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

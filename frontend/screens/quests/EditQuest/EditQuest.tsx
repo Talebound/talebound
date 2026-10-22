@@ -1,3 +1,4 @@
+import QuestSettings from '../../../component-sections/Quest/QuestSettings';
 import React, { Suspense, useCallback, useEffect, useMemo } from 'react';
 import Layout from '../../../components/Layout/Layout';
 import LeftNavbar from '../../../components/LeftNavbar/LeftNavbar';
@@ -15,7 +16,7 @@ import { useUpdateQuest } from '../../../api/quests/useUpdateQuest';
 import ModuleImages from '../../modules/Edit/ModuleImages';
 import ModuleTags from '../../modules/Edit/ModuleTags';
 import Loading from '../../../components/Loading/Loading';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import { useMyModuleRole, ModuleAdminRole } from '../../../hooks/useModuleAdmins';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
@@ -35,7 +36,7 @@ interface EditQuestProps {
 const EditQuest: React.FC<EditQuestProps> = ({ questId }) => {
   const { quest, module, moduleId } = useQuest(questId);
   console.log({ quest, module, moduleId });
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const updateQuestMutation = useUpdateQuest();
   const disabled = useMemo(() => role !== ModuleAdminRole.SUPER_COLLABORATOR, [role]);
 
@@ -152,6 +153,7 @@ const EditQuest: React.FC<EditQuestProps> = ({ questId }) => {
                 </Col>{' '}
               </Row>
             </ContentSection>
+            <QuestSettings questId={questId} />
             {moduleId > 0 && (
               <>
                 <ContentSection flexWrap="wrap" direction="column" header="Tags">

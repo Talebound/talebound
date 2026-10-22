@@ -12,9 +12,15 @@
 import {
   PbCreateQuestRequest,
   PbCreateQuestResponse,
+  PbGetQuestCharactersResponse,
   PbGetQuestsResponse,
   PbImage,
   PbQuest,
+  PbQuestCharacter,
+  QuestsCreateQuestCharacterBody,
+  QuestsUpdateQuestBody,
+  QuestsUpdateQuestCharacterBody,
+  QuestsUploadQuestImageBody,
   RpcStatus,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
@@ -49,6 +55,14 @@ export class Quests<SecurityDataType = unknown> {
       limit?: number;
       /** @format int32 */
       offset?: number;
+      canJoin?: boolean;
+      /** @default "UNKNOWN" */
+      status?:
+        | 'UNKNOWN'
+        | 'NOT_STARTED'
+        | 'IN_PROGRESS'
+        | 'FINISHED_COMPLETED'
+        | 'FINISHED_NOT_COMPLETED';
     },
     params: RequestParams = {},
   ) =>
@@ -105,21 +119,91 @@ export class Quests<SecurityDataType = unknown> {
    * @response `200` `PbQuest` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  questsUpdateQuest = (
-    questId: number,
-    body: {
-      name?: string;
-      shortDescription?: string;
-      public?: boolean;
-      /** @format int32 */
-      worldId?: number;
-      /** @format int32 */
-      systemId?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  questsUpdateQuest = (questId: number, body: QuestsUpdateQuestBody, params: RequestParams = {}) =>
     this.http.request<PbQuest, RpcStatus>({
       path: `/quests/${questId}`,
+      method: 'PATCH',
+      body: body,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description gets list of quest characters
+   *
+   * @tags Quests
+   * @name QuestsGetQuestCharacters
+   * @summary Get quest characters
+   * @request GET:/quests/{questId}/characters
+   * @response `200` `PbGetQuestCharactersResponse` A successful response.
+   * @response `default` `RpcStatus` An unexpected error response.
+   */
+  questsGetQuestCharacters = (questId: number, params: RequestParams = {}) =>
+    this.http.request<PbGetQuestCharactersResponse, RpcStatus>({
+      path: `/quests/${questId}/characters`,
+      method: 'GET',
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description deletes quest character
+   *
+   * @tags Quests
+   * @name QuestsDeleteQuestCharacter
+   * @summary Delete quest character
+   * @request DELETE:/quests/{questId}/characters/{characterId}
+   * @response `200` `object` A successful response.
+   * @response `default` `RpcStatus` An unexpected error response.
+   */
+  questsDeleteQuestCharacter = (questId: number, characterId: number, params: RequestParams = {}) =>
+    this.http.request<object, RpcStatus>({
+      path: `/quests/${questId}/characters/${characterId}`,
+      method: 'DELETE',
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description creates quest character
+   *
+   * @tags Quests
+   * @name QuestsCreateQuestCharacter
+   * @summary Create quest character
+   * @request POST:/quests/{questId}/characters/{characterId}
+   * @response `200` `PbQuestCharacter` A successful response.
+   * @response `default` `RpcStatus` An unexpected error response.
+   */
+  questsCreateQuestCharacter = (
+    questId: number,
+    characterId: number,
+    body: QuestsCreateQuestCharacterBody,
+    params: RequestParams = {},
+  ) =>
+    this.http.request<PbQuestCharacter, RpcStatus>({
+      path: `/quests/${questId}/characters/${characterId}`,
+      method: 'POST',
+      body: body,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description updates quest character properties
+   *
+   * @tags Quests
+   * @name QuestsUpdateQuestCharacter
+   * @summary Update quest character
+   * @request PATCH:/quests/{questId}/characters/{characterId}
+   * @response `200` `PbQuestCharacter` A successful response.
+   * @response `default` `RpcStatus` An unexpected error response.
+   */
+  questsUpdateQuestCharacter = (
+    questId: number,
+    characterId: number,
+    body: QuestsUpdateQuestCharacterBody,
+    params: RequestParams = {},
+  ) =>
+    this.http.request<PbQuestCharacter, RpcStatus>({
+      path: `/quests/${questId}/characters/${characterId}`,
       method: 'PATCH',
       body: body,
       type: ContentType.Json,
@@ -138,12 +222,7 @@ export class Quests<SecurityDataType = unknown> {
    */
   questsUploadQuestImage = (
     questId: number,
-    body: {
-      /** @format byte */
-      data?: string;
-      /** @format int32 */
-      imageTypeId?: number;
-    },
+    body: QuestsUploadQuestImageBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbImage, RpcStatus>({

@@ -38,7 +38,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ characterId }) => {
       imgSrc={imageThumbnail?.url ?? IMAGE_DEFAULT_CHARACTER_THUMBNAIL}
       href={`/characters/${character.id}/detail`}
       availableTags={availableTags}
-      tags={[]} //module.tags ??
+      tags={module?.tags}
     />
   );
 };

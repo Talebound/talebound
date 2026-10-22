@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import ActionBoxModule from '../ActionBoxModule';
+import ActionBoxModule from '../ActionBox/ActionBoxModule';
 import Layout from '../../../components/Layout/Layout';
 import { Col, Row } from '../../../components/Flex/Flex';
 import CollaboratorsApproved from './CollaboratorsApproved/CollaboratorsApproved';

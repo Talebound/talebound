@@ -116,3 +116,27 @@ git -C /home/medo/dev/talebound/monorepo worktree add --no-track \
   -b codex/example-feature \
   /home/medo/dev/talebound/worktrees/example-feature origin/main
 ```
+
+## Quest settings and character participation
+
+Quest managers can set a quest's status and open recruitment from **Edit → Quest
+settings**. On a character's detail page, **Search for a quest** lists quests that
+accept applications in the same world and game system. Row/grid preferences are
+remembered in the browser.
+
+Character managers can apply with an optional message, update a pending message,
+and withdraw or leave. Quest managers review applications on the quest detail
+page and can approve, decline, or remove characters. Character detail pages show
+all their quests and applications, including completed quests. Finishing or
+abandoning a quest closes recruitment automatically.
+
+Pending/declined applications and application messages are visible only to the
+relevant character/quest managers (including site administrators). Other visitors
+see accepted participants without their messages. Existing applications must be
+withdrawn before changing a character's world/system; quest world/system changes
+retain the original restriction to universal modules with no applications.
+
+This recovers the frontend and backend `archive/*/feature/quest-settings-and-characters`
+work on the current monorepo and dependency versions. Story turns and in-game chat
+remain separate future features. The quest handler regression tests run as part of
+`scripts/worktree-dev/talebound-worktree-dev test-backend`.

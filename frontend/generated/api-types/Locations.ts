@@ -10,6 +10,7 @@
  */
 
 import {
+  LocationsUpdateLocationBody,
   PbCreateLocationRequest,
   PbGetLocationsResponse,
   PbLocation,
@@ -142,14 +143,7 @@ export class Locations<SecurityDataType = unknown> {
    */
   locationsUpdateLocation = (
     locationId: number,
-    body: {
-      name?: string;
-      description?: string;
-      /** @format int32 */
-      postId?: number;
-      /** @format int32 */
-      thumbnailImageId?: number;
-    },
+    body: LocationsUpdateLocationBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbLocation, RpcStatus>({

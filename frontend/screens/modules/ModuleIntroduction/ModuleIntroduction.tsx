@@ -15,7 +15,7 @@ const ModuleIntroduction: React.FC<ModuleIntroductionProps> = ({
   postViewOnly = false,
 }) => {
   const { module } = useModule(moduleId);
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const hasRightToEdit = isModuleCollaborator(role);
 
   return (

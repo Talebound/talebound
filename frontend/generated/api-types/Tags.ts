@@ -19,6 +19,10 @@ import {
   PbGetModuleTypeAvailableTagsResponse,
   PbViewTag,
   RpcStatus,
+  TagsCreateEntityTagBody,
+  TagsCreateModuleTagBody,
+  TagsUpdateModuleEntityAvailableTagBody,
+  TagsUpdateModuleTypeAvailableTagBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
@@ -104,9 +108,7 @@ export class Tags<SecurityDataType = unknown> {
    */
   tagsUpdateModuleEntityAvailableTag = (
     tagId: number,
-    body: {
-      newTag?: string;
-    },
+    body: TagsUpdateModuleEntityAvailableTagBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbEntityTagAvailable, RpcStatus>({
@@ -197,9 +199,7 @@ export class Tags<SecurityDataType = unknown> {
    */
   tagsUpdateModuleTypeAvailableTag = (
     tagId: number,
-    body: {
-      newTag?: string;
-    },
+    body: TagsUpdateModuleTypeAvailableTagBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbViewTag, RpcStatus>({
@@ -222,10 +222,7 @@ export class Tags<SecurityDataType = unknown> {
    */
   tagsCreateEntityTag = (
     entityId: number,
-    body: {
-      /** @format int32 */
-      tagId?: number;
-    },
+    body: TagsCreateEntityTagBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbCreateEntityTagResponse, RpcStatus>({
@@ -265,10 +262,7 @@ export class Tags<SecurityDataType = unknown> {
    */
   tagsCreateModuleTag = (
     moduleId: number,
-    body: {
-      /** @format int32 */
-      tagId?: number;
-    },
+    body: TagsCreateModuleTagBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbCreateModuleTagResponse, RpcStatus>({

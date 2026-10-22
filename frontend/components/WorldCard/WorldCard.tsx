@@ -52,7 +52,7 @@ const WorldCard: React.FC<WorldCardProps> = ({
       imgSrc={imageThumbnail?.url ?? IMAGE_DEFAULT_WORLD_THUMBNAIL}
       href={`/worlds/${world.id}/detail`}
       availableTags={availableTags}
-      tags={[]} //module.tags ??
+      tags={module?.tags}
       onClick={onClick ?? onSelected}
       {...extended}
     />

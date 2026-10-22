@@ -1,18 +1,21 @@
+import QuestCharacters from '../../../component-sections/Quest/QuestCharacters';
+import QuestStatusButton from '../../../components/QuestStatusButton/QuestStatusButton';
+import QuestCanJoinButton from '../../../components/QuestCanJoinButton/QuestCanJoinButton';
 import React, { Suspense, useMemo } from 'react';
 import ContentSection from '../../../components/ContentSection/ContentSection';
 import { Col, Row } from '../../../components/Flex/Flex';
 import Layout from '../../../components/Layout/Layout';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import LeftNavbarModule from '../../../components/LeftNavbar/LeftNavbarModule';
 import Loading from '../../../components/Loading/Loading';
-import MiniStatistic from '../../../components/MiniStatistic/MiniStatistic';
 import { TitleH2 } from '../../../components/Typography/Title';
-import { Text } from '../../../components/Typography/Text';
 import TagRow from '../../../components/TagRow/TagRow';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
 import { useQuest } from '../../../hooks/useQuest';
 import { useImage } from '../../../hooks/useImage';
+import WorldCard from '../../../components/WorldCard/WorldCard';
+import SystemCard from '../../../components/SystemCard/SystemCard';
 
 const ModuleIntroduction = React.lazy(
   () => import('../../modules/ModuleIntroduction/ModuleIntroduction'),
@@ -57,9 +60,8 @@ const DetailQuest: React.FC<DetailQuestProps> = ({ questId }) => {
                 width={500}
               />
               <Row gap="md">
-                <MiniStatistic title="Play modes" value={1} />
-                <MiniStatistic title="Quests" value={4} />
-                <MiniStatistic title="Activity" value={2.3} />
+                {quest?.status && <QuestStatusButton questStatus={quest.status} />}
+                <QuestCanJoinButton canJoin={!!quest?.canJoin} />
               </Row>
             </Row>
             <Suspense fallback={<Loading />}>
@@ -69,22 +71,17 @@ const DetailQuest: React.FC<DetailQuestProps> = ({ questId }) => {
         </Col>
 
         <Col css={{ flexGrow: 0, flexBasis: '600px' }}>
-          <ContentSection
-            flexWrap="wrap"
-            direction="column"
-            header="Quests"
-            cornerImage={thumbnailImg?.url}
-          >
-            <Text>Currently no quests playing in this quest</Text>
-          </ContentSection>
-          <ContentSection
-            flexWrap="wrap"
-            direction="column"
-            header="Characters"
-            cornerImage={thumbnailImg?.url}
-          >
-            <Text>Currently no characters playing in this quest</Text>
-          </ContentSection>
+          {quest && (
+            <>
+              <QuestCharacters questId={questId} />
+              <ContentSection flexWrap="wrap" direction="column" header="World and System">
+                <Row gap="md" fullWidth>
+                  <WorldCard worldId={quest.worldId ?? 0} compact />
+                  <SystemCard systemId={quest.systemId ?? 0} compact />
+                </Row>
+              </ContentSection>
+            </>
+          )}
         </Col>
       </Row>
     </Layout>

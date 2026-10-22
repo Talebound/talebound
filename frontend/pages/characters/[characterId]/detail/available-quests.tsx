@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 import Head from 'next/head';
-import useNumericParam from '../../../hooks/useNumericParam';
-import ModuleOpened from '../../../screens/modules/ModuleOpened';
-import DetailCharacter from '../../../screens/characters/DetailCharacter/DetailCharacter';
-import { useUrlModuleId } from '../../../hooks/useUrlModuleId';
+import useNumericParam from '../../../../hooks/useNumericParam';
+import ModuleOpened from '../../../../screens/modules/ModuleOpened';
+import { useUrlModuleId } from '../../../../hooks/useUrlModuleId';
+import AvailableCharacterQuests from '../../../../screens/characters/DetailCharacter/AvailableQuests/AvailableQuests';
 
-const Characters: React.FC = () => {
+const AvailableQuestsScreen: React.FC = () => {
   const moduleId = useUrlModuleId();
   const characterId = useNumericParam('characterId');
 
@@ -21,11 +21,11 @@ const Characters: React.FC = () => {
       )}
       {characterId && (
         <Suspense fallback={null}>
-          <DetailCharacter characterId={characterId} />
+          <AvailableCharacterQuests characterId={characterId} />
         </Suspense>
       )}
     </>
   );
 };
 
-export default Characters;
+export default AvailableQuestsScreen;

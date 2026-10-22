@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, Suspense, useMemo } from 'react';
 import Layout from './Layout';
 import LeftNavbarModule from '../LeftNavbar/LeftNavbarModule';
-import ActionBoxModule from '../../screens/modules/ActionBoxModule';
+import ActionBoxModule from '../../screens/modules/ActionBox/ActionBoxModule';
 import ModuleOpened from '../../screens/modules/ModuleOpened';
 import { useUrlModuleId } from '../../hooks/useUrlModuleId';
 

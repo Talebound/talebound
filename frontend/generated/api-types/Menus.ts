@@ -10,6 +10,9 @@
  */
 
 import {
+  MenusCreateMenuItemBody,
+  MenusUpdateMenuBody,
+  MenusUpdateMenuItemBody,
   PbGetMenuItemContentResponse,
   PbGetMenuItemsResponse,
   PbMenuItem,
@@ -69,15 +72,7 @@ export class Menus<SecurityDataType = unknown> {
    * @response `200` `PbViewMenu` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  menusUpdateMenu = (
-    menuId: number,
-    body: {
-      code?: string;
-      /** @format int32 */
-      headerImgId?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  menusUpdateMenu = (menuId: number, body: MenusUpdateMenuBody, params: RequestParams = {}) =>
     this.http.request<PbViewMenu, RpcStatus>({
       path: `/menus/${menuId}`,
       method: 'PATCH',
@@ -136,13 +131,7 @@ export class Menus<SecurityDataType = unknown> {
    */
   menusCreateMenuItem = (
     menuId: number,
-    body: {
-      code?: string;
-      name?: string;
-      /** @format int32 */
-      position?: number;
-      isMain?: boolean;
-    },
+    body: MenusCreateMenuItemBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbMenuItem, RpcStatus>({
@@ -183,15 +172,7 @@ export class Menus<SecurityDataType = unknown> {
   menusUpdateMenuItem = (
     menuId: number,
     menuItemId: number,
-    body: {
-      code?: string;
-      name?: string;
-      /** @format int32 */
-      position?: number;
-      isMain?: boolean;
-      /** @format int32 */
-      descriptionPostId?: number;
-    },
+    body: MenusUpdateMenuItemBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbMenuItem, RpcStatus>({

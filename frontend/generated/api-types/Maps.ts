@@ -10,6 +10,15 @@
  */
 
 import {
+  MapsCreateMapLayerBody,
+  MapsCreateMapPinBody,
+  MapsCreateMapPinTypeBody,
+  MapsCreateMapPinTypeGroupBody,
+  MapsUpdateMapBody,
+  MapsUpdateMapLayerBody,
+  MapsUpdateMapPinBody,
+  MapsUpdateMapPinTypeBody,
+  MapsUpdateMapPinTypeGroupBody,
   PbCreateMapRequest,
   PbCreateMapResponse,
   PbGetMapLayersResponse,
@@ -19,7 +28,6 @@ import {
   PbMap,
   PbMapPinType,
   PbMapPinTypeGroup,
-  PbPinShape,
   PbUpdateMapPinTypeResponse,
   PbViewMapLayer,
   PbViewMapPin,
@@ -95,9 +103,7 @@ export class Maps<SecurityDataType = unknown> {
    */
   mapsCreateMapPinTypeGroup = (
     moduleId: number,
-    body: {
-      name?: string;
-    },
+    body: MapsCreateMapPinTypeGroupBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbMapPinTypeGroup, RpcStatus>({
@@ -142,9 +148,7 @@ export class Maps<SecurityDataType = unknown> {
   mapsUpdateMapPinTypeGroup = (
     moduleId: number,
     mapPinTypeGroupId: number,
-    body: {
-      name?: string;
-    },
+    body: MapsUpdateMapPinTypeGroupBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbMapPinTypeGroup, RpcStatus>({
@@ -184,19 +188,7 @@ export class Maps<SecurityDataType = unknown> {
    */
   mapsCreateMapPinType = (
     moduleId: number,
-    body: {
-      /** @format int32 */
-      mapPinTypeGroupId?: number;
-      shape?: PbPinShape;
-      backgroundColor?: string;
-      borderColor?: string;
-      iconColor?: string;
-      icon?: string;
-      /** @format int32 */
-      iconSize?: number;
-      /** @format int32 */
-      width?: number;
-    },
+    body: MapsCreateMapPinTypeBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbMapPinType, RpcStatus>({
@@ -220,18 +212,7 @@ export class Maps<SecurityDataType = unknown> {
   mapsUpdateMapPinType = (
     moduleId: number,
     pinTypeId: number,
-    body: {
-      shape?: PbPinShape;
-      backgroundColor?: string;
-      borderColor?: string;
-      iconColor?: string;
-      icon?: string;
-      /** @format int32 */
-      iconSize?: number;
-      /** @format int32 */
-      width?: number;
-      isDefault?: boolean;
-    },
+    body: MapsUpdateMapPinTypeBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbUpdateMapPinTypeResponse, RpcStatus>({
@@ -286,18 +267,7 @@ export class Maps<SecurityDataType = unknown> {
    * @response `200` `PbMap` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  mapsUpdateMap = (
-    mapId: number,
-    body: {
-      title?: string;
-      type?: string;
-      description?: string;
-      /** @format int32 */
-      thumbnailImageId?: number;
-      isPrivate?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
+  mapsUpdateMap = (mapId: number, body: MapsUpdateMapBody, params: RequestParams = {}) =>
     this.http.request<PbMap, RpcStatus>({
       path: `/maps/${mapId}`,
       method: 'PATCH',
@@ -333,18 +303,7 @@ export class Maps<SecurityDataType = unknown> {
    * @response `200` `PbViewMapLayer` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  mapsCreateMapLayer = (
-    mapId: number,
-    body: {
-      name?: string;
-      /** @format int32 */
-      imageId?: number;
-      enabled?: boolean;
-      /** @format int32 */
-      position?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  mapsCreateMapLayer = (mapId: number, body: MapsCreateMapLayerBody, params: RequestParams = {}) =>
     this.http.request<PbViewMapLayer, RpcStatus>({
       path: `/maps/${mapId}/layers`,
       method: 'POST',
@@ -383,14 +342,7 @@ export class Maps<SecurityDataType = unknown> {
   mapsUpdateMapLayer = (
     mapId: number,
     layerId: number,
-    body: {
-      name?: string;
-      /** @format int32 */
-      imageId?: number;
-      enabled?: boolean;
-      /** @format int32 */
-      position?: number;
-    },
+    body: MapsUpdateMapLayerBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbViewMapLayer, RpcStatus>({
@@ -445,23 +397,7 @@ export class Maps<SecurityDataType = unknown> {
    * @response `200` `PbViewMapPin` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  mapsCreateMapPin = (
-    mapId: number,
-    body: {
-      /** @format int32 */
-      mapPinTypeId?: number;
-      name?: string;
-      /** @format int32 */
-      locationId?: number;
-      /** @format int32 */
-      mapLayerId?: number;
-      /** @format int32 */
-      x?: number;
-      /** @format int32 */
-      y?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  mapsCreateMapPin = (mapId: number, body: MapsCreateMapPinBody, params: RequestParams = {}) =>
     this.http.request<PbViewMapPin, RpcStatus>({
       path: `/maps/${mapId}/pins`,
       method: 'POST',
@@ -500,19 +436,7 @@ export class Maps<SecurityDataType = unknown> {
   mapsUpdateMapPin = (
     mapId: number,
     pinId: number,
-    body: {
-      /** @format int32 */
-      mapPinTypeId?: number;
-      name?: string;
-      /** @format int32 */
-      locationId?: number;
-      /** @format int32 */
-      mapLayerId?: number;
-      /** @format int32 */
-      x?: number;
-      /** @format int32 */
-      y?: number;
-    },
+    body: MapsUpdateMapPinBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbViewMapPin, RpcStatus>({

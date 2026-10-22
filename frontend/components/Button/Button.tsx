@@ -26,14 +26,17 @@ const StyledButton = styled('button', {
   fontFamily: '$heading',
   borderRadius: '$md',
   textDecoration: 'none',
-  cursor: 'pointer',
   transition: 'all 0.3s ease-in-out',
+
+  '&:not([data-pressable="false"])': {
+    cursor: 'pointer',
+  },
 
   '& svg': {
     fontSize: '1.25em',
   },
 
-  '&:focus': {
+  '&:focus:not([data-pressable="false"])': {
     boxShadow: '$focus',
   },
 
@@ -55,12 +58,12 @@ const StyledButton = styled('button', {
         border: '1px solid $primary700',
         color: '$white',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$primary900',
           color: '$white300',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $primary900',
         },
       },
@@ -69,12 +72,12 @@ const StyledButton = styled('button', {
         border: '1px solid $primary700',
         color: '$primary700',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$primary900',
           color: '$white300',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $primary900',
         },
       },
@@ -83,12 +86,12 @@ const StyledButton = styled('button', {
         border: '1px solid $secondary700',
         color: '$white',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$secondary900',
           color: '$white300',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $secondary900',
         },
       },
@@ -97,12 +100,12 @@ const StyledButton = styled('button', {
         border: '1px solid $secondary700',
         color: '$secondary700',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$secondary900',
           color: '$white300',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $secondary900',
         },
       },
@@ -111,12 +114,12 @@ const StyledButton = styled('button', {
         border: '1px solid $danger',
         color: '$white',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$danger800',
           color: '$white500',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $danger',
         },
       },
@@ -125,12 +128,12 @@ const StyledButton = styled('button', {
         border: '1px solid $danger',
         color: '$danger',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$danger',
           color: '$white500',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid $danger',
         },
       },
@@ -140,13 +143,13 @@ const StyledButton = styled('button', {
         color: 'inherit',
         boxShadow: '$sm',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           border: '1px solid currentColor',
           background: '$transparent30',
           boxShadow: '$sm',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid currentColor',
         },
       },
@@ -155,11 +158,11 @@ const StyledButton = styled('button', {
         border: '1px solid $transparent50',
         color: 'inherit',
 
-        '&:hover': {
+        '&:not([data-pressable="false"]):hover': {
           background: '$transparent80',
         },
 
-        '&:focus': {
+        '&:not([data-pressable="false"]):focus': {
           outline: '1px solid currentColor',
         },
       },

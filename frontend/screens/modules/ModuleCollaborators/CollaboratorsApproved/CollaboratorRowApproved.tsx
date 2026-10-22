@@ -33,7 +33,7 @@ const CollaboratorRowApproved: React.FC<CollaboratorRowApprovedProps> = ({
 }) => {
   const moduleId = data.moduleId ?? 0;
   const { module } = useModule(moduleId);
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const userId = useAppSelector((state: ReduxState) => state.auth.user?.id);
   const isMyRow = data.user?.id === userId;
   const profileLink = `/user/${data.user?.id}/profile`;

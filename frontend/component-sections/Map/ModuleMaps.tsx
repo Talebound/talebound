@@ -8,7 +8,7 @@ interface ModuleMapsProps {
 }
 
 const ModuleMaps: React.FC<ModuleMapsProps> = ({ moduleId }) => {
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const canEdit = isModuleCollaborator(role);
 
   return (

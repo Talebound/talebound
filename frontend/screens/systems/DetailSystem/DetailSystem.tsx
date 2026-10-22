@@ -2,7 +2,7 @@ import React, { Suspense, useMemo } from 'react';
 import ContentSection from '../../../components/ContentSection/ContentSection';
 import { Col, Row } from '../../../components/Flex/Flex';
 import Layout from '../../../components/Layout/Layout';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import LeftNavbarModule from '../../../components/LeftNavbar/LeftNavbarModule';
 import Loading from '../../../components/Loading/Loading';
 import MiniStatistic from '../../../components/MiniStatistic/MiniStatistic';

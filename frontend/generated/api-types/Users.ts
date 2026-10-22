@@ -26,6 +26,9 @@ import {
   PbUploadUserAvatarResponse,
   PbUser,
   RpcStatus,
+  UsersCreateOrUpdateEvaluationVoteBody,
+  UsersUpdateUserIntroductionBody,
+  UsersUploadUserAvatarBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
@@ -129,10 +132,7 @@ export class Users<SecurityDataType = unknown> {
    */
   usersUploadUserAvatar = (
     userId: number,
-    body: {
-      /** @format byte */
-      data?: string;
-    },
+    body: UsersUploadUserAvatarBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbUploadUserAvatarResponse, RpcStatus>({
@@ -172,14 +172,7 @@ export class Users<SecurityDataType = unknown> {
    */
   usersCreateOrUpdateEvaluationVote = (
     userId: number,
-    body: {
-      /** @format int32 */
-      evaluationId?: number;
-      /** @format int32 */
-      userIdVoter?: number;
-      /** @format double */
-      value?: number;
-    },
+    body: UsersCreateOrUpdateEvaluationVoteBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbCreateOrUpdateEvaluationVoteResponse, RpcStatus>({
@@ -266,10 +259,7 @@ export class Users<SecurityDataType = unknown> {
    */
   usersUpdateUserIntroduction = (
     userId: number,
-    body: {
-      content?: string;
-      saveAsDraft?: boolean;
-    },
+    body: UsersUpdateUserIntroductionBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbPost, RpcStatus>({
