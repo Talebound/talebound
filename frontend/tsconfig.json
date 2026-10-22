@@ -16,6 +16,6 @@
     "incremental": true,
     "typeRoots": ["./utils/types", "./node_modules/@types"]
   },
-  "include": ["next-env.d.ts", "utils/types/*.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["utils/types/*.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

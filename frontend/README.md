@@ -21,6 +21,43 @@ Development and production builds explicitly use
 Webpack to preserve the existing SVG component loader. The Pages Router remains
 in use.
 
+## SVG imports
+
+`@svgr/webpack` uses a shared configuration in `scripts/configure-svg.cjs`, called
+by Next.js and Storybook. Import `Logo` from
+`./logo.svg` to render `<Logo />`, or import `logoImage` from `./logo.svg?url`
+to pass image metadata to Next's `<Image src={logoImage} alt="..." />`.
+The SVG imports story checks both forms. The old `next-svgr` wrapper is removed.
+
+## Transitive dependency maintenance
+
+Refresh compatible nested versions with `yarn up -R '*' '@*/*'`, then run
+`yarn dedupe` and the checks above. Keep `yarn.lock` committed; installations in
+CI use `--immutable`.
+
+The `@storybook/builder-webpack5/webpack-dev-middleware` resolution selects 8.5.0
+to fix [GHSA-g84c-rxfj-3j2c](https://github.com/advisories/GHSA-g84c-rxfj-3j2c).
+Its Node and Webpack requirements are met by this project. Remove the override
+when Storybook selects a fixed version itself. Validate the Storybook dev server,
+including hot updates, when changing it; a static build does not exercise this
+middleware.
+
+The 2026-10-23 recursive audit reports two advisories with no published fixes:
+
+- [braces 3.0.3, high](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), installed
+  through Storybook's TypeScript documentation plugin and micromatch. The affected
+  input is a deeply nested glob pattern. This configuration uses the default
+  `react-docgen` parser, and story patterns are repository-controlled; no
+  application endpoint accepts these patterns.
+- [elliptic 6.6.1, low](https://github.com/advisories/GHSA-848j-6mx2-7j84), installed
+  through Storybook's Node crypto polyfills. The finding concerns ECDSA signing;
+  this application does not use those polyfills to sign data.
+
+`yarn npm audit --all --recursive --environment production` reports no advisories.
+The full audit still reports the two above plus deprecations for `glob`, `inflight`,
+and `rimraf` under Storybook's `flat-cache` dependency. These are not suppressed.
+Recheck when updating Storybook or accepting external story/glob configuration.
+
 ## TypeScript and rich text editor
 
 `typescript` is the native TypeScript 7 compiler, used by `yarn typecheck` and

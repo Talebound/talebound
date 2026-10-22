@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/nextjs';
+import configureSvg from '../scripts/configure-svg.cjs';
 
 const config: StorybookConfig = {
   stories: [
@@ -7,6 +8,7 @@ const config: StorybookConfig = {
   ],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-docs', '@storybook/addon-links'],
+  webpackFinal: configureSvg,
   framework: {
     name: '@storybook/nextjs',
     options: {},

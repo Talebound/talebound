@@ -2,9 +2,10 @@ package token
 
 import (
 	"fmt"
-	"github.com/aead/chacha20poly1305"
-	"github.com/o1egl/paseto"
 	"time"
+
+	"github.com/o1egl/paseto/v2"
+	"golang.org/x/crypto/chacha20poly1305"
 )
 
 type PasetoMaker struct {

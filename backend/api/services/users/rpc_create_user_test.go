@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/lib/pq"
 	"github.com/stretchr/testify/require"
 	mockdb "github.com/the-medo/talebound-backend/db/mock"
@@ -17,6 +16,7 @@ import (
 	"github.com/the-medo/talebound-backend/util"
 	"github.com/the-medo/talebound-backend/worker"
 	mockwk "github.com/the-medo/talebound-backend/worker/mock"
+	"go.uber.org/mock/gomock"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

@@ -1,4 +1,4 @@
-const withSvgr = require('next-svgr');
+const configureSvg = require('./scripts/configure-svg.cjs');
 
 // The worktree launcher serves the API and frontend on the same isolated host.
 const apiHost = process.env.NEXT_PUBLIC_API_URL
@@ -6,9 +6,10 @@ const apiHost = process.env.NEXT_PUBLIC_API_URL
   : undefined;
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withSvgr({
+const nextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: apiHost?.startsWith('127.') ? [apiHost] : [],
-});
+  webpack: configureSvg,
+};
 
 module.exports = nextConfig;

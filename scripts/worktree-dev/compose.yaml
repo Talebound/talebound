@@ -34,7 +34,7 @@ services:
       retries: 30
 
   mailpit:
-    image: axllent/mailpit:v1.27.4
+    image: axllent/mailpit:v1.31.6
     labels: *labels
     environment:
       MP_DATABASE: /data/mailpit.db
@@ -49,7 +49,7 @@ services:
       retries: 30
 
   backend:
-    image: golang:1.23-bookworm
+    image: golang:1.27.3-bookworm
     labels: *labels
     init: true
     entrypoint: ['bash', '/tooling/backend-entrypoint.sh']

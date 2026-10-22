@@ -3,12 +3,12 @@ package auth
 import (
 	"context"
 	"database/sql"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	testutils2 "github.com/the-medo/talebound-backend/api/testutils"
 	mockdb "github.com/the-medo/talebound-backend/db/mock"
 	db "github.com/the-medo/talebound-backend/db/sqlc"
 	"github.com/the-medo/talebound-backend/pb"
+	"go.uber.org/mock/gomock"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
