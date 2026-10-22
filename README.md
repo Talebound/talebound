@@ -10,37 +10,34 @@ The frontend and backend for Talebound, developed together in one repository.
 
 ## Development
 
-Use Node.js 22, Go 1.23 (as declared in `backend/go.mod`), GNU Make, and Docker
-with Compose. Yarn is checked into the frontend, so a global Yarn installation
-is not required. Run `make` to see the available commands.
+On Linux/WSL, use Bash, Python 3.9+, Git, and Docker with Compose v2. The supported
+worktree launcher runs Node.js 22, Go 1.23, PostgreSQL 15, Redis 7, and Mailpit in
+containers. No host Node, Go, Yarn, or Make installation is needed to run the app.
 
 ```sh
-make frontend-install
-make services-up
-make backend-migrate
+scripts/worktree-dev/bootstrap-worktree.sh
+scripts/worktree-dev/talebound-worktree-dev up
+scripts/worktree-dev/talebound-worktree-dev status
 ```
 
-The backend loads `backend/app.env`. Put local overrides in the ignored
-`backend/app.env.local`, which is loaded by the backend Makefile. Review the
-database configuration before running migrations. The supplied development
-database uses port 5432 and Redis uses port 6379.
+Each worktree gets its own database, Redis queue, email inbox, loopback address,
+ports, and authentication key. `status` prints the exact app and inbox URLs.
+Use those URLs: separate loopback addresses also keep browser cookies isolated.
+No hosts-file edits or AWS credentials are required. Register an account in the
+app and open the verification email in the local inbox.
 
-Create `frontend/.env.local` using the settings described in
-[the frontend README](frontend/README.md), including the API URL and the service
-keys needed for features you use. The existing development CORS setup uses
-`dev.talebound.net`; map it to `127.0.0.1` in your hosts file.
+Bootstrap is idempotent and stops after installing dependencies and applying
+migrations; `up` starts both applications. `down` stops this worktree and retains
+data. Generated `.env.worktree`, `backend/app.env.worktree`,
+`frontend/.env.worktree`, and `.talebound/` are ignored local state. Do not copy
+them between worktrees. Optional development Cloudflare settings go in
+`.talebound/integrations.env`; uploads require those credentials.
 
-Start each application in its own terminal:
-
-```sh
-make backend-dev
-make frontend-dev
-```
-
-The frontend runs at `http://dev.talebound.net:4000` and the HTTP API at
-`http://dev.talebound.net:8080`. Email, image delivery, and other integrations
-still need their own configuration. See [the backend README](backend/README.md)
-for its existing development tools and workflow.
+See [the worktree development guide](scripts/worktree-dev/README.md) for lifecycle
+commands, environment precedence, database access, cleanup, and validation.
+GNU Make aliases (`make dev-up`, `make dev-status`, `make dev-down`) are optional.
+The older `backend/Makefile` and `backend/docker-compose.yaml` contain historical
+single-repository commands; use the root launcher for local worktree development.
 
 ## Validation and API generation
 
@@ -52,7 +49,9 @@ make backend-test
 make api-generate
 ```
 
-Backend tests require the migrated PostgreSQL database. API generation reads
+Backend tests use the current worktree's migrated PostgreSQL database. The
+frontend checks/API generator and `backend-build` use host Node.js 22/Go 1.23;
+their container equivalents are documented in the worktree guide. API generation reads
 `backend/doc/swagger/talebound.swagger.json` directly; it no longer needs a
 running backend or the old development server. After changing protobuf API
 definitions, regenerate the backend schema with `make -C backend proto` using

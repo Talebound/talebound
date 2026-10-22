@@ -1,0 +1,33 @@
+name: Worktree development tooling
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/worktree-dev/**'
+      - '.gitignore'
+      - 'Makefile'
+      - '.github/workflows/worktree-dev-test.yml'
+  pull_request:
+    paths:
+      - 'scripts/worktree-dev/**'
+      - '.gitignore'
+      - 'Makefile'
+      - '.github/workflows/worktree-dev-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check syntax
+        run: |
+          bash -n scripts/worktree-dev/*.sh scripts/worktree-dev/talebound-worktree-dev
+          python3 -m py_compile scripts/worktree-dev/*.py
+      - name: Verify concurrent worktree isolation and cleanup
+        run: scripts/worktree-dev/test-concurrent-worktrees.sh
