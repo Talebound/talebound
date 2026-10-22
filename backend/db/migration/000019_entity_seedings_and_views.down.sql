@@ -1,0 +1,5 @@
+
+drop index entities_map_id_module_id_idx;
+drop index entities_location_id_module_id_idx;
+drop index entities_post_id_module_id_idx;
+drop index entities_image_id_module_id_idx;

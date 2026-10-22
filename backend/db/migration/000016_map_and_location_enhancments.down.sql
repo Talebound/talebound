@@ -1,0 +1,5 @@
+DROP INDEX world_map_pin_type_groups_world_id_map_pin_type_group_id_idx;
+DROP INDEX world_maps_world_id_map_id_idx;
+DROP INDEX world_locations_world_id_location_id_idx;
+
+DROP TABLE IF EXISTS world_posts;

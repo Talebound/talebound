@@ -1,0 +1,175 @@
+syntax = "proto3";
+
+package pb;
+
+import "services/maps/map.proto";
+
+option go_package = "github.com/the-medo/talebound-backend/pb";
+
+
+message GetMapByIdRequest {
+  int32 mapId = 1;
+}
+
+message GetMapsRequest {
+  optional int32 moduleId = 1;
+  repeated int32 tags = 2;
+  optional string orderBy = 3;
+  optional int32 limit = 4;
+  optional int32 offset = 5;
+}
+
+message GetMapsResponse {
+  repeated Map maps = 1;
+  int32 totalCount = 2;
+}
+
+message CreateMapRequest {
+  int32 moduleId = 1;
+  string title = 2;
+  optional string type = 3;
+  optional string description = 4;
+  optional int32 thumbnailImageId = 5;
+  optional bool isPrivate = 6;
+  int32 layerImageId = 7;
+}
+
+message CreateMapResponse {
+  Map map = 1;
+  ViewMapLayer layer = 2;
+}
+
+message DeleteMapRequest {
+  int32 mapId = 1;
+}
+
+message UpdateMapRequest {
+  int32 mapId = 1;
+  optional string title = 2;
+  optional string type = 3;
+  optional string description = 4;
+  optional int32 thumbnailImageId = 5;
+  optional bool isPrivate = 6;
+}
+
+message GetMapLayersRequest {
+  int32 mapId = 1;
+}
+
+message GetMapLayersResponse {
+  repeated ViewMapLayer layers = 1;
+}
+
+message CreateMapLayerRequest {
+  int32 mapId = 1;
+  string name = 2;
+  int32 imageId = 3;
+  bool enabled = 4;
+  optional int32 position = 5;
+}
+
+message DeleteMapLayerRequest {
+  int32 mapId = 1;
+  int32 layerId = 2;
+}
+
+message UpdateMapLayerRequest {
+  int32 mapId = 1;
+  int32 layerId = 2;
+  optional string name = 3;
+  optional int32 imageId = 4;
+  optional bool enabled = 5;
+  optional int32 position = 6;
+}
+
+message GetModuleMapPinTypesRequest {
+  int32 moduleId = 1;
+}
+
+message GetModuleMapPinTypesResponse {
+  repeated MapPinType pinTypes = 1;
+  repeated MapPinTypeGroup pinTypeGroups = 2;
+}
+
+message CreateMapPinTypeRequest {
+  int32 moduleId = 1;
+  int32 mapPinTypeGroupId = 2;
+  optional PinShape shape = 3;
+  optional string backgroundColor = 4;
+  optional string borderColor = 5;
+  optional string iconColor = 6;
+  optional string icon = 7;
+  optional int32 iconSize = 8;
+  optional int32 width = 9;
+}
+
+message DeleteMapPinTypeRequest {
+  int32 mapId = 1;
+  int32 pinTypeId = 2;
+}
+
+message UpdateMapPinTypeRequest {
+  int32 moduleId = 1;
+  int32 pinTypeId = 2;
+  optional PinShape shape = 3;
+  optional string backgroundColor = 4;
+  optional string borderColor = 5;
+  optional string iconColor = 6;
+  optional string icon = 7;
+  optional int32 iconSize = 8;
+  optional int32 width = 9;
+  optional bool isDefault = 10;
+}
+
+message UpdateMapPinTypeResponse {
+  MapPinType pinType = 1;
+}
+
+message CreateMapPinTypeGroupRequest {
+  int32 moduleId = 1;
+  string name = 2;
+}
+
+message UpdateMapPinTypeGroupRequest {
+  int32 moduleId = 1;
+  int32 mapPinTypeGroupId = 2;
+  string name = 3;
+}
+
+message DeleteMapPinTypeGroupRequest {
+  int32 moduleId = 1;
+  int32 mapPinTypeGroupId = 2;
+}
+
+message GetMapPinsRequest {
+  int32 mapId = 1;
+}
+message GetMapPinsResponse {
+  repeated ViewMapPin pins = 1;
+}
+
+message CreateMapPinRequest {
+  int32 mapId = 1;
+  optional int32 mapPinTypeId = 2;
+  string name = 3;
+  optional int32 locationId = 4;
+  optional int32 mapLayerId = 5;
+  int32 x = 6;
+  int32 y = 7;
+}
+
+message DeleteMapPinRequest {
+  int32 mapId = 1;
+  int32 pinId = 2;
+}
+
+message UpdateMapPinRequest {
+  int32 mapId = 1;
+  int32 pinId = 2;
+  optional int32 mapPinTypeId = 3;
+  optional string name = 4;
+  optional int32 locationId = 5;
+  optional int32 mapLayerId = 6;
+  optional int32 x = 7;
+  optional int32 y = 8;
+}
