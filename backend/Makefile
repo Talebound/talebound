@@ -3,6 +3,7 @@
 export
 
 DB_URL=postgresql://root:secret@localhost:5432/talebound?sslmode=disable
+SQLC_VERSION := 1.31.1
 PROTO_SERVICES := $(shell find proto/services -mindepth 1 -maxdepth 1 -type d | sort | awk -F/ '{print "proto/services/" $$NF "/*.proto"}' | tr '\n' ' ')
 
 network-create:
@@ -42,7 +43,7 @@ migratedown1:
 
 sqlc-generate:
 	go run github.com/the-medo/golang-migrate-objects -mpath=$(MIGRATION_URL) -obj_path=$(MIGRATION_OBJECTS_URL) -db_source=$(DB_SOURCE) -co_filename=$(MIGRATION_CREATE_OBJECTS_FILENAME) -do_filename=$(MIGRATION_DROP_OBJECTS_FILENAME) -sumfile
-	docker run --rm -v "$(CURDIR):/src" -w /src kjconroy/sqlc generate
+	docker run --rm -v "$(CURDIR):/src" -w /src sqlc/sqlc:$(SQLC_VERSION) generate
 
 test:
 	go test -v -cover -short ./...
@@ -51,8 +52,15 @@ server:
 	go run main.go
 
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/the-medo/talebound-backend/db/sqlc Store
-	mockgen -package mockwk -destination worker/mock/distributor.go github.com/the-medo/talebound-backend/worker TaskDistributor
+	go run go.uber.org/mock/mockgen -package mockdb -destination db/mock/store.go github.com/the-medo/talebound-backend/db/sqlc Store
+	go run go.uber.org/mock/mockgen -package mockwk -destination worker/mock/distributor.go github.com/the-medo/talebound-backend/worker TaskDistributor
+
+tools-install:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+	go install github.com/rakyll/statik
 
 db_docs:
 	dbdocs password --set secret --project talebound
@@ -100,4 +108,4 @@ new_migration:
 
 prepare: network-create postgres redis wait-for-createdb createdb wait-for-createdb migrateup server
 
-.PHONY: network-create rm-postgres createdb dropdb postgres migrateup migratedown sqlc-generate test mock migrateup1 migratedown1 db_docs db_schema proto_win proto_linux evans proto_without_clean redis new_migration
+.PHONY: tools-install network-create rm-postgres createdb dropdb postgres migrateup migratedown sqlc-generate test mock migrateup1 migratedown1 db_docs db_schema proto_win proto_linux evans proto_without_clean redis new_migration

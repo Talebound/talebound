@@ -19,24 +19,40 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v4
-      with:
-        version: 'v1.26.3'
-      id: install
+      uses: actions/checkout@v7.0.1
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v6.3.0
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-central-1
 
+    - name: Select kubectl version for EKS
+      id: kubectl-version
+      shell: bash
+      run: |
+        cluster_version=$(aws eks describe-cluster --name talebound --region eu-central-1 --query 'cluster.version' --output text)
+        if [[ ! "$cluster_version" =~ ^[0-9]+\.[0-9]+$ ]]; then
+          echo 'Unable to determine the EKS Kubernetes version' >&2
+          exit 1
+        fi
+        kubectl_version=$(curl --fail --silent --show-error --location --retry 3 --max-time 30 "https://dl.k8s.io/release/stable-${cluster_version}.txt")
+        if [[ ! "$kubectl_version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ || "${kubectl_version%.*}" != "v${cluster_version}" ]]; then
+          echo 'Unable to resolve a stable kubectl patch matching EKS' >&2
+          exit 1
+        fi
+        echo "version=$kubectl_version" >> "$GITHUB_OUTPUT"
+        echo "Using kubectl $kubectl_version for EKS $cluster_version"
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v5.2.0
+      with:
+        version: ${{ steps.kubectl-version.outputs.version }}
+
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      uses: aws-actions/amazon-ecr-login@v2.1.7
 
     - name: Load secrets and save to app.env
       run: aws secretsmanager get-secret-value --secret-id talebound_secrets --region eu-central-1 --query SecretString --output text | jq 'to_entries|map("\(.key)=\(.value)")|.[]' -r > app.env

@@ -3,7 +3,15 @@ package images
 import (
 	"bytes"
 	"context"
-	cloudflareGo "github.com/cloudflare/cloudflare-go"
+	"image"
+	_ "image/gif"  // Import this to decode gif images
+	_ "image/jpeg" // Import this to decode jpeg images
+	_ "image/png"  // Import this to decode png images
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v7"
+	cloudflareImages "github.com/cloudflare/cloudflare-go/v7/images"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/the-medo/talebound-backend/api/servicecore"
 	"github.com/the-medo/talebound-backend/e"
 	"github.com/the-medo/talebound-backend/pb"
@@ -12,11 +20,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"image"
-	_ "image/gif"  // Import this to decode gif images
-	_ "image/jpeg" // Import this to decode jpeg images
-	_ "image/png"  // Import this to decode png images
-	"io"
 )
 
 func UploadImage(service *servicecore.ServiceCore, ctx context.Context, request *pb.UploadImageRequest) (*pb.UploadImageResponse, error) {
@@ -25,11 +28,15 @@ func UploadImage(service *servicecore.ServiceCore, ctx context.Context, request 
 		return nil, e.InvalidArgumentError(violations)
 	}
 
-	cloudflare, err := cloudflareGo.NewWithAPIToken(service.Config.CloudflareApiToken)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to create cloudflare client: %v", err)
+	if service.Config.CloudflareApiToken == "" {
+		return nil, status.Error(codes.Internal, "Cloudflare API token is not configured")
 	}
 
+	client := cloudflare.NewClient(option.WithAPIToken(service.Config.CloudflareApiToken))
+	return uploadImage(ctx, client.Images.V1, service.Config.CloudflareAccountId, request)
+}
+
+func uploadImage(ctx context.Context, client *cloudflareImages.V1Service, accountID string, request *pb.UploadImageRequest) (*pb.UploadImageResponse, error) {
 	reader := bytes.NewReader(request.GetData())
 
 	decodedImg, _, err := image.DecodeConfig(reader)
@@ -45,27 +52,12 @@ func UploadImage(service *servicecore.ServiceCore, ctx context.Context, request 
 		return nil, err
 	}
 
-	readCloser := io.NopCloser(reader)
-
-	defer func(readCloser io.ReadCloser) {
-		err := readCloser.Close()
-		if err != nil {
-
-		}
-	}(readCloser)
-
-	uploadRequest := cloudflareGo.UploadImageParams{
-		File: readCloser,
-		Name: request.GetFilename(),
+	uploadRequest := cloudflareImages.V1NewParams{
+		AccountID: cloudflare.F(accountID),
+		File:      cloudflare.FileParam(reader, request.GetFilename(), http.DetectContentType(request.GetData())),
 	}
 
-	resourceContainer := cloudflareGo.ResourceContainer{
-		Level:      cloudflareGo.AccountRouteLevel,
-		Identifier: service.Config.CloudflareAccountId,
-		Type:       cloudflareGo.AccountType,
-	}
-
-	img, err := cloudflare.UploadImage(ctx, &resourceContainer, uploadRequest)
+	img, err := client.New(ctx, uploadRequest)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to upload image: %v", err)
 	}
