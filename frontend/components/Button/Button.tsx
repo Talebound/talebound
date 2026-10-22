@@ -1,6 +1,6 @@
 import { styled } from '../../styles/stitches.config';
 import React, { forwardRef, PropsWithChildren, useMemo } from 'react';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 import Loading from '../Loading/Loading';
 
 const LoadingOverlay = styled('div', {

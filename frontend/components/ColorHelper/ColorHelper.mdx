@@ -1,4 +1,4 @@
-import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as stories from './ColorHelper.stories';
 import ColorHelper from './ColorHelper';
 import {
@@ -18,56 +18,56 @@ import { Palette } from './Palette';
 
 ## Palette
 
-<Canvas>
+<div className="sb-unstyled">
   <Palette
     colors={[baseColors, primaryColors, secondaryColors, tertiaryColors, whiteColors, statusColors]}
   />
-</Canvas>
+</div>
 
 ## Base colors
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper colors={baseColors} />
-</Canvas>
+</div>
 
 ## Status
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper colors={statusColors} />
-</Canvas>
+</div>
 
 ## Transparent
 
 User to cover images
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper bg="image" colors={transparentColors} />
-</Canvas>
+</div>
 
 # All shades
 
 ## Primary
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper colors={primaryColors} />
-</Canvas>
+</div>
 
 ## Secondary
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper colors={secondaryColors} />
-</Canvas>
+</div>
 
 ## Tertiary
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper colors={tertiaryColors} />
-</Canvas>
+</div>
 
 ## White
 
 Note: background of the square is always dark, text color is changing
 
-<Canvas>
+<div className="sb-unstyled">
   <ColorHelper bg="dark" colors={whiteColors} />
-</Canvas>
+</div>

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { $getNodeByKey, LexicalEditor } from 'lexical';
-import { $isCodeNode, getCodeLanguages } from '@lexical/code';
+import { $isCodeNode } from '@lexical/code';
+import { getCodeLanguages } from '@lexical/code-prism';
 import { ToolbarSelect } from './componentsToolbar';
 import { styled } from '../../../../styles/stitches.config';
 

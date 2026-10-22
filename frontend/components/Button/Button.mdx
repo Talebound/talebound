@@ -1,4 +1,4 @@
-import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 import * as stories from './Button.stories';
 import { Button } from './Button';
 import { Col, Row } from '../Flex/Flex';
@@ -34,7 +34,7 @@ By default, icons (svg elements) inside button have font-size of 1.25em, but you
 - dangerOutline
 - ghost
 
-<Canvas>
+<div className="sb-unstyled">
   <Button color="primaryFill">Button primaryFill (default)</Button>
   <Button color="primaryOutline">Button primaryOutline</Button>
   <Button color="secondaryFill">Button secondaryFill</Button>
@@ -42,13 +42,13 @@ By default, icons (svg elements) inside button have font-size of 1.25em, but you
   <Button color="dangerFill">Button dangerFill</Button>
   <Button color="dangerOutline">Button dangerOutline</Button>
   <Button color="ghost">Button ghost</Button>
-</Canvas>
+</div>
 
 ## Sizes
 
 sm, md (default), lg, xl
 
-<Canvas>
+<div className="sb-unstyled">
   <Button size="sm">Button sm</Button>
   <Button size="md">Button md (default)</Button>
   <Button size="lg">Button lg</Button>
@@ -66,7 +66,7 @@ sm, md (default), lg, xl
   <Button size="xl" icon>
     <RxTrash />
   </Button>
-</Canvas>
+</div>
 
 ## Special props
 

@@ -1,6 +1,6 @@
 # Talebound monorepo
 
-- `frontend/` contains Next.js, React, TypeScript, and its Yarn 3.6.1 lockfile.
+- `frontend/` contains Next.js, React, TypeScript, and its Yarn 4.18.1 lockfile.
 - `backend/` contains the Go module, protobuf definitions, database migrations,
   Docker configuration, and deployment manifests.
 - Run commands through the root Makefile or from the relevant application directory.

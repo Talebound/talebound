@@ -66,13 +66,12 @@ const CharacterList: React.FC = () => {
             </ContentSection>
 
             <Row gap="md" alignItems="start" wrap>
-              {charactersData?.pages.map(
-                (page) =>
-                  page.characterIds?.map((characterId) => (
-                    <Suspense fallback={null} key={characterId}>
-                      <CharacterCard characterId={characterId} />
-                    </Suspense>
-                  )),
+              {charactersData?.pages.map((page) =>
+                page.characterIds?.map((characterId) => (
+                  <Suspense fallback={null} key={characterId}>
+                    <CharacterCard characterId={characterId} />
+                  </Suspense>
+                )),
               )}
               {hasNextPage && !isFetching && (
                 <InfiniteScrollObserver runOnObserve={fetchNextPage} />

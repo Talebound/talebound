@@ -9,7 +9,8 @@ import { LexicalEditor, EditorState } from 'lexical';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 import { InitialConfigType, LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -167,19 +168,27 @@ const Editor: React.FC<EditorProps> = ({
   //   }
   // }, [refetchState, setRefetchState]);
 
-  const editorStateRef = useRef<EditorState>();
-  const editorRef = useRef<LexicalEditor>();
+  const editorStateRef = useRef<EditorState>(undefined);
+  const editorRef = useRef<LexicalEditor>(undefined);
   const placeholder = useMemo(() => <Placeholder>No content yet</Placeholder>, []);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [contentSaved, setContentSaved] = useState(true);
   const [postViewType, setPostViewType] = useState(defaultPostViewType);
   const [actionInProgress, setActionInProgress] = useState<EditorAction>(EditorAction.IDLE);
 
+  const captureEditor = useCallback((editor: LexicalEditor | null) => {
+    editorRef.current = editor ?? undefined;
+    editorStateRef.current = editor?.getEditorState();
+    // Empty documents may not emit an initial change event. Capture the editor
+    // on mount so edit mode and the first user change work for new posts too.
+    setIsInitialLoad(false);
+  }, []);
+
   const contentEditable = useMemo(
     () => (
       <EditorScroller className="editor-scroll" editable={postViewType === PostViewType.EDIT}>
         <EditorWrapper className="editor" editable={postViewType === PostViewType.EDIT} ref={onRef}>
-          <ContentEditable className="editor-input" />
+          <ContentEditable aria-label="Rich text editor" className="editor-input" />
         </EditorWrapper>
       </EditorScroller>
     ),
@@ -192,12 +201,12 @@ const Editor: React.FC<EditorProps> = ({
       editorState: lastSavedEditorState,
       editable: postViewType === PostViewType.EDIT,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, []); //, editorState
 
   useEffect(() => {
     const postViewTypeToSet =
-      !hasRightToEdit || !editable ? PostViewType.POST : changedPostViewType ?? postViewType;
+      !hasRightToEdit || !editable ? PostViewType.POST : (changedPostViewType ?? postViewType);
     setPostViewType(postViewTypeToSet);
 
     editorRef.current?.setEditable(
@@ -229,7 +238,7 @@ const Editor: React.FC<EditorProps> = ({
     };
   }, [contentSaved, onChange]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((editorState: EditorState, editor: LexicalEditor) => {
       editorStateRef.current = editorState;
@@ -366,6 +375,7 @@ const Editor: React.FC<EditorProps> = ({
   return (
     <Col fullWidth gap="sm">
       <LexicalComposer initialConfig={initialConfig}>
+        <EditorRefPlugin editorRef={captureEditor} />
         <EditorContainer postView={postViewType === PostViewType.POST} loading={loading}>
           {postViewType === PostViewType.EDIT && <ToolbarPlugin disabled={disabled} />}
           <EditorInner

@@ -6,8 +6,8 @@ import { userAdapterSlice, userSelectors } from '../../adapters/UserAdapter';
 import { store } from '../../store';
 
 export const useGetUserById = createSuspenseQuery<PbUser, number, TaleboundError>({
-  primaryKey: 'useGetUserById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetUserById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const user = userSelectors.selectById(store.getState(), variables);
     if (!user) {

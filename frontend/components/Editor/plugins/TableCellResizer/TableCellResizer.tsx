@@ -2,7 +2,6 @@ import {
   $getNearestNodeFromDOMNode,
   $getSelection,
   COMMAND_PRIORITY_HIGH,
-  DEPRECATED_$isGridSelection,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
@@ -13,8 +12,9 @@ import {
   $getTableRowIndexFromTableCellNode,
   $isTableCellNode,
   $isTableRowNode,
-  Cell,
-  getCellFromTarget,
+  TableDOMCell,
+  getDOMCellFromTarget,
+  $isTableSelection,
 } from '@lexical/table';
 import * as React from 'react';
 import { Resizer } from './componentsTableCellResizer';
@@ -29,7 +29,7 @@ type MouseDraggingDirection = 'right' | 'bottom';
 const MIN_ROW_HEIGHT = 33;
 const MIN_COLUMN_WIDTH = 50;
 
-function TableCellResizer({ editor }: { editor: LexicalEditor }): JSX.Element {
+function TableCellResizer({ editor }: { editor: LexicalEditor }): React.JSX.Element {
   const targetRef = useRef<HTMLElement | null>(null);
   const resizerRef = useRef<HTMLDivElement | null>(null);
   const tableRectRef = useRef<ClientRect | null>(null);
@@ -37,7 +37,7 @@ function TableCellResizer({ editor }: { editor: LexicalEditor }): JSX.Element {
   const mouseStartPosRef = useRef<MousePosition | null>(null);
   const [mouseCurrentPos, updateMouseCurrentPos] = useState<MousePosition | null>(null);
 
-  const [activeCell, updateActiveCell] = useState<Cell | null>(null);
+  const [activeCell, updateActiveCell] = useState<TableDOMCell | null>(null);
   const [isSelectingGrid, updateIsSelectingGrid] = useState<boolean>(false);
   const [draggingDirection, updateDraggingDirection] = useState<MouseDraggingDirection | null>(
     null,
@@ -48,10 +48,10 @@ function TableCellResizer({ editor }: { editor: LexicalEditor }): JSX.Element {
       SELECTION_CHANGE_COMMAND,
       (_payload) => {
         const selection = $getSelection();
-        const isGridSelection = DEPRECATED_$isGridSelection(selection);
+        const isTableSelection = $isTableSelection(selection);
 
-        if (isSelectingGrid !== isGridSelection) {
-          updateIsSelectingGrid(isGridSelection);
+        if (isSelectingGrid !== isTableSelection) {
+          updateIsSelectingGrid(isTableSelection);
         }
 
         return false;
@@ -87,7 +87,7 @@ function TableCellResizer({ editor }: { editor: LexicalEditor }): JSX.Element {
 
         if (targetRef.current !== target) {
           targetRef.current = target as HTMLElement;
-          const cell = getCellFromTarget(target as HTMLElement);
+          const cell = getDOMCellFromTarget(target as HTMLElement);
 
           if (cell && activeCell !== cell) {
             editor.update(() => {

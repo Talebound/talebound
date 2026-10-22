@@ -21,8 +21,8 @@ export const useGetLocations = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetLocations',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetLocations'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const { data } = await LocationsCollection.locationsGetLocations({
       ...variables,
       limit: PAGE_SIZE_POSTS,

@@ -3,8 +3,8 @@ import { TagsCollection } from '../collections';
 import { PbModuleType, PbViewTag } from '../../generated/api-types/data-contracts';
 
 export const useGetModuleTypeAvailableTags = createQuery<PbViewTag[], PbModuleType>({
-  primaryKey: 'useGetModuleTypeAvailableTags',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetModuleTypeAvailableTags'],
+  fetcher: async (variables) => {
     const { data } = await TagsCollection.tagsGetModuleTypeAvailableTags({
       moduleType: variables ?? PbModuleType.MODULE_TYPE_UNKNOWN,
     });

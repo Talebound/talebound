@@ -10,7 +10,7 @@ export type AspectRatioOffset =
     };
 
 export interface AspectRatioResizerProps {
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;
   baseWidth: number;
   baseHeight: number;
   offset?: AspectRatioOffset;

@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useMemo } from 'react';
-import Stitches, { CSSProperties } from '@stitches/react';
+import type * as Stitches from '@stitches/react';
+import { CSSProperties } from '@stitches/react';
 import { TitleH2 } from '../Typography/Title';
 import { styled } from '../../styles/stitches.config';
 import Loading from '../Loading/Loading';

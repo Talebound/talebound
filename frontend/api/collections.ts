@@ -28,7 +28,7 @@ export const API = new HttpClient({
 API.instance.interceptors.request.use(
   (req) => req,
   (error) => {
-    // eslint-disable-next-line no-console,@typescript-eslint/no-unsafe-member-access
+    // oxlint-disable-next-line no-console,typescript/no-unsafe-member-access
     console.log(error.response);
     return Promise.reject(error);
   },

@@ -1,8 +1,6 @@
 import React from 'react';
 
-interface UserModulesProps {}
-
-const UserModules: React.FC<UserModulesProps> = () => {
+const UserModules: React.FC = () => {
   return <div>UserModules</div>;
 };
 

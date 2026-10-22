@@ -4,14 +4,14 @@ The frontend and backend for Talebound, developed together in one repository.
 
 | Directory | Application |
 | --- | --- |
-| `frontend/` | Next.js / React / TypeScript, managed with Yarn 3.6.1 |
+| `frontend/` | Next.js / React / TypeScript, managed with Yarn 4.18.1 |
 | `backend/` | Go API, protobuf/gRPC, PostgreSQL migrations, and Docker configuration |
 | `.github/workflows/` | Frontend checks, backend tests, and manual backend deployment |
 
 ## Development
 
 On Linux/WSL, use Bash, Python 3.9+, Git, and Docker with Compose v2. The supported
-worktree launcher runs Node.js 22, Go 1.23, PostgreSQL 15, Redis 7, and Mailpit in
+worktree launcher runs Node.js 24, Go 1.23, PostgreSQL 15, Redis 7, and Mailpit in
 containers. No host Node, Go, Yarn, or Make installation is needed to run the app.
 
 ```sh
@@ -50,7 +50,7 @@ make api-generate
 ```
 
 Backend tests use the current worktree's migrated PostgreSQL database. The
-frontend checks/API generator and `backend-build` use host Node.js 22/Go 1.23;
+frontend checks/API generator and `backend-build` use host Node.js 24/Go 1.23;
 their container equivalents are documented in the worktree guide. API generation reads
 `backend/doc/swagger/talebound.swagger.json` directly; it no longer needs a
 running backend or the old development server. After changing protobuf API
@@ -69,7 +69,7 @@ existing imports and protobuf package identities. Go builds use the local
   client without changes. The Yarn lockfile installed with `--immutable`.
 - GitHub Actions workflows passed `actionlint`; Compose configuration and root
   Makefile command paths were checked.
-- Frontend lint, TypeScript checking, and the production build pass with Node 22
+- Frontend lint, TypeScript checking, and the production build pass with Node 24
   and the checked-in Yarn lockfile. The inherited API/type mismatches and unused
   code have been corrected; lint and type checking remain enabled.
 

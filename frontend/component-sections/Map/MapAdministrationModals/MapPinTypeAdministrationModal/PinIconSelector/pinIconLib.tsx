@@ -1,7 +1,7 @@
 import {
-  Gi3DHammer,
-  Gi3DMeeple,
-  Gi3DStairs,
+  Gi3dHammer as Gi3DHammer,
+  Gi3dMeeple as Gi3DMeeple,
+  Gi3dStairs as Gi3DStairs,
   GiAbbotMeeple,
   GiAbstract002,
   GiAbstract004,

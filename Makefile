@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 NODE ?= node
-FRONTEND_YARN = cd frontend && $(NODE) .yarn/releases/yarn-3.6.1.cjs
+FRONTEND_YARN = cd frontend && $(NODE) .yarn/releases/yarn-4.18.1.cjs
 WORKTREE_DEV = scripts/worktree-dev/talebound-worktree-dev
 
 .PHONY: help dev-setup dev-up dev-down dev-status dev-logs frontend-install frontend-dev frontend-build frontend-lint backend-dev backend-build backend-test backend-migrate api-generate services-up services-down

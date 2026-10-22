@@ -2,7 +2,7 @@ import { ImagePosition } from '../InlineImageNode/InlineImageNode';
 import { useSuspenseImage } from './inlineImageComponentLib';
 import * as React from 'react';
 import { styled } from '../../../../styles/stitches.config';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 
 const StyledLazyImage = styled('img', {
   maxWidth: '100%',
@@ -42,7 +42,7 @@ export function LazyImage({
   height,
   position,
   ...variants
-}: LazyImageProps): JSX.Element {
+}: LazyImageProps): React.JSX.Element {
   useSuspenseImage(src);
 
   return (

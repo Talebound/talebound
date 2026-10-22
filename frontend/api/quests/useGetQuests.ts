@@ -11,8 +11,8 @@ export const useGetQuests = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetQuests',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetQuests'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const tags = (variables.tags?.length ?? 0) > 0 ? variables.tags : undefined;
 
     const { data } = await QuestsCollection.questsGetQuests({

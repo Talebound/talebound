@@ -1,7 +1,6 @@
-import { ColumnType } from 'antd/es/table';
+import type { TableColumnType as ColumnType, TableProps } from 'antd';
 import React from 'react';
-import { TableProps } from 'antd/lib';
-import { SorterResult } from 'antd/lib/table/interface';
+import type { SorterResult } from 'antd/es/table/interface';
 
 export interface Tables {
   orderBy: string;

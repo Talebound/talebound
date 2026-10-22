@@ -9,7 +9,7 @@ export const TableCellActionButtonContainer = styled('div', {
   willChange: 'transform',
 });
 
-export const TableCellActionButton = styled('div', {
+export const TableCellActionButton = styled('button', {
   backgroundColor: '$primary200',
   display: 'flex',
   justifyContent: 'center',

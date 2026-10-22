@@ -14,8 +14,8 @@ export const useGetAverageUserEvaluationByType = createSuspenseQuery<
   PbGetAverageUserEvaluationsByTypeResponse,
   PbGetAverageUserEvaluationsByTypeRequest
 >({
-  primaryKey: 'useGetAverageUserEvaluationByType',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetAverageUserEvaluationByType'],
+  fetcher: async (variables) => {
     const { data } = await UsersCollection.usersGetAverageUserEvaluationsByType(
       variables.userId,
       variables.type,

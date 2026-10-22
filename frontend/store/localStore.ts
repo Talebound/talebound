@@ -28,7 +28,7 @@ export function getItem<T extends LSKey>(key: T): LSValues[T] | undefined {
   if (typeof window !== 'undefined') {
     const savedItem = localStorage.getItem(key);
     if (savedItem && savedItem !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      // oxlint-disable-next-line typescript/consistent-type-assertions
       return JSON.parse(savedItem) as LSValues[T];
     }
   }

@@ -60,7 +60,7 @@ export default function ResetPasswordVerify() {
     if (secretCode.length > 0) {
       resetPasswordVerifyCodeValidity.mutate(secretCode);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [secretCode]);
 
   const buttonDisabled = useMemo(

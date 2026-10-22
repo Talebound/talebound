@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -104,6 +104,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/modules/${moduleId}/pin_type_groups`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -150,6 +151,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/modules/${moduleId}/pin_type_groups/${mapPinTypeGroupId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -347,6 +349,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/${mapId}/layers`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -394,6 +397,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/${mapId}/layers/${layerId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -462,6 +466,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/${mapId}/pins`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -514,6 +519,7 @@ export class Maps<SecurityDataType = unknown> {
       path: `/maps/${mapId}/pins/${pinId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

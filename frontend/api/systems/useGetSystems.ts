@@ -11,8 +11,8 @@ export const useGetSystems = createInfiniteQuery<
   Error,
   number
 >({
-  primaryKey: 'useGetSystems',
-  queryFn: async ({ queryKey: [_primaryKey, variables], pageParam: offset }) => {
+  queryKey: ['useGetSystems'],
+  fetcher: async (variables, { pageParam: offset }) => {
     const tags = (variables.tags?.length ?? 0) > 0 ? variables.tags : undefined;
 
     const { data } = await SystemsCollection.systemsGetSystems({

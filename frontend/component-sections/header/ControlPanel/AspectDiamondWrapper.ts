@@ -1,5 +1,5 @@
 import { styled } from '../../../styles/stitches.config';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 import { BIG_IMG_COEF, IMG_SIZE, ON_HOVER_SCALE_SIZE, SUB_ICON_SIZE } from './utilsAspectDiamond';
 
 const transformByPosition = {

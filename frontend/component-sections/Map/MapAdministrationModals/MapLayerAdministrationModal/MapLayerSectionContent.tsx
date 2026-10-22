@@ -42,7 +42,7 @@ const MapLayerSectionContent: React.FC<MapLayerSectionContentProps> = ({ mapLaye
     [mapLayer.mapId, mapLayer.id, updateMapLayer],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((payload: UpdateMenuItemParams['body']) => {
       sendPayload(payload);

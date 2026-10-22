@@ -40,17 +40,16 @@ const ImageModalTabYourImages: React.FC<ImageModalTabYourImagesProps> = ({
   return (
     <Spin spinning={isFetchingImages}>
       <Row gap="sm" wrap css={{ maxHeight: 300, overflowY: 'scroll' }}>
-        {imagesData?.pages.map(
-          (page) =>
-            page.images?.map((i) => (
-              <Image
-                key={i.imgGuid}
-                image={i}
-                onClick={onClick}
-                variant={ImageVariant['150x150']}
-                selected={selectedImageBaseUrl === i.baseUrl || selectedImageById === i.id}
-              />
-            )),
+        {imagesData?.pages.map((page) =>
+          page.images?.map((i) => (
+            <Image
+              key={i.imgGuid}
+              image={i}
+              onClick={onClick}
+              variant={ImageVariant['150x150']}
+              selected={selectedImageBaseUrl === i.baseUrl || selectedImageById === i.id}
+            />
+          )),
         )}
         {hasNextPage && !isFetchingImages && (
           <InfiniteScrollObserver runOnObserve={fetchNextPage} />

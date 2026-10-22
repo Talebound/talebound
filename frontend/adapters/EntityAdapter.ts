@@ -1,9 +1,9 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { PbViewEntity } from '../generated/api-types/data-contracts';
 import { ReduxState } from '../store';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 
-export const EntityAdapter = createEntityAdapter<PbViewEntity>({
+export const EntityAdapter = createEntityAdapter<PbViewEntity, number>({
   selectId: (entity) => entity.id!,
   sortComparer: (a, b) => a.id! - b.id!,
 });

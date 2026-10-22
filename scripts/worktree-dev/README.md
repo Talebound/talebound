@@ -143,7 +143,7 @@ For containerized frontend lint/build/API generation after setup:
 project=$(python3 -c 'import json; print(json.load(open(".talebound/state.json"))["project"])')
 docker compose -p "$project" --env-file .env.worktree \
   -f scripts/worktree-dev/compose.yaml run --rm --no-deps frontend \
-  node .yarn/releases/yarn-3.6.1.cjs lint
+  node .yarn/releases/yarn-4.18.1.cjs lint
 ```
 
 Replace `lint` with `build` or `generate`. Stop the frontend before `build`

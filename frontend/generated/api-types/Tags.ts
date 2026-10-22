@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -113,6 +113,7 @@ export class Tags<SecurityDataType = unknown> {
       path: `/tags/available/entity/${tagId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -205,6 +206,7 @@ export class Tags<SecurityDataType = unknown> {
       path: `/tags/available/module_type/${tagId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -230,6 +232,7 @@ export class Tags<SecurityDataType = unknown> {
       path: `/tags/entity/${entityId}`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -272,6 +275,7 @@ export class Tags<SecurityDataType = unknown> {
       path: `/tags/module/${moduleId}`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

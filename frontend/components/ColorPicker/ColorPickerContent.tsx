@@ -67,7 +67,7 @@ const ColorPickerColor = styled('div', {
 export default function ColorPickerContent({
   color,
   onChange,
-}: Readonly<ColorPickerContentProps>): JSX.Element {
+}: Readonly<ColorPickerContentProps>): React.JSX.Element {
   const [selfColor, setSelfColor] = useState(transformColor('hex', color));
   const [inputColor, setInputColor] = useState(color);
   const innerDivRef = useRef(null);
@@ -185,7 +185,7 @@ interface MoveWrapperProps {
   type?: 'hue' | 'saturation';
   style?: React.CSSProperties;
   onChange: (position: Position) => void;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 const MoveWrapperCursor = styled('div', {

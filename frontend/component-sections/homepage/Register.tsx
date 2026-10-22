@@ -124,7 +124,7 @@ const Register: React.FC<HomepageRegisterProps> = ({ background = false }) => {
       password: password1Value,
     });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [buttonDisabled, usernameValue, emailValue, password1Value, password2Value]);
 
   return (

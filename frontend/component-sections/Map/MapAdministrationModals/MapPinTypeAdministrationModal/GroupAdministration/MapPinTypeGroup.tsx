@@ -29,7 +29,7 @@ const MapPinTypeGroup: React.FC<MapPinTypeGroupProps> = ({ data }) => {
 
   const { value: titleValue, setValue: setTitleValue } = useInput(data.name ?? '');
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((id: number, newName: string) => {
       updateMapPinTypeGroup({

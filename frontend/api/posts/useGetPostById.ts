@@ -6,8 +6,8 @@ import { postAdapterSlice, postSelectors } from '../../adapters/PostAdapter';
 import { store } from '../../store';
 
 export const useGetPostById = createSuspenseQuery<PbPost, number, TaleboundError>({
-  primaryKey: 'useGetPostById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetPostById'],
+  fetcher: async (variables) => {
     if (!variables) return {};
     const post = postSelectors.selectById(store.getState(), variables);
     if (!post) {

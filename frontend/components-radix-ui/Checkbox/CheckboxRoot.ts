@@ -1,6 +1,6 @@
 import * as CheckboxRadix from '@radix-ui/react-checkbox';
 import { styled } from '../../styles/stitches.config';
-import Stitches from '@stitches/react';
+import type * as Stitches from '@stitches/react';
 
 export const CheckboxRoot = styled(CheckboxRadix.Root, {
   all: 'unset',

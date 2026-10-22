@@ -4,7 +4,7 @@ import { $getSelection, $isRangeSelection } from 'lexical';
 import { TableCellActionButton, TableCellActionButtonContainer } from './componentsTableActionMenu';
 import { BiChevronDown } from 'react-icons/bi';
 import TableCellActionMenu from './TableCellActionMenu';
-import { $getTableCellNodeFromLexicalNode, TableCellNode } from '@lexical/table';
+import { $getTableCellNodeFromLexicalNode, $isTableSelection, TableCellNode } from '@lexical/table';
 
 interface TableCellActionMenuContainerProps {
   anchorElem: HTMLElement;
@@ -17,12 +17,15 @@ const TableCellActionMenuContainer: React.FC<TableCellActionMenuContainerProps> 
 }) => {
   const [editor] = useLexicalComposerContext();
 
-  const menuButtonRef = useRef(null);
-  const menuRootRef = useRef(null);
+  const menuButtonRef = useRef<HTMLDivElement>(null);
+  const menuRootRef = useRef<HTMLButtonElement>(null);
+  const menuOpenRef = useRef(false);
 
   const [tableCellNode, setTableMenuCellNode] = useState<TableCellNode | null>(null);
 
   const moveMenu = useCallback(() => {
+    // Lexical may clear its selection when keyboard focus enters the menu.
+    if (menuOpenRef.current) return;
     const menu = menuButtonRef.current;
     const selection = $getSelection();
     const nativeSelection = window.getSelection();
@@ -36,10 +39,11 @@ const TableCellActionMenuContainer: React.FC<TableCellActionMenuContainerProps> 
     const rootElement = editor.getRootElement();
 
     if (
-      $isRangeSelection(selection) &&
-      rootElement !== null &&
-      nativeSelection !== null &&
-      rootElement.contains(nativeSelection.anchorNode)
+      $isTableSelection(selection) ||
+      ($isRangeSelection(selection) &&
+        rootElement !== null &&
+        nativeSelection !== null &&
+        rootElement.contains(nativeSelection.anchorNode))
     ) {
       const tableCellNodeFromSelection = $getTableCellNodeFromLexicalNode(
         selection.anchor.getNode(),
@@ -104,8 +108,11 @@ const TableCellActionMenuContainer: React.FC<TableCellActionMenuContainerProps> 
     <TableCellActionButtonContainer ref={menuButtonRef}>
       {tableCellNode != null && (
         <TableCellActionMenu
+          onOpenChange={(open) => {
+            menuOpenRef.current = open;
+          }}
           trigger={
-            <TableCellActionButton ref={menuRootRef}>
+            <TableCellActionButton aria-label="Table cell actions" ref={menuRootRef}>
               <BiChevronDown />
             </TableCellActionButton>
           }

@@ -6,8 +6,8 @@ import { moduleAdapterSlice, moduleSelectors } from '../../adapters/ModuleAdapte
 import { store } from '../../store';
 
 export const useGetModuleById = createSuspenseQuery<PbViewModule, number, TaleboundError>({
-  primaryKey: 'useGetModuleById',
-  queryFn: async ({ queryKey: [, variables] }) => {
+  queryKey: ['useGetModuleById'],
+  fetcher: async (variables) => {
     if (!variables) {
       return {};
     }

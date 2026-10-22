@@ -66,13 +66,12 @@ const WorldList: React.FC = () => {
             </ContentSection>
 
             <Row gap="md" alignItems="start" wrap>
-              {worldsData?.pages.map(
-                (page) =>
-                  page.worldIds?.map((worldId) => (
-                    <Suspense fallback={null} key={worldId}>
-                      <WorldCard worldId={worldId} />
-                    </Suspense>
-                  )),
+              {worldsData?.pages.map((page) =>
+                page.worldIds?.map((worldId) => (
+                  <Suspense fallback={null} key={worldId}>
+                    <WorldCard worldId={worldId} />
+                  </Suspense>
+                )),
               )}
               {hasNextPage && !isFetching && (
                 <InfiniteScrollObserver runOnObserve={fetchNextPage} />

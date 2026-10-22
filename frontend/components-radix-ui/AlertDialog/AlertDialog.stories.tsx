@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs';
 import AlertDialogDemo from './AlertDialogDemo';
 
 const meta: Meta<typeof AlertDialogDemo> = {

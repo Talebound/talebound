@@ -7,8 +7,7 @@ import { StoreProvider } from '../store';
 import { CookiesProvider } from 'react-cookie';
 import { HydrationProvider } from 'react-hydration-provider';
 import { COLORS, theme } from '../styles/stitches.config';
-import { ConfigProviderProps } from 'antd/es/config-provider';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, type ConfigProviderProps } from 'antd';
 import qs from 'qs';
 
 const antdTheme: ConfigProviderProps['theme'] = {

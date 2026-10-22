@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "bracketSpacing": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "node_modules/**",
+    ".next/**",
+    "public/**",
+    "out/**",
+    "dist/**",
+    ".yarn/**",
+    "storybook-static/**",
+    "next-env.d.ts",
+    "yarn.lock"
+  ]
+}

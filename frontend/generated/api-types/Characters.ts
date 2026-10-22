@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 /* tslint:disable */
 /*
  * ---------------------------------------------------------------
@@ -122,6 +122,7 @@ export class Characters<SecurityDataType = unknown> {
       path: `/characters/${characterId}`,
       method: 'PATCH',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
@@ -149,6 +150,7 @@ export class Characters<SecurityDataType = unknown> {
       path: `/characters/${characterId}/images`,
       method: 'POST',
       body: body,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });
