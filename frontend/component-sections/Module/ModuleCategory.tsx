@@ -15,7 +15,7 @@ const ModuleCategory: React.FC<ModuleCategoryProps> = ({ entityId }) => {
   const { module, linkPrefix, moduleTypeId } = useModule(moduleId);
   const { entity } = useEntity(entityId ?? 0);
   const menuId = module?.menuId ?? 0;
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const canEdit = isModuleCollaborator(role);
 
   const isEntityOfModule = entity?.moduleId === moduleId;

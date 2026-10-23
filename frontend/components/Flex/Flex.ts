@@ -26,6 +26,12 @@ export const Flex = styled('div', {
       },
     },
 
+    fullHeight: {
+      true: {
+        height: '100%',
+      },
+    },
+
     hoverHighlight: {
       true: {
         '&:hover': {
@@ -156,6 +162,12 @@ export const Flex = styled('div', {
     circle: {
       true: {
         borderRadius: '50%',
+      },
+    },
+
+    borderBottom: {
+      true: {
+        borderBottom: '1px solid $primary200',
       },
     },
   },

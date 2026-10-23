@@ -1,3 +1,4 @@
+import { useGetQuests } from './useGetQuests';
 import { createMutation, inferData } from 'react-query-kit';
 import { QuestsCollection } from '../collections';
 import { useGetQuestById } from './useGetQuestById';
@@ -21,6 +22,7 @@ export const useUpdateQuest = createMutation({
         return data.data;
       });
       store.dispatch(questAdapterSlice.actions.upsertQuest(data.data));
+      return queryClient.invalidateQueries({ queryKey: useGetQuests.getKey() });
     }
   },
 });

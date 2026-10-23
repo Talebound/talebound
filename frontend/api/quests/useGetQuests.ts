@@ -16,8 +16,12 @@ export const useGetQuests = createInfiniteQuery<
     const tags = (variables.tags?.length ?? 0) > 0 ? variables.tags : undefined;
 
     const { data } = await QuestsCollection.questsGetQuests({
+      worldId: variables.worldId,
+      systemId: variables.systemId,
       public: variables.public,
       orderBy: variables.orderBy,
+      canJoin: variables.canJoin,
+      status: variables.status,
       tags,
       limit: PAGE_SIZE,
       offset,

@@ -25,7 +25,6 @@ func (server *ServiceModules) UpdateModuleAdmin(ctx context.Context, req *pb.Upd
 		return nil, err
 	}
 
-	//TODO: add AllowedEntityTypes and AllowedMenu here and to SQL query
 	arg := db.UpdateModuleAdminParams{
 		ModuleID: req.GetModuleId(),
 		UserID:   req.GetUserId(),
@@ -45,14 +44,36 @@ func (server *ServiceModules) UpdateModuleAdmin(ctx context.Context, req *pb.Upd
 		AllowedEntityTypesPresent: req.GetAllowedEntityTypes() != nil,
 		AllowedEntityTypes:        make([]db.EntityType, 0),
 		AllowedMenu: sql.NullBool{
-			Bool:  req.GetSuperAdmin(),
-			Valid: req.SuperAdmin != nil,
+			Bool:  req.GetAllowedMenu(),
+			Valid: req.AllowedMenu != nil,
 		},
 	}
 
 	if req.GetAllowedEntityTypes() != nil {
 		for _, et := range req.AllowedEntityTypes.EntityTypes {
 			arg.AllowedEntityTypes = append(arg.AllowedEntityTypes, converters.ConvertEntityTypeToDB(et))
+		}
+	}
+
+	if req.GetApproved() == 1 {
+		_, err := server.Store.UpsertUserModule(ctx, db.UpsertUserModuleParams{
+			ModuleID: req.GetModuleId(),
+			UserID:   req.GetUserId(),
+			Admin: sql.NullBool{
+				Bool:  true,
+				Valid: true,
+			},
+			Favorite: sql.NullBool{
+				Bool:  true,
+				Valid: true,
+			},
+			Following: sql.NullBool{
+				Bool:  true,
+				Valid: true,
+			},
+		})
+		if err != nil {
+			return nil, err
 		}
 	}
 

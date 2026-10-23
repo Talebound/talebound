@@ -18,7 +18,7 @@ const StyledImage = styled('img', {
 
 interface ImageProps {
   image: PbImage;
-  onClick: (image: PbImage) => void;
+  onClick?: (image: PbImage) => void;
   variant: ImageVariant;
   selected?: boolean;
 }

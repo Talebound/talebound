@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/the-medo/talebound-backend/api/servicecore"
+	"github.com/the-medo/talebound-backend/constants"
 	"github.com/the-medo/talebound-backend/converters"
 	db "github.com/the-medo/talebound-backend/db/sqlc"
 	"github.com/the-medo/talebound-backend/e"
@@ -31,15 +32,68 @@ func (server *ServiceQuests) UpdateQuest(ctx context.Context, req *pb.UpdateQues
 		return nil, err
 	}
 
-	// TODO - make WorldID and SystemID updateable only when they are "Universal world" or "Universal system"
+	current, err := server.Store.GetQuestByID(ctx, req.GetQuestId())
+	if err != nil {
+		return nil, err
+	}
+	if req.WorldId != nil && req.GetWorldId() == current.WorldID.Int32 {
+		req.WorldId = nil
+	}
+	if req.SystemId != nil && req.GetSystemId() == current.SystemID.Int32 {
+		req.SystemId = nil
+	}
+	// WorldID and SystemID are updateable only when they are "Universal world" or "Universal system"
 	// otherwise, another related entities can be out of sync with what is possible
+	if req.WorldId != nil || req.SystemId != nil {
+		questCharacters, err := server.Store.GetQuestCharactersByQuestID(ctx, req.GetQuestId())
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to update quest: %s", err)
+		}
 
+		if len(questCharacters) > 0 {
+			return nil, status.Errorf(codes.FailedPrecondition, "failed to update quest: can not change world or system when characters are in a quest")
+		}
+
+		if req.WorldId != nil {
+			world, err := server.Store.GetWorldByID(ctx, current.WorldID.Int32)
+			if err != nil {
+				return nil, status.Errorf(codes.Internal, "failed to update quest: %s", err)
+			}
+			if world.Name != constants.UniversalWorldName {
+				return nil, status.Errorf(codes.FailedPrecondition, "failed to update quest: world can be changed only from world named %s", constants.UniversalWorldName)
+			}
+		}
+
+		if req.SystemId != nil {
+			system, err := server.Store.GetSystemByID(ctx, current.SystemID.Int32)
+			if err != nil {
+				return nil, status.Errorf(codes.Internal, "failed to update quest: %s", err)
+			}
+			if system.Name != constants.UniversalSystemName {
+				return nil, status.Errorf(codes.FailedPrecondition, "failed to update quest: system can be changed only from system named %s", constants.UniversalSystemName)
+			}
+		}
+	}
+
+	nextStatus := current.Status
+	if req.Status != nil {
+		nextStatus = converters.ConvertQuestStatusToDB(req.GetStatus())
+	}
+	if nextStatus == db.QuestStatusFinishedCompleted || nextStatus == db.QuestStatusFinishedNotCompleted {
+		if req.GetCanJoin() {
+			return nil, status.Error(codes.FailedPrecondition, "a finished quest cannot accept applications")
+		}
+		closed := false
+		req.CanJoin = &closed
+	}
 	arg := db.UpdateQuestParams{
 		QuestID:          req.GetQuestId(),
 		Name:             sql.NullString{String: req.GetName(), Valid: req.Name != nil},
 		ShortDescription: sql.NullString{String: req.GetShortDescription(), Valid: req.ShortDescription != nil},
 		WorldID:          sql.NullInt32{Int32: req.GetWorldId(), Valid: req.WorldId != nil},
 		SystemID:         sql.NullInt32{Int32: req.GetSystemId(), Valid: req.SystemId != nil},
+		CanJoin:          sql.NullBool{Bool: req.GetCanJoin(), Valid: req.CanJoin != nil},
+		Status:           db.NullQuestStatus{QuestStatus: converters.ConvertQuestStatusToDB(req.GetStatus()), Valid: req.Status != nil},
 	}
 
 	quest, err := server.Store.UpdateQuest(ctx, arg)
@@ -79,5 +133,8 @@ func validateUpdateQuestRequest(req *pb.UpdateQuestRequest) (violations []*errde
 		}
 	}
 
+	if req.Status != nil && (req.GetStatus() < pb.QuestStatus_NOT_STARTED || req.GetStatus() > pb.QuestStatus_FINISHED_NOT_COMPLETED) {
+		violations = append(violations, e.FieldViolation("status", status.Error(codes.InvalidArgument, "invalid quest status")))
+	}
 	return violations
 }

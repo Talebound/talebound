@@ -52,7 +52,7 @@ const SystemCard: React.FC<SystemCardProps> = ({
       imgSrc={imageThumbnail?.url ?? IMAGE_DEFAULT_SYSTEM_THUMBNAIL}
       href={`/systems/${system.id}/detail`}
       availableTags={availableTags}
-      tags={[]} //module.tags ??
+      tags={module?.tags}
       onClick={onClick ?? onSelected}
       {...extended}
     />

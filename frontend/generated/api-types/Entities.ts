@@ -10,13 +10,13 @@
  */
 
 import {
+  EntitiesCreateEntityGroupContentBody,
+  EntitiesUpdateEntityGroupBody,
+  EntitiesUpdateEntityGroupContentBody,
   PbCreateEntityGroupRequest,
   PbCreateEntityGroupResponse,
   PbEntityGroup,
   PbEntityGroupContent,
-  PbEntityGroupDirection,
-  PbEntityGroupStyle,
-  PbEntityType,
   PbViewEntity,
   RpcStatus,
 } from './data-contracts';
@@ -60,12 +60,7 @@ export class Entities<SecurityDataType = unknown> {
    */
   entitiesUpdateEntityGroup = (
     entityGroupId: number,
-    body: {
-      name?: string;
-      description?: string;
-      style?: PbEntityGroupStyle;
-      direction?: PbEntityGroupDirection;
-    },
+    body: EntitiesUpdateEntityGroupBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbEntityGroup, RpcStatus>({
@@ -88,17 +83,7 @@ export class Entities<SecurityDataType = unknown> {
    */
   entitiesCreateEntityGroupContent = (
     entityGroupId: number,
-    body: {
-      /** @format int32 */
-      contentEntityId?: number;
-      /** @format int32 */
-      contentEntityGroupId?: number;
-      /** @format int32 */
-      position?: number;
-      entityType?: PbEntityType;
-      /** @format int32 */
-      entityIdOfType?: number;
-    },
+    body: EntitiesCreateEntityGroupContentBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbEntityGroupContent, RpcStatus>({
@@ -143,16 +128,7 @@ export class Entities<SecurityDataType = unknown> {
   entitiesUpdateEntityGroupContent = (
     entityGroupId: number,
     contentId: number,
-    body: {
-      /** @format int32 */
-      newEntityGroupId?: number;
-      /** @format int32 */
-      position?: number;
-      /** @format int32 */
-      contentEntityId?: number;
-      /** @format int32 */
-      contentEntityGroupId?: number;
-    },
+    body: EntitiesUpdateEntityGroupContentBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbEntityGroupContent, RpcStatus>({

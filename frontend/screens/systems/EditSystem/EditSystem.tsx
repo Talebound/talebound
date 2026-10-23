@@ -15,7 +15,7 @@ import { useUpdateSystem } from '../../../api/systems/useUpdateSystem';
 import ModuleImages from '../../modules/Edit/ModuleImages';
 import ModuleTags from '../../modules/Edit/ModuleTags';
 import Loading from '../../../components/Loading/Loading';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import { useMyModuleRole, ModuleAdminRole } from '../../../hooks/useModuleAdmins';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
@@ -35,7 +35,7 @@ interface EditSystemProps {
 const EditSystem: React.FC<EditSystemProps> = ({ systemId }) => {
   const { system, module, moduleId } = useSystem(systemId);
   console.log({ system, module, moduleId });
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const updateSystemMutation = useUpdateSystem();
   const disabled = useMemo(() => role !== ModuleAdminRole.SUPER_COLLABORATOR, [role]);
 

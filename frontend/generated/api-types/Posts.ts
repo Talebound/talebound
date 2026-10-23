@@ -16,6 +16,7 @@ import {
   PbGetPostsResponse,
   PbPost,
   PbPostHistory,
+  PostsUpdatePostBody,
   RpcStatus,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
@@ -125,19 +126,7 @@ export class Posts<SecurityDataType = unknown> {
    * @response `200` `PbPost` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  postsUpdatePost = (
-    postId: number,
-    body: {
-      title?: string;
-      content?: string;
-      description?: string;
-      isDraft?: boolean;
-      isPrivate?: boolean;
-      /** @format int32 */
-      imageThumbnailId?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  postsUpdatePost = (postId: number, body: PostsUpdatePostBody, params: RequestParams = {}) =>
     this.http.request<PbPost, RpcStatus>({
       path: `/posts/${postId}`,
       method: 'PATCH',

@@ -9,6 +9,15 @@
  * ---------------------------------------------------------------
  */
 
+/** @default "UNKNOWN" */
+export enum PbQuestStatus {
+  UNKNOWN = 'UNKNOWN',
+  NOT_STARTED = 'NOT_STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FINISHED_COMPLETED = 'FINISHED_COMPLETED',
+  FINISHED_NOT_COMPLETED = 'FINISHED_NOT_COMPLETED',
+}
+
 /** @default "NONE" */
 export enum PbPinShape {
   NONE = 'NONE',
@@ -69,6 +78,307 @@ export enum PbDeleteEntityGroupContentAction {
   DELETE_EGC_ACTION_UNKNOWN = 'DELETE_EGC_ACTION_UNKNOWN',
   DELETE_EGC_ACTION_DELETE_CHILDREN = 'DELETE_EGC_ACTION_DELETE_CHILDREN',
   DELETE_EGC_ACTION_MOVE_CHILDREN = 'DELETE_EGC_ACTION_MOVE_CHILDREN',
+}
+
+export interface CharactersUpdateCharacterBody {
+  name?: string;
+  shortDescription?: string;
+  public?: boolean;
+  /** @format int32 */
+  worldId?: number;
+  /** @format int32 */
+  systemId?: number;
+}
+
+export interface CharactersUploadCharacterImageBody {
+  /** @format byte */
+  data?: string;
+  /** @format int32 */
+  imageTypeId?: number;
+}
+
+export interface EntitiesCreateEntityGroupContentBody {
+  /** @format int32 */
+  contentEntityId?: number;
+  /** @format int32 */
+  contentEntityGroupId?: number;
+  /** @format int32 */
+  position?: number;
+  entityType?: PbEntityType;
+  /** @format int32 */
+  entityIdOfType?: number;
+}
+
+export interface EntitiesUpdateEntityGroupBody {
+  name?: string;
+  description?: string;
+  style?: PbEntityGroupStyle;
+  direction?: PbEntityGroupDirection;
+}
+
+export interface EntitiesUpdateEntityGroupContentBody {
+  /** @format int32 */
+  newEntityGroupId?: number;
+  /** @format int32 */
+  position?: number;
+  /** @format int32 */
+  contentEntityId?: number;
+  /** @format int32 */
+  contentEntityGroupId?: number;
+}
+
+export interface LocationsUpdateLocationBody {
+  name?: string;
+  description?: string;
+  /** @format int32 */
+  postId?: number;
+  /** @format int32 */
+  thumbnailImageId?: number;
+}
+
+export interface MapsCreateMapLayerBody {
+  name?: string;
+  /** @format int32 */
+  imageId?: number;
+  enabled?: boolean;
+  /** @format int32 */
+  position?: number;
+}
+
+export interface MapsCreateMapPinBody {
+  /** @format int32 */
+  mapPinTypeId?: number;
+  name?: string;
+  /** @format int32 */
+  locationId?: number;
+  /** @format int32 */
+  mapLayerId?: number;
+  /** @format int32 */
+  x?: number;
+  /** @format int32 */
+  y?: number;
+}
+
+export interface MapsCreateMapPinTypeBody {
+  /** @format int32 */
+  mapPinTypeGroupId?: number;
+  shape?: PbPinShape;
+  backgroundColor?: string;
+  borderColor?: string;
+  iconColor?: string;
+  icon?: string;
+  /** @format int32 */
+  iconSize?: number;
+  /** @format int32 */
+  width?: number;
+}
+
+export interface MapsCreateMapPinTypeGroupBody {
+  name?: string;
+}
+
+export interface MapsUpdateMapBody {
+  title?: string;
+  type?: string;
+  description?: string;
+  /** @format int32 */
+  thumbnailImageId?: number;
+  isPrivate?: boolean;
+}
+
+export interface MapsUpdateMapLayerBody {
+  name?: string;
+  /** @format int32 */
+  imageId?: number;
+  enabled?: boolean;
+  /** @format int32 */
+  position?: number;
+}
+
+export interface MapsUpdateMapPinBody {
+  /** @format int32 */
+  mapPinTypeId?: number;
+  name?: string;
+  /** @format int32 */
+  locationId?: number;
+  /** @format int32 */
+  mapLayerId?: number;
+  /** @format int32 */
+  x?: number;
+  /** @format int32 */
+  y?: number;
+}
+
+export interface MapsUpdateMapPinTypeBody {
+  shape?: PbPinShape;
+  backgroundColor?: string;
+  borderColor?: string;
+  iconColor?: string;
+  icon?: string;
+  /** @format int32 */
+  iconSize?: number;
+  /** @format int32 */
+  width?: number;
+  isDefault?: boolean;
+}
+
+export interface MapsUpdateMapPinTypeGroupBody {
+  name?: string;
+}
+
+export interface MenusCreateMenuItemBody {
+  code?: string;
+  name?: string;
+  /** @format int32 */
+  position?: number;
+  isMain?: boolean;
+}
+
+export interface MenusUpdateMenuBody {
+  code?: string;
+  /** @format int32 */
+  headerImgId?: number;
+}
+
+export interface MenusUpdateMenuItemBody {
+  code?: string;
+  name?: string;
+  /** @format int32 */
+  position?: number;
+  isMain?: boolean;
+  /** @format int32 */
+  descriptionPostId?: number;
+}
+
+export interface ModulesCreateModuleAdminBody {
+  motivationalLetter?: string;
+}
+
+export interface ModulesUpdateModuleAdminBody {
+  /** @format int32 */
+  userId?: number;
+  superAdmin?: boolean;
+  /** @format int32 */
+  approved?: number;
+  motivationalLetter?: string;
+  allowedEntityTypes?: PbEntityTypeList;
+  allowedMenu?: boolean;
+}
+
+export interface ModulesUpdateModuleBody {
+  /** @format int32 */
+  headerImgId?: number;
+  /** @format int32 */
+  thumbnailImgId?: number;
+  /** @format int32 */
+  avatarImgId?: number;
+  /** @format int32 */
+  descriptionPostId?: number;
+}
+
+export interface PostsUpdatePostBody {
+  title?: string;
+  content?: string;
+  description?: string;
+  isDraft?: boolean;
+  isPrivate?: boolean;
+  /** @format int32 */
+  imageThumbnailId?: number;
+}
+
+export interface QuestsCreateQuestCharacterBody {
+  motivationalLetter?: string;
+}
+
+export interface QuestsUpdateQuestBody {
+  name?: string;
+  shortDescription?: string;
+  public?: boolean;
+  /** @format int32 */
+  worldId?: number;
+  /** @format int32 */
+  systemId?: number;
+  status?: PbQuestStatus;
+  canJoin?: boolean;
+}
+
+export interface QuestsUpdateQuestCharacterBody {
+  /** @format int32 */
+  approved?: number;
+  motivationalLetter?: string;
+}
+
+export interface QuestsUploadQuestImageBody {
+  /** @format byte */
+  data?: string;
+  /** @format int32 */
+  imageTypeId?: number;
+}
+
+export interface SystemsUpdateSystemBody {
+  name?: string;
+  shortDescription?: string;
+  public?: boolean;
+  basedOn?: string;
+}
+
+export interface SystemsUploadSystemImageBody {
+  /** @format byte */
+  data?: string;
+  /** @format int32 */
+  imageTypeId?: number;
+}
+
+export interface TagsCreateEntityTagBody {
+  /** @format int32 */
+  tagId?: number;
+}
+
+export interface TagsCreateModuleTagBody {
+  /** @format int32 */
+  tagId?: number;
+}
+
+export interface TagsUpdateModuleEntityAvailableTagBody {
+  newTag?: string;
+}
+
+export interface TagsUpdateModuleTypeAvailableTagBody {
+  newTag?: string;
+}
+
+/** Create or update evaluation */
+export interface UsersCreateOrUpdateEvaluationVoteBody {
+  /** @format int32 */
+  evaluationId?: number;
+  /** @format int32 */
+  userIdVoter?: number;
+  /** @format double */
+  value?: number;
+}
+
+export interface UsersUpdateUserIntroductionBody {
+  content?: string;
+  saveAsDraft?: boolean;
+}
+
+export interface UsersUploadUserAvatarBody {
+  /** @format byte */
+  data?: string;
+}
+
+export interface WorldsUpdateWorldBody {
+  name?: string;
+  shortDescription?: string;
+  public?: boolean;
+  basedOn?: string;
+}
+
+export interface WorldsUploadWorldImageBody {
+  /** @format byte */
+  data?: string;
+  /** @format int32 */
+  imageTypeId?: number;
 }
 
 export interface PbAddRoleToUserRequest {
@@ -414,6 +724,10 @@ export interface PbGetPostsResponse {
   totalCount?: number;
 }
 
+export interface PbGetQuestCharactersResponse {
+  questCharacters?: PbQuestCharacter[];
+}
+
 export interface PbGetQuestsResponse {
   questIds?: number[];
   /** @format int32 */
@@ -634,6 +948,20 @@ export interface PbQuest {
   worldId?: number;
   /** @format int32 */
   systemId?: number;
+  canJoin?: boolean;
+  status?: PbQuestStatus;
+}
+
+export interface PbQuestCharacter {
+  /** @format int32 */
+  questId?: number;
+  /** @format int32 */
+  characterId?: number;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format int32 */
+  approved?: number;
+  motivationalLetter?: string;
 }
 
 export interface PbRemoveRoleFromUserResponse {

@@ -16,6 +16,8 @@ import {
   PbImage,
   PbSystem,
   RpcStatus,
+  SystemsUpdateSystemBody,
+  SystemsUploadSystemImageBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
@@ -103,12 +105,7 @@ export class Systems<SecurityDataType = unknown> {
    */
   systemsUpdateSystem = (
     systemId: number,
-    body: {
-      name?: string;
-      shortDescription?: string;
-      public?: boolean;
-      basedOn?: string;
-    },
+    body: SystemsUpdateSystemBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbSystem, RpcStatus>({
@@ -131,12 +128,7 @@ export class Systems<SecurityDataType = unknown> {
    */
   systemsUploadSystemImage = (
     systemId: number,
-    body: {
-      /** @format byte */
-      data?: string;
-      /** @format int32 */
-      imageTypeId?: number;
-    },
+    body: SystemsUploadSystemImageBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbImage, RpcStatus>({

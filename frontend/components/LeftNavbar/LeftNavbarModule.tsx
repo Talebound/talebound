@@ -10,7 +10,7 @@ interface LeftNavbarModuleProps {
 const LeftNavbarModule: React.FC<LeftNavbarModuleProps> = ({ moduleId }) => {
   const { module, moduleTypeId, linkPrefix } = useModule(moduleId);
   const menuId = module?.menuId ?? 0;
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
 
   const postfixItems: NavbarItem[] = useMemo(() => {
     if (isModuleCollaborator(role)) {

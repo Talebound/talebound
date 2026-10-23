@@ -15,7 +15,7 @@ import { useUpdateCharacter } from '../../../api/characters/useUpdateCharacter';
 import ModuleImages from '../../modules/Edit/ModuleImages';
 import ModuleTags from '../../modules/Edit/ModuleTags';
 import Loading from '../../../components/Loading/Loading';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import { useMyModuleRole, ModuleAdminRole } from '../../../hooks/useModuleAdmins';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
@@ -35,7 +35,7 @@ interface EditCharacterProps {
 const EditCharacter: React.FC<EditCharacterProps> = ({ characterId }) => {
   const { character, module, moduleId } = useCharacter(characterId);
   console.log({ character, module, moduleId });
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const updateCharacterMutation = useUpdateCharacter();
   const disabled = useMemo(() => role !== ModuleAdminRole.SUPER_COLLABORATOR, [role]);
 

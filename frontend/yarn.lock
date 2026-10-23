@@ -4024,6 +4024,52 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-toggle-group@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@radix-ui/react-toggle-group@npm:1.2.1"
+  dependencies:
+    "@radix-ui/primitive": "npm:1.2.0"
+    "@radix-ui/react-context": "npm:1.3.0"
+    "@radix-ui/react-direction": "npm:1.2.0"
+    "@radix-ui/react-primitive": "npm:2.2.0"
+    "@radix-ui/react-roving-focus": "npm:1.2.1"
+    "@radix-ui/react-toggle": "npm:1.2.1"
+    "@radix-ui/react-use-controllable-state": "npm:1.3.0"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/9413b030abf4d7c6a7923afb549a09a632370895522461cf714162059f3ac9faa3a9f23b2b3fee0a8be6b56dc0f9689bc91ee2ed9042bde87228a1d78d5bc705
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-toggle@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@radix-ui/react-toggle@npm:1.2.1"
+  dependencies:
+    "@radix-ui/primitive": "npm:1.2.0"
+    "@radix-ui/react-primitive": "npm:2.2.0"
+    "@radix-ui/react-use-controllable-state": "npm:1.3.0"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/654519694a1325ebb15809070e80c962dcb3dc302dc4eb3cb127f808bfe565fa858da0192c887fd7c91d97634799d0c64b7ecd55d5f59bd3174f9aeab59eea36
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-tooltip@npm:1.4.1":
   version: 1.4.1
   resolution: "@radix-ui/react-tooltip@npm:1.4.1"
@@ -10674,6 +10720,7 @@ __metadata:
     "@radix-ui/react-dropdown-menu": "npm:2.2.1"
     "@radix-ui/react-select": "npm:2.4.1"
     "@radix-ui/react-slider": "npm:1.6.1"
+    "@radix-ui/react-toggle-group": "npm:1.2.1"
     "@radix-ui/react-tooltip": "npm:1.4.1"
     "@reduxjs/toolkit": "npm:2.13.0"
     "@stitches/react": "npm:^1.2.8"

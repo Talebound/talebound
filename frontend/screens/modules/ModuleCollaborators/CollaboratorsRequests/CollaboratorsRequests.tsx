@@ -11,7 +11,7 @@ interface CollaboratorsRequestsProps {
 }
 
 const CollaboratorsRequests: React.FC<CollaboratorsRequestsProps> = ({ moduleId }) => {
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const { data: moduleAdmins = [], isPending } = useGetModuleAdmins({
     variables: moduleId,
   });

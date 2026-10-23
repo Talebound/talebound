@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import ActionBoxModule from '../ActionBoxModule';
+import ActionBoxModule from '../ActionBox/ActionBoxModule';
 import Layout from '../../../components/Layout/Layout';
 import MenuAdministration from '../../menus/MenuAdministration/MenuAdministration';
 import LeftNavbarModule from '../../../components/LeftNavbar/LeftNavbarModule';
@@ -14,7 +14,7 @@ interface EditModuleMenuProps {
 }
 
 const EditModuleMenu: React.FC<EditModuleMenuProps> = ({ moduleId }) => {
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const { module } = useModule(moduleId);
   const menuId = module?.menuId ?? 0;
 

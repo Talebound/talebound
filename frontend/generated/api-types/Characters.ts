@@ -10,10 +10,13 @@
  */
 
 import {
+  CharactersUpdateCharacterBody,
+  CharactersUploadCharacterImageBody,
   PbCharacter,
   PbCreateCharacterRequest,
   PbCreateCharacterResponse,
   PbGetCharactersResponse,
+  PbGetQuestCharactersResponse,
   PbImage,
   RpcStatus,
 } from './data-contracts';
@@ -107,15 +110,7 @@ export class Characters<SecurityDataType = unknown> {
    */
   charactersUpdateCharacter = (
     characterId: number,
-    body: {
-      name?: string;
-      shortDescription?: string;
-      public?: boolean;
-      /** @format int32 */
-      worldId?: number;
-      /** @format int32 */
-      systemId?: number;
-    },
+    body: CharactersUpdateCharacterBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbCharacter, RpcStatus>({
@@ -138,12 +133,7 @@ export class Characters<SecurityDataType = unknown> {
    */
   charactersUploadCharacterImage = (
     characterId: number,
-    body: {
-      /** @format byte */
-      data?: string;
-      /** @format int32 */
-      imageTypeId?: number;
-    },
+    body: CharactersUploadCharacterImageBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbImage, RpcStatus>({
@@ -151,6 +141,23 @@ export class Characters<SecurityDataType = unknown> {
       method: 'POST',
       body: body,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description gets list of character quests
+   *
+   * @tags Characters
+   * @name CharactersGetCharacterQuests
+   * @summary Get character quests
+   * @request GET:/characters/{characterId}/quests
+   * @response `200` `PbGetQuestCharactersResponse` A successful response.
+   * @response `default` `RpcStatus` An unexpected error response.
+   */
+  charactersGetCharacterQuests = (characterId: number, params: RequestParams = {}) =>
+    this.http.request<PbGetQuestCharactersResponse, RpcStatus>({
+      path: `/characters/${characterId}/quests`,
+      method: 'GET',
       format: 'json',
       ...params,
     });

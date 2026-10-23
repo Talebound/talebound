@@ -433,6 +433,21 @@ func (mr *MockStoreMockRecorder) CreateQuest(ctx, arg any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateQuest", reflect.TypeOf((*MockStore)(nil).CreateQuest), ctx, arg)
 }
 
+// CreateQuestCharacter mocks base method.
+func (m *MockStore) CreateQuestCharacter(ctx context.Context, arg db.CreateQuestCharacterParams) (db.QuestCharacter, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateQuestCharacter", ctx, arg)
+	ret0, _ := ret[0].(db.QuestCharacter)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateQuestCharacter indicates an expected call of CreateQuestCharacter.
+func (mr *MockStoreMockRecorder) CreateQuestCharacter(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateQuestCharacter", reflect.TypeOf((*MockStore)(nil).CreateQuestCharacter), ctx, arg)
+}
+
 // CreateQuestTx mocks base method.
 func (m *MockStore) CreateQuestTx(ctx context.Context, arg db.CreateQuestTxParams) (db.CreateQuestTxResult, error) {
 	m.ctrl.T.Helper()
@@ -944,6 +959,20 @@ func (m *MockStore) DeleteQuest(ctx context.Context, questID int32) error {
 func (mr *MockStoreMockRecorder) DeleteQuest(ctx, questID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteQuest", reflect.TypeOf((*MockStore)(nil).DeleteQuest), ctx, questID)
+}
+
+// DeleteQuestCharacter mocks base method.
+func (m *MockStore) DeleteQuestCharacter(ctx context.Context, arg db.DeleteQuestCharacterParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteQuestCharacter", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteQuestCharacter indicates an expected call of DeleteQuestCharacter.
+func (mr *MockStoreMockRecorder) DeleteQuestCharacter(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteQuestCharacter", reflect.TypeOf((*MockStore)(nil).DeleteQuestCharacter), ctx, arg)
 }
 
 // DeleteSystem mocks base method.
@@ -2081,6 +2110,51 @@ func (mr *MockStoreMockRecorder) GetQuestByID(ctx, questID any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetQuestByID", reflect.TypeOf((*MockStore)(nil).GetQuestByID), ctx, questID)
 }
 
+// GetQuestCharacterByQuestAndCharacterID mocks base method.
+func (m *MockStore) GetQuestCharacterByQuestAndCharacterID(ctx context.Context, arg db.GetQuestCharacterByQuestAndCharacterIDParams) (db.QuestCharacter, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetQuestCharacterByQuestAndCharacterID", ctx, arg)
+	ret0, _ := ret[0].(db.QuestCharacter)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetQuestCharacterByQuestAndCharacterID indicates an expected call of GetQuestCharacterByQuestAndCharacterID.
+func (mr *MockStoreMockRecorder) GetQuestCharacterByQuestAndCharacterID(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetQuestCharacterByQuestAndCharacterID", reflect.TypeOf((*MockStore)(nil).GetQuestCharacterByQuestAndCharacterID), ctx, arg)
+}
+
+// GetQuestCharactersByCharacterID mocks base method.
+func (m *MockStore) GetQuestCharactersByCharacterID(ctx context.Context, characterID int32) ([]db.QuestCharacter, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetQuestCharactersByCharacterID", ctx, characterID)
+	ret0, _ := ret[0].([]db.QuestCharacter)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetQuestCharactersByCharacterID indicates an expected call of GetQuestCharactersByCharacterID.
+func (mr *MockStoreMockRecorder) GetQuestCharactersByCharacterID(ctx, characterID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetQuestCharactersByCharacterID", reflect.TypeOf((*MockStore)(nil).GetQuestCharactersByCharacterID), ctx, characterID)
+}
+
+// GetQuestCharactersByQuestID mocks base method.
+func (m *MockStore) GetQuestCharactersByQuestID(ctx context.Context, questID int32) ([]db.QuestCharacter, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetQuestCharactersByQuestID", ctx, questID)
+	ret0, _ := ret[0].([]db.QuestCharacter)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetQuestCharactersByQuestID indicates an expected call of GetQuestCharactersByQuestID.
+func (mr *MockStoreMockRecorder) GetQuestCharactersByQuestID(ctx, questID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetQuestCharactersByQuestID", reflect.TypeOf((*MockStore)(nil).GetQuestCharactersByQuestID), ctx, questID)
+}
+
 // GetQuests mocks base method.
 func (m *MockStore) GetQuests(ctx context.Context, arg db.GetQuestsParams) ([]db.ViewQuest, error) {
 	m.ctrl.T.Helper()
@@ -2839,6 +2913,21 @@ func (m *MockStore) UpdateQuest(ctx context.Context, arg db.UpdateQuestParams) (
 func (mr *MockStoreMockRecorder) UpdateQuest(ctx, arg any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateQuest", reflect.TypeOf((*MockStore)(nil).UpdateQuest), ctx, arg)
+}
+
+// UpdateQuestCharacter mocks base method.
+func (m *MockStore) UpdateQuestCharacter(ctx context.Context, arg db.UpdateQuestCharacterParams) (db.QuestCharacter, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateQuestCharacter", ctx, arg)
+	ret0, _ := ret[0].(db.QuestCharacter)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateQuestCharacter indicates an expected call of UpdateQuestCharacter.
+func (mr *MockStoreMockRecorder) UpdateQuestCharacter(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateQuestCharacter", reflect.TypeOf((*MockStore)(nil).UpdateQuestCharacter), ctx, arg)
 }
 
 // UpdateSystem mocks base method.

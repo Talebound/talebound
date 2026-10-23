@@ -2,17 +2,17 @@ import React, { Suspense, useMemo } from 'react';
 import ContentSection from '../../../components/ContentSection/ContentSection';
 import { Col, Row } from '../../../components/Flex/Flex';
 import Layout from '../../../components/Layout/Layout';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import LeftNavbarModule from '../../../components/LeftNavbar/LeftNavbarModule';
 import Loading from '../../../components/Loading/Loading';
 import MiniStatistic from '../../../components/MiniStatistic/MiniStatistic';
 import { TitleH2 } from '../../../components/Typography/Title';
-import { Text } from '../../../components/Typography/Text';
 import TagRow from '../../../components/TagRow/TagRow';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
 import { useCharacter } from '../../../hooks/useCharacter';
 import { useImage } from '../../../hooks/useImage';
+import DetailCharacterRightSection from './DetailCharacterRightSection/DetailCharacterRightSection';
 
 const ModuleIntroduction = React.lazy(
   () => import('../../modules/ModuleIntroduction/ModuleIntroduction'),
@@ -67,25 +67,7 @@ const DetailCharacter: React.FC<DetailCharacterProps> = ({ characterId }) => {
             </Suspense>
           </ContentSection>
         </Col>
-
-        <Col css={{ flexGrow: 0, flexBasis: '600px' }}>
-          <ContentSection
-            flexWrap="wrap"
-            direction="column"
-            header="Characters"
-            cornerImage={thumbnailImg?.url}
-          >
-            <Text>Currently no characters playing in this character</Text>
-          </ContentSection>
-          <ContentSection
-            flexWrap="wrap"
-            direction="column"
-            header="Characters"
-            cornerImage={thumbnailImg?.url}
-          >
-            <Text>Currently no characters playing in this character</Text>
-          </ContentSection>
-        </Col>
+        <DetailCharacterRightSection characterId={characterId} />
       </Row>
     </Layout>
   );

@@ -15,7 +15,7 @@ import { useUpdateWorld } from '../../../api/worlds/useUpdateWorld';
 import ModuleImages from '../../modules/Edit/ModuleImages';
 import ModuleTags from '../../modules/Edit/ModuleTags';
 import Loading from '../../../components/Loading/Loading';
-import ActionBoxModule from '../../modules/ActionBoxModule';
+import ActionBoxModule from '../../modules/ActionBox/ActionBoxModule';
 import { useMyModuleRole, ModuleAdminRole } from '../../../hooks/useModuleAdmins';
 import { useGetModuleTypeAvailableTags } from '../../../api/tags/useGetModuleTypeAvailableTags';
 import { PbModuleType } from '../../../generated/api-types/data-contracts';
@@ -35,7 +35,7 @@ interface EditWorldProps {
 
 const EditWorld: React.FC<EditWorldProps> = ({ worldId }) => {
   const { world, module, moduleId } = useWorld(worldId);
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const updateWorldMutation = useUpdateWorld();
   const disabled = useMemo(() => role !== ModuleAdminRole.SUPER_COLLABORATOR, [role]);
 

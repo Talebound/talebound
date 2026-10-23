@@ -10,7 +10,9 @@
  */
 
 import {
-  PbEntityTypeList,
+  ModulesCreateModuleAdminBody,
+  ModulesUpdateModuleAdminBody,
+  ModulesUpdateModuleBody,
   PbGetModuleAdminsResponse,
   PbGetModuleIdResponse,
   PbModuleAdmin,
@@ -85,16 +87,7 @@ export class Modules<SecurityDataType = unknown> {
    */
   modulesUpdateModule = (
     moduleId: number,
-    body: {
-      /** @format int32 */
-      headerImgId?: number;
-      /** @format int32 */
-      thumbnailImgId?: number;
-      /** @format int32 */
-      avatarImgId?: number;
-      /** @format int32 */
-      descriptionPostId?: number;
-    },
+    body: ModulesUpdateModuleBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbViewModule, RpcStatus>({
@@ -159,9 +152,7 @@ export class Modules<SecurityDataType = unknown> {
    */
   modulesCreateModuleAdmin = (
     moduleId: number,
-    body: {
-      motivationalLetter?: string;
-    },
+    body: ModulesCreateModuleAdminBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbModuleAdmin, RpcStatus>({
@@ -184,16 +175,7 @@ export class Modules<SecurityDataType = unknown> {
    */
   modulesUpdateModuleAdmin = (
     moduleId: number,
-    body: {
-      /** @format int32 */
-      userId?: number;
-      superAdmin?: boolean;
-      /** @format int32 */
-      approved?: number;
-      motivationalLetter?: string;
-      allowedEntityTypes?: PbEntityTypeList;
-      allowedMenu?: boolean;
-    },
+    body: ModulesUpdateModuleAdminBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbModuleAdmin, RpcStatus>({

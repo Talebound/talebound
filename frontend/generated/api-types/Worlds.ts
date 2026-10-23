@@ -16,6 +16,8 @@ import {
   PbImage,
   PbWorld,
   RpcStatus,
+  WorldsUpdateWorldBody,
+  WorldsUploadWorldImageBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
@@ -101,16 +103,7 @@ export class Worlds<SecurityDataType = unknown> {
    * @response `200` `PbWorld` A successful response.
    * @response `default` `RpcStatus` An unexpected error response.
    */
-  worldsUpdateWorld = (
-    worldId: number,
-    body: {
-      name?: string;
-      shortDescription?: string;
-      public?: boolean;
-      basedOn?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  worldsUpdateWorld = (worldId: number, body: WorldsUpdateWorldBody, params: RequestParams = {}) =>
     this.http.request<PbWorld, RpcStatus>({
       path: `/worlds/${worldId}`,
       method: 'PATCH',
@@ -131,12 +124,7 @@ export class Worlds<SecurityDataType = unknown> {
    */
   worldsUploadWorldImage = (
     worldId: number,
-    body: {
-      /** @format byte */
-      data?: string;
-      /** @format int32 */
-      imageTypeId?: number;
-    },
+    body: WorldsUploadWorldImageBody,
     params: RequestParams = {},
   ) =>
     this.http.request<PbImage, RpcStatus>({

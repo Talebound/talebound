@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '../../styles/stitches.config';
-import { TitleH2, TitleH3 } from '../Typography/Title';
+import { TitleH3 } from '../Typography/Title';
 import { Col, Row } from '../Flex/Flex';
 import { Text } from '../Typography/Text';
 import TagRow from '../TagRow/TagRow';
@@ -71,17 +71,20 @@ interface ImageCardProps extends ImageCardPropsExtended {
   imgSrc: string;
   href: string;
   title: string;
-  basedOn: string;
+  basedOn?: string;
+  showBasedOn?: boolean;
   statSections: ImageCardStatSection[];
   availableTags: PbViewTag[];
-  tags: number[];
+  tags?: number[];
+  statusBar?: React.ReactNode;
 }
 
 const ImageCard: React.FC<ImageCardProps> = ({
   imgSrc,
   href,
   title,
-  basedOn,
+  basedOn = '',
+  showBasedOn = true,
   statSections,
   availableTags,
   tags,
@@ -89,6 +92,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
   selected = false,
   onClick,
   grow = true,
+  statusBar,
 }) => {
   const displayedTitle = title === '' || !title ? ' * empty * ' : title;
 
@@ -113,24 +117,29 @@ const ImageCard: React.FC<ImageCardProps> = ({
     >
       <Col gap="xs" alignItems="center">
         <Link href={href}>
-          {compact ? <TitleH3>{displayedTitle}</TitleH3> : <TitleH2>{displayedTitle}</TitleH2>}
+          {compact ? <TitleH3>{displayedTitle}</TitleH3> : <TitleH3>{displayedTitle}</TitleH3>}
         </Link>
-        <Text size="sm" i>
-          {basedOn.length > 0 ? `(based on ${basedOn})` : 'original'}
-        </Text>
+        {showBasedOn && (
+          <Text size="sm" i>
+            {basedOn.length > 0 ? `(based on ${basedOn})` : 'original'}
+          </Text>
+        )}
+        {!compact && tags && (
+          <>
+            <div style={{ height: '0px' }}></div>
+            <TagRow availableTags={availableTags} tagIds={tags} width={330} />
+          </>
+        )}
       </Col>
       <div style={{ height: compact ? '50px' : '100px' }}></div>
-      <Row gap={compact ? 'xs' : 'sm'} justifyContent="around">
-        {statSections.map((ss) => (
-          <MiniStatistic key={ss.label} title={ss.label} value={ss.value} compact={compact} />
-        ))}
-      </Row>
-      {!compact && (
-        <>
-          <div style={{ height: '0px' }}></div>
-          <TagRow availableTags={availableTags} tagIds={tags} width={330} />
-        </>
+      {statSections.length > 0 && (
+        <Row gap={compact ? 'xs' : 'sm'} justifyContent="around">
+          {statSections.map((ss) => (
+            <MiniStatistic key={ss.label} title={ss.label} value={ss.value} compact={compact} />
+          ))}
+        </Row>
       )}
+      {statusBar}
     </ImageBackground>
   );
 };

@@ -8,7 +8,7 @@ interface ModulePostsProps {
 }
 
 const ModulePosts: React.FC<ModulePostsProps> = ({ moduleId }) => {
-  const role = useMyModuleRole(moduleId);
+  const { role } = useMyModuleRole(moduleId);
   const canEdit = isModuleCollaborator(role);
 
   return (

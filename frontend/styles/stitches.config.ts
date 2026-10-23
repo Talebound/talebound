@@ -452,4 +452,52 @@ export const paddingStyles = {
       paddingLeft: '$2xl',
     },
   },
+
+  paddingTop: {
+    none: {
+      paddingTop: '0',
+    },
+    xs: {
+      paddingTop: '$xs',
+    },
+    sm: {
+      paddingTop: '$sm',
+    },
+    md: {
+      paddingTop: '$md',
+    },
+    lg: {
+      paddingTop: '$lg',
+    },
+    xl: {
+      paddingTop: '$xl',
+    },
+    '2xl': {
+      paddingTop: '$2xl',
+    },
+  },
+
+  paddingBottom: {
+    none: {
+      paddingBottom: '0',
+    },
+    xs: {
+      paddingBottom: '$xs',
+    },
+    sm: {
+      paddingBottom: '$sm',
+    },
+    md: {
+      paddingBottom: '$md',
+    },
+    lg: {
+      paddingBottom: '$lg',
+    },
+    xl: {
+      paddingBottom: '$xl',
+    },
+    '2xl': {
+      paddingBottom: '$2xl',
+    },
+  },
 } as const;
