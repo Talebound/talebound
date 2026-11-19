@@ -10,6 +10,7 @@ import MapLayerSectionContent from './MapLayerSectionContent';
 interface MapLayerSectionDraggableProps {
   mapLayer: PbViewMapLayer;
   newPosition: number;
+  disabled?: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<unknown>;
 }
@@ -17,6 +18,7 @@ interface MapLayerSectionDraggableProps {
 const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
   mapLayer,
   newPosition,
+  disabled,
   setLoading,
   setError,
 }) => {
@@ -25,8 +27,7 @@ const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
 
   const onSettled = useCallback(() => {
     setLoading(false);
-    setError(undefined);
-  }, [setLoading, setError]);
+  }, [setLoading]);
 
   const {
     mutate: updateMapLayer,
@@ -49,12 +50,13 @@ const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
   }, [setLoading, isPendingUpdate]);
 
   const onDragStart = useCallback(() => {
+    setError(undefined);
     setDragging(true);
-  }, []);
+  }, [setError]);
 
   const onDragEnd = useCallback(() => {
     setDragging(false);
-    if (mapLayer.mapId && mapLayer.id) {
+    if (mapLayer.mapId && mapLayer.id && newPosition !== mapLayer.position) {
       updateMapLayer({
         mapId: mapLayer.mapId,
         mapLayerId: mapLayer.id,
@@ -63,7 +65,7 @@ const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
         },
       });
     }
-  }, [mapLayer.mapId, mapLayer.id, updateMapLayer, newPosition]);
+  }, [mapLayer.mapId, mapLayer.id, mapLayer.position, updateMapLayer, newPosition]);
 
   return (
     <Reorder.Item
@@ -77,7 +79,7 @@ const MapLayerSectionDraggable: React.FC<MapLayerSectionDraggableProps> = ({
       <Row gap="sm" fullWidth>
         <DragHandle
           dragging={dragging}
-          onPointerDown={(mapLayer.position ?? 0) > 1 ? (e) => controls.start(e) : () => {}}
+          onPointerDown={!disabled ? (e) => controls.start(e) : undefined}
         >
           <MdDragIndicator size={20} />
         </DragHandle>
