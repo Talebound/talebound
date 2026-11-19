@@ -1,17 +1,23 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import PasswordChangeInputs, {
   PasswordChangeStatus,
 } from '../../components/PasswordChangeInputs/PasswordChangeInputs';
 import { Button } from '../../components/Button/Button';
 import ContentSection from '../../components/ContentSection/ContentSection';
 import { useUpdateUser } from '../../api/users/useUpdateUser';
+import ErrorText from '../../components/ErrorText/ErrorText';
 import { Col } from '../../components/Flex/Flex';
 
 const PasswordChange: React.FC = () => {
   const [passwordValue, setPasswordValue] = React.useState<string>('');
   const [externalButtonDisabled, setExternalButtonDisabled] = React.useState<boolean>(true);
 
-  const changePassword = useUpdateUser();
+  const submitting = useRef(false);
+  const changePassword = useUpdateUser({
+    onSettled: () => {
+      submitting.current = false;
+    },
+  });
 
   const buttonDisabled = useMemo(
     () => changePassword.isPending || externalButtonDisabled,
@@ -19,7 +25,8 @@ const PasswordChange: React.FC = () => {
   );
 
   const submitChangePassword = useCallback(() => {
-    if (buttonDisabled) return;
+    if (buttonDisabled || submitting.current) return;
+    submitting.current = true;
 
     changePassword.mutate({
       password: passwordValue,
@@ -41,8 +48,15 @@ const PasswordChange: React.FC = () => {
           successMessage="Password changed successfully."
         />
         {display === PasswordChangeStatus.PasswordForm && (
-          <Button onClick={submitChangePassword}>Change</Button>
+          <Button
+            onClick={submitChangePassword}
+            disabled={buttonDisabled}
+            loading={changePassword.isPending}
+          >
+            Change
+          </Button>
         )}
+        <ErrorText error={changePassword.error} />
       </Col>
     </ContentSection>
   );

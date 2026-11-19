@@ -9,47 +9,62 @@ import { updateUser } from '../../utils/auth/userSlice';
 import { useAppDispatch } from '../../store/hooks';
 import AvatarById from '../../components/AvatarById/AvatarById';
 import { imageAdapterSlice } from '../../adapters/ImageAdapter';
-import Loading from '../../components/Loading/Loading';
+import ErrorText from '../../components/ErrorText/ErrorText';
 import { fileInputChanged } from '../../utils/functions/fileInputChanged';
 
 const AvatarChange: React.FC = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
+  const [uploadArgs, setUploadArgs] = useState<UploadUserAvatarRequest>();
+  const [reading, setReading] = useState(false);
+  const [readError, setReadError] = useState<unknown>();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const selectionVersion = useRef(0);
+  const uploading = useRef(false);
 
   const doUploadAvatar = useUploadUserAvatar({
     onSuccess: (data) => {
       if (data.data.image) dispatch(imageAdapterSlice.actions.upsertImage(data.data.image));
-      dispatch(
-        updateUser({
-          imgId: data.data.image?.id,
-        }),
-      );
+      dispatch(updateUser({ imgId: data.data.image?.id }));
+      setUploadArgs(undefined);
+      if (inputRef.current) inputRef.current.value = '';
+    },
+    onSettled: () => {
+      uploading.current = false;
     },
   });
 
-  const [uploadArgs, setUploadArgs] = useState<UploadUserAvatarRequest>();
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (event) =>
-      fileInputChanged(event, (base64Data) =>
-        setUploadArgs({
-          userId: user?.id ?? 0,
-          data: base64Data,
-        }),
-      ),
+    async (event) => {
+      const version = ++selectionVersion.current;
+      setUploadArgs(undefined);
+      setReadError(undefined);
+      setReading(true);
+      try {
+        await fileInputChanged(event, (data) => {
+          if (version === selectionVersion.current && user?.id)
+            setUploadArgs({ userId: user.id, data });
+        });
+      } catch (error) {
+        if (version === selectionVersion.current) setReadError(error);
+      } finally {
+        if (version === selectionVersion.current) setReading(false);
+      }
+    },
     [user?.id],
   );
 
-  const handleUpload = useCallback(() => {
-    if (!uploadArgs) return;
+  const disabled =
+    !uploadArgs?.data ||
+    !user?.id ||
+    uploadArgs.userId !== user.id ||
+    reading ||
+    doUploadAvatar.isPending;
+  const handleUpload = () => {
+    if (disabled || !uploadArgs || uploading.current) return;
+    uploading.current = true;
     doUploadAvatar.mutate(uploadArgs);
-
-    setUploadArgs(undefined);
-    if (inputRef.current) {
-      inputRef.current.value = '';
-    }
-  }, [doUploadAvatar, uploadArgs]);
+  };
 
   return (
     <ContentSection header="Change avatar" direction="row" justifyContent="space-between">
@@ -60,10 +75,12 @@ const AvatarChange: React.FC = () => {
           showBorder={false}
           showTitle={false}
           ref={inputRef}
+          disabled={doUploadAvatar.isPending}
         />
-        <Button onClick={handleUpload}>
-          {doUploadAvatar.isPending ? <Loading color="currentColor" size="xs" /> : 'Upload'}
+        <Button onClick={handleUpload} disabled={disabled} loading={doUploadAvatar.isPending}>
+          Upload
         </Button>
+        <ErrorText error={readError || doUploadAvatar.error} />
       </Col>
       <AvatarById size="xl" type="user" imageId={user?.imgId} />
     </ContentSection>
