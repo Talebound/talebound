@@ -45,6 +45,7 @@ export class Locations<SecurityDataType = unknown> {
       limit?: number;
       /** @format int32 */
       offset?: number;
+      orderDirection?: string;
     },
     params: RequestParams = {},
   ) =>

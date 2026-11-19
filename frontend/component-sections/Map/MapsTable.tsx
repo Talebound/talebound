@@ -8,7 +8,10 @@ import EntityTableDragHandle from '../../screens/menus/MenuCategory/EntityCompon
 import {
   EntityTableType,
   Tables,
+  ENTITY_TABLE_STYLE,
   tableSorter,
+  columnSortOrder,
+  DEFAULT_ENTITY_SORT,
   TaleboundColumnType,
 } from '../../utils/types/tables';
 import { PAGE_SIZE_MAPS } from '../../api/maps/useGetMaps';
@@ -21,6 +24,8 @@ interface MapsTableProps {
   tableType?: EntityTableType;
   data: (PbMap | undefined)[];
   totalCount: number;
+  currentPage: number;
+  sorting: Tables;
   canEdit?: boolean;
   loading?: boolean;
   isSelectionTable?: boolean;
@@ -33,6 +38,8 @@ const MapsTable: React.FC<MapsTableProps> = ({
   tableType = EntityTableType.LIST,
   data,
   totalCount,
+  currentPage,
+  sorting,
   canEdit,
   loading,
   isSelectionTable = false,
@@ -58,6 +65,8 @@ const MapsTable: React.FC<MapsTableProps> = ({
       (canEdit || isSelectionTable) && tableType === EntityTableType.LIST
         ? {
             selectedRowKeys,
+            columnWidth: 40,
+            preserveSelectedRowKeys: true,
             onChange: onSelectChange,
             type: isSelectionTable ? (isSelectionMultiple ? 'checkbox' : 'radio') : 'checkbox',
           }
@@ -109,9 +118,11 @@ const MapsTable: React.FC<MapsTableProps> = ({
         title: 'Title',
         key: 'title',
         dataIndex: 'title',
-        render: (value: string) => <b>{value}</b>,
+        render: (value: string) => <b title={value}>{value}</b>,
+        ellipsis: true,
         sorter: true,
         sort_field: 'title',
+        sortOrder: columnSortOrder(sorting, 'title'),
       },
       {
         title: 'Created at',
@@ -119,9 +130,9 @@ const MapsTable: React.FC<MapsTableProps> = ({
         dataIndex: 'createdAt',
         width: 140,
         render: (value: string) => formatDate(value, false, 'week'),
-        defaultSortOrder: 'descend',
         sorter: true,
         sort_field: 'created_at',
+        sortOrder: columnSortOrder(sorting, 'created_at'),
       },
       {
         title: 'Last updated at',
@@ -131,6 +142,7 @@ const MapsTable: React.FC<MapsTableProps> = ({
         render: (value: string) => formatDate(value, false, 'week'),
         sorter: true,
         sort_field: 'last_updated_at',
+        sortOrder: columnSortOrder(sorting, 'last_updated_at'),
       },
       {
         title: 'W',
@@ -140,6 +152,7 @@ const MapsTable: React.FC<MapsTableProps> = ({
         render: (value) => value,
         sorter: true,
         sort_field: 'width',
+        sortOrder: columnSortOrder(sorting, 'width'),
       },
       {
         title: 'H',
@@ -149,13 +162,14 @@ const MapsTable: React.FC<MapsTableProps> = ({
         render: (value) => value,
         sorter: true,
         sort_field: 'height',
+        sortOrder: columnSortOrder(sorting, 'height'),
       },
     ];
 
     if (canEdit) {
       cols.push({
         title: '',
-        key: 'action-buttons',
+        key: 'edit-action',
         render: (_, record) => actionButtons(record),
         width: '40px',
       });
@@ -163,7 +177,7 @@ const MapsTable: React.FC<MapsTableProps> = ({
 
     cols.push({
       title: '',
-      key: 'action-buttons',
+      key: 'open-action',
       render: (_, record) => openMapModalButtons(record),
       width: '40px',
     });
@@ -185,7 +199,7 @@ const MapsTable: React.FC<MapsTableProps> = ({
     }
 
     return cols;
-  }, [tableType, canEdit, actionButtons, openMapModalButtons]);
+  }, [tableType, canEdit, actionButtons, openMapModalButtons, sorting]);
 
   const onRow: TableProps<PbMap>['onRow'] = useCallback(
     (record: PbMap) => {
@@ -207,19 +221,25 @@ const MapsTable: React.FC<MapsTableProps> = ({
       total: totalCount,
       pageSize: PAGE_SIZE_MAPS,
       size: 'medium',
-      onChange: onPageChange,
+      current: currentPage,
       disabled: loading,
     };
-  }, [totalCount, onPageChange, loading]);
+  }, [totalCount, currentPage, loading]);
 
   const filteredData = useMemo(() => data.filter((d) => d !== undefined) as PbMap[], [data]);
 
-  const onChangeHandler = useMemo(() => tableSorter<PbMap>(setSorting), [setSorting]);
+  const onChangeHandler = useMemo(
+    () => tableSorter<PbMap>(setSorting, DEFAULT_ENTITY_SORT, onPageChange),
+    [setSorting, onPageChange],
+  );
 
   return (
     <>
       <Col fullWidth>
         <Table<PbMap>
+          tableLayout="fixed"
+          style={ENTITY_TABLE_STYLE}
+          scroll={{ x: 800 }}
           loading={loading}
           rowSelection={rowSelection}
           pagination={paginationConfig}

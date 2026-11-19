@@ -13,7 +13,10 @@ import EntityTableDragHandle from '../../screens/menus/MenuCategory/EntityCompon
 import {
   EntityTableType,
   Tables,
+  ENTITY_TABLE_STYLE,
   tableSorter,
+  columnSortOrder,
+  DEFAULT_ENTITY_SORT,
   TaleboundColumnType,
 } from '../../utils/types/tables';
 
@@ -21,6 +24,8 @@ interface PostsTableProps {
   tableType?: EntityTableType;
   data: (PbPost | undefined)[];
   totalCount: number;
+  currentPage: number;
+  sorting: Tables;
   canEdit?: boolean;
   loading?: boolean;
   isSelectionTable?: boolean;
@@ -33,6 +38,8 @@ const PostsTable: React.FC<PostsTableProps> = ({
   tableType = EntityTableType.LIST,
   data,
   totalCount,
+  currentPage,
+  sorting,
   canEdit,
   loading,
   isSelectionTable = false,
@@ -59,6 +66,8 @@ const PostsTable: React.FC<PostsTableProps> = ({
       (canEdit || isSelectionTable) && tableType === EntityTableType.LIST
         ? {
             selectedRowKeys,
+            columnWidth: 40,
+            preserveSelectedRowKeys: true,
             onChange: onSelectChange,
             type: isSelectionTable ? (isSelectionMultiple ? 'checkbox' : 'radio') : 'checkbox',
           }
@@ -110,9 +119,11 @@ const PostsTable: React.FC<PostsTableProps> = ({
         title: 'Title',
         key: 'title',
         dataIndex: 'title',
-        render: (value: string) => <b>{value}</b>,
+        render: (value: string) => <b title={value}>{value}</b>,
+        ellipsis: true,
         sorter: true,
         sort_field: 'title',
+        sortOrder: columnSortOrder(sorting, 'title'),
       },
       {
         title: 'Created at',
@@ -120,9 +131,9 @@ const PostsTable: React.FC<PostsTableProps> = ({
         dataIndex: 'createdAt',
         width: 140,
         render: (value: string) => formatDate(value, false, 'week'),
-        defaultSortOrder: 'descend',
         sorter: true,
         sort_field: 'created_at',
+        sortOrder: columnSortOrder(sorting, 'created_at'),
       },
       {
         title: 'Last updated at',
@@ -132,13 +143,14 @@ const PostsTable: React.FC<PostsTableProps> = ({
         render: (value: string) => formatDate(value, false, 'week'),
         sorter: true,
         sort_field: 'last_updated_at',
+        sortOrder: columnSortOrder(sorting, 'last_updated_at'),
       },
     ];
 
     if (canEdit) {
       cols.push({
         title: '',
-        key: 'action-buttons',
+        key: 'edit-action',
         render: (_, record) => actionButtons(record),
         width: '40px',
       });
@@ -146,7 +158,7 @@ const PostsTable: React.FC<PostsTableProps> = ({
 
     cols.push({
       title: '',
-      key: 'action-buttons',
+      key: 'open-action',
       render: (_, record) => openPostModalButtons(record),
       width: '40px',
     });
@@ -168,7 +180,7 @@ const PostsTable: React.FC<PostsTableProps> = ({
     }
 
     return cols;
-  }, [tableType, canEdit, actionButtons, openPostModalButtons]);
+  }, [tableType, canEdit, actionButtons, openPostModalButtons, sorting]);
 
   const onRow: TableProps<PbPost>['onRow'] = useCallback(
     (record: PbPost) => {
@@ -190,19 +202,25 @@ const PostsTable: React.FC<PostsTableProps> = ({
       total: totalCount,
       pageSize: PAGE_SIZE_POSTS,
       size: 'medium',
-      onChange: onPageChange,
+      current: currentPage,
       disabled: loading,
     };
-  }, [totalCount, onPageChange, loading]);
+  }, [totalCount, currentPage, loading]);
 
   const filteredData = useMemo(() => data.filter((d) => d !== undefined) as PbPost[], [data]);
 
-  const onChangeHandler = useMemo(() => tableSorter<PbPost>(setSorting), [setSorting]);
+  const onChangeHandler = useMemo(
+    () => tableSorter<PbPost>(setSorting, DEFAULT_ENTITY_SORT, onPageChange),
+    [setSorting, onPageChange],
+  );
 
   return (
     <>
       <Col fullWidth>
         <Table<PbPost>
+          tableLayout="fixed"
+          style={ENTITY_TABLE_STYLE}
+          scroll={{ x: 700 }}
           loading={loading}
           rowSelection={rowSelection}
           pagination={paginationConfig}

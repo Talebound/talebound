@@ -1,37 +1,23 @@
 import React from 'react';
-import { Button } from '../../components/Button/Button';
 import { useGetModuleId } from '../../api/modules/useGetModuleId';
-import { useGetLocations } from '../../api/locations/useGetLocations';
-import LocationTable from './LocationTable';
 import { PbViewModule } from '../../generated/api-types/data-contracts';
+import LocationListContent from './LocationListContent';
 
 interface LocationListSelectionProps {
   module: PbViewModule;
   onSelect: (locationId: number[]) => void;
 }
 
-const LocationListSelection: React.FC<LocationListSelectionProps> = ({ module }) => {
-  const { data: moduleId } = useGetModuleId({ variables: module });
-  const {
-    data: locationsData,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useGetLocations({ variables: { moduleId }, enabled: !!moduleId });
-
+const LocationListSelection: React.FC<LocationListSelectionProps> = ({ module, onSelect }) => {
+  const { data: moduleId = 0 } = useGetModuleId({ variables: module });
   return (
-    <div>
-      <LocationTable
-        locationIds={locationsData?.pages.flatMap((page) => page.locationIds) ?? []}
-        module={module}
-        isSelectionTable={true}
-      />
-      {hasNextPage && (
-        <Button onClick={() => fetchNextPage()} loading={isFetchingNextPage}>
-          Load more locations
-        </Button>
-      )}
-    </div>
+    <LocationListContent
+      key={moduleId}
+      module={module}
+      moduleId={moduleId}
+      isSelectionTable
+      onSelect={onSelect}
+    />
   );
 };
 

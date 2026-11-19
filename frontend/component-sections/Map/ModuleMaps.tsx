@@ -13,7 +13,7 @@ const ModuleMaps: React.FC<ModuleMapsProps> = ({ moduleId }) => {
 
   return (
     <ModuleLayout>
-      <MapsScreen canEdit={canEdit} />
+      <MapsScreen canEdit={canEdit} moduleId={moduleId} />
     </ModuleLayout>
   );
 };
