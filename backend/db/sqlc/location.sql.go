@@ -69,29 +69,53 @@ func (q *Queries) GetLocationById(ctx context.Context, id int32) (Location, erro
 	return i, err
 }
 
+const getLocationForUpdate = `-- name: GetLocationForUpdate :one
+SELECT id, name, description, post_id, thumbnail_image_id FROM locations WHERE id = $1 FOR UPDATE
+`
+
+func (q *Queries) GetLocationForUpdate(ctx context.Context, id int32) (Location, error) {
+	row := q.db.QueryRowContext(ctx, getLocationForUpdate, id)
+	var i Location
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.PostID,
+		&i.ThumbnailImageID,
+	)
+	return i, err
+}
+
 const getLocations = `-- name: GetLocations :many
 WITH cte AS (
     SELECT
         id, name, description, post_id, thumbnail_image_id, thumbnail_image_url, post_title, entity_id, module_id, module_type, module_type_id, tags
-    FROM get_locations( $3::int[], $4, $5, $6, $7, 0, 0)
+    FROM get_locations( $5::int[], $6, $7, $1, $2, 0, 0)
 )
 SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.id, cte.name, cte.description, cte.post_id, cte.thumbnail_image_id, cte.thumbnail_image_url, cte.post_title, cte.entity_id, cte.module_id, cte.module_type, cte.module_type_id, cte.tags
 FROM cte
-ORDER BY id DESC
-LIMIT $2
-    OFFSET $1
+ORDER BY
+    CASE WHEN COALESCE($1::text, 'id') = 'id' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.id END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'id' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.id END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'name' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.name END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'name' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.name END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    cte.id DESC
+LIMIT $4
+    OFFSET $3
 `
 
 type GetLocationsParams struct {
+	OrderBy        sql.NullString `json:"order_by"`
+	OrderDirection sql.NullString `json:"order_direction"`
 	PageOffset     int32          `json:"page_offset"`
 	PageLimit      int32          `json:"page_limit"`
 	Tags           []int32        `json:"tags"`
 	ModuleID       sql.NullInt32  `json:"module_id"`
 	ModuleType     NullModuleType `json:"module_type"`
-	OrderBy        sql.NullString `json:"order_by"`
-	OrderDirection sql.NullString `json:"order_direction"`
 }
 
 type GetLocationsRow struct {
@@ -112,13 +136,13 @@ type GetLocationsRow struct {
 
 func (q *Queries) GetLocations(ctx context.Context, arg GetLocationsParams) ([]GetLocationsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getLocations,
+		arg.OrderBy,
+		arg.OrderDirection,
 		arg.PageOffset,
 		arg.PageLimit,
 		pq.Array(arg.Tags),
 		arg.ModuleID,
 		arg.ModuleType,
-		arg.OrderBy,
-		arg.OrderDirection,
 	)
 	if err != nil {
 		return nil, err

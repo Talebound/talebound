@@ -11,6 +11,7 @@ import (
 	"github.com/the-medo/talebound-backend/pb"
 	"github.com/the-medo/talebound-backend/validator"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"strings"
 )
 
 func (server *ServiceLocations) GetLocations(ctx context.Context, req *pb.GetLocationsRequest) (*pb.GetLocationsResponse, error) {
@@ -32,7 +33,8 @@ func (server *ServiceLocations) GetLocations(ctx context.Context, req *pb.GetLoc
 			String: req.GetOrderBy(),
 			Valid:  req.OrderBy != nil,
 		},
-		Tags: req.GetTags(),
+		OrderDirection: sql.NullString{String: strings.ToUpper(req.GetOrderDirection()), Valid: req.OrderDirection != nil},
+		Tags:           req.GetTags(),
 	}
 
 	locationRows, err := server.Store.GetLocations(ctx, arg)
@@ -59,6 +61,12 @@ func (server *ServiceLocations) GetLocations(ctx context.Context, req *pb.GetLoc
 
 func validateGetLocations(req *pb.GetLocationsRequest) (violations []*errdetails.BadRequest_FieldViolation) {
 	fields := []string{"id", "name", "description"}
+
+	if req.OrderDirection != nil {
+		if err := validator.ValidateOrderDirection(req.GetOrderDirection()); err != nil {
+			violations = append(violations, e.FieldViolation("order_direction", err))
+		}
+	}
 
 	if req.OrderBy != nil {
 		if validator.StringInSlice(req.GetOrderBy(), fields) == false {

@@ -4,7 +4,7 @@ import { expandDataForInfiniteQuery, InfiniteResponse } from '../apiLib';
 import { store } from '../../store';
 import { locationAdapterSlice } from '../../adapters/LocationAdapter';
 
-export const PAGE_SIZE_POSTS = 3;
+export const PAGE_SIZE_LOCATIONS = 3;
 
 type GetLocationsParams = NonNullable<
   Parameters<typeof LocationsCollection.locationsGetLocations>[0]
@@ -25,7 +25,7 @@ export const useGetLocations = createInfiniteQuery<
   fetcher: async (variables, { pageParam: offset }) => {
     const { data } = await LocationsCollection.locationsGetLocations({
       ...variables,
-      limit: PAGE_SIZE_POSTS,
+      limit: PAGE_SIZE_LOCATIONS,
       offset,
     });
 
@@ -39,7 +39,7 @@ export const useGetLocations = createInfiniteQuery<
         totalCount: data.totalCount ?? 0,
       },
       offset,
-      PAGE_SIZE_POSTS,
+      PAGE_SIZE_LOCATIONS,
       data.totalCount,
     );
   },

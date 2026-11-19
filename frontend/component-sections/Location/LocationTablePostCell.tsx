@@ -1,10 +1,10 @@
 import { usePost } from '../../hooks/usePost';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useCreateLocationPost } from '../../api/locations/useCreateLocationPost';
-import AssignPostModal from '../Post/AssignPostModal/AssignPostModal';
 import { Button } from '../../components/Button/Button';
 import ErrorText from '../../components/ErrorText/ErrorText';
+import PostDetailModal from '../Post/PostDetailModal';
 
 interface LocationTablePostCellProps {
   locationId: number;
@@ -18,51 +18,61 @@ const LocationTablePostCell: React.FC<LocationTablePostCellProps> = ({
   canEdit,
 }) => {
   const { post } = usePost(postId);
-  const [assignPostModal, setAssignPostModal] = useState(false);
+  const [openedPostId, setOpenedPostId] = useState<number>();
+  const creating = useRef(false);
+  const { mutate: createPost, isPending, error } = useCreateLocationPost();
 
-  const {
-    mutate: createLocationPost,
-    isPending: isPendingCreateLocationPost,
-    error: errorCreateLocationPost,
-  } = useCreateLocationPost();
-
-  const createNewPostCallback = useCallback(() => {
-    createLocationPost({
-      locationId,
-    });
-  }, [createLocationPost, locationId]);
-
-  const trigger = useMemo(
-    () => (
-      <Button
-        size="sm"
-        color="primaryOutline"
-        loading={isPendingCreateLocationPost}
-        disabled={isPendingCreateLocationPost}
-      >
-        <MdAdd size={10} /> Assign Post
-      </Button>
-    ),
-    [isPendingCreateLocationPost],
-  );
-
-  if (!postId) {
-    return (
-      <>
-        {canEdit && (
-          <AssignPostModal
-            trigger={trigger}
-            open={assignPostModal}
-            setOpen={setAssignPostModal}
-            createNewPostCallback={createNewPostCallback}
-            chooseExistingPostCallback={() => {}}
-          />
-        )}
-        <ErrorText error={errorCreateLocationPost} />
-      </>
+  const create = () => {
+    if (!canEdit || postId || creating.current || isPending) return;
+    creating.current = true;
+    createPost(
+      { locationId },
+      {
+        onSuccess: ({ data }) => setOpenedPostId(data.postId),
+        onSettled: () => {
+          creating.current = false;
+        },
+      },
     );
-  }
-  return <div>{post?.title}</div>;
+  };
+
+  return (
+    <div onClick={(event) => event.stopPropagation()}>
+      {postId ? (
+        <Button
+          size="sm"
+          color="primaryOutline"
+          title={post?.title}
+          css={{ maxWidth: '100%' }}
+          onClick={() => setOpenedPostId(postId)}
+        >
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {post?.title || 'Open post'}
+          </span>
+        </Button>
+      ) : canEdit ? (
+        <Button
+          size="sm"
+          color="primaryOutline"
+          loading={isPending}
+          disabled={isPending}
+          onClick={create}
+        >
+          <MdAdd size={10} /> Create post
+        </Button>
+      ) : null}
+      <ErrorText error={error} />
+      <PostDetailModal
+        postId={openedPostId}
+        canEdit={canEdit}
+        trigger={undefined}
+        open={!!openedPostId}
+        setOpen={(open) => {
+          if (!open) setOpenedPostId(undefined);
+        }}
+      />
+    </div>
+  );
 };
 
 export default LocationTablePostCell;

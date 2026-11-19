@@ -47,7 +47,8 @@ const PasswordChangeInputs: React.FC<PasswordChangeInputsProps> = ({
       password1Value === '' ||
       password2Value === '' ||
       password1Value !== password2Value ||
-      password1Value.length < 6,
+      password1Value.length < 6 ||
+      password1Value.length > 100,
     [password1Value, password2Value],
   );
 

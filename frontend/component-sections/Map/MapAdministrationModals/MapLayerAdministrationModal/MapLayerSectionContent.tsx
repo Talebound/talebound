@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { PbViewMapLayer } from '../../../../generated/api-types/data-contracts';
-import { Row } from '../../../../components/Flex/Flex';
+import { Col, Row } from '../../../../components/Flex/Flex';
 import ContentSection from '../../../../components/ContentSection/ContentSection';
 import Input from '../../../../components/Input/Input';
 import { useInput } from '../../../../hooks/useInput';
@@ -62,17 +62,20 @@ const MapLayerSectionContent: React.FC<MapLayerSectionContentProps> = ({ mapLaye
 
   return (
     <ContentSection key={mapLayer.id} fullWidth loading={isPendingUpdate}>
-      <Row gap="sm">
-        <MapLayerImage mapLayer={mapLayer} />
-        <Input
-          id={`map-layer-title-${mapLayer.id}`}
-          value={titleValue}
-          onChange={onChangeTitle}
-          aria-labelledby="Map layer name"
-          placeholder="Layer title"
-          required
-          displayHelpers={false}
-        />
+      <Col gap="sm" fullWidth>
+        <Row gap="sm" fullWidth>
+          <MapLayerImage mapLayer={mapLayer} />
+          <Input
+            id={`map-layer-title-${mapLayer.id}`}
+            value={titleValue}
+            onChange={onChangeTitle}
+            aria-label="Map layer name"
+            placeholder="Layer title"
+            required
+            fullWidth
+            displayHelpers={false}
+          />
+        </Row>
         <Checkbox
           id={`map-layer-enabled-${mapLayer.id}`}
           checked={mapLayer.enabled}
@@ -80,10 +83,10 @@ const MapLayerSectionContent: React.FC<MapLayerSectionContentProps> = ({ mapLaye
           onCheckedChange={(x) => sendPayload({ enabled: !!x })}
           disabled={mapLayer.position === 1}
         >
-          Enabled
+          {mapLayer.position === 1 ? 'Base layer — always enabled' : 'Enabled'}
         </Checkbox>
         <ErrorText error={errorUpdate} />
-      </Row>
+      </Col>
     </ContentSection>
   );
 };

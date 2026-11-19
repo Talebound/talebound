@@ -109,6 +109,12 @@ func validateGetPosts(req *pb.GetPostsRequest) (violations []*errdetails.BadRequ
 
 	fields := []string{"title", "created_at", "last_updated_at", "description"}
 
+	if req.OrderDirection != nil {
+		if err := validator.ValidateOrderDirection(req.GetOrderDirection()); err != nil {
+			violations = append(violations, e.FieldViolation("order_direction", err))
+		}
+	}
+
 	if req.OrderBy != nil {
 		if validator.StringInSlice(req.GetOrderBy(), fields) == false {
 			violations = append(violations, e.FieldViolation("order_by", fmt.Errorf("invalid field to order by %s", req.GetOrderBy())))

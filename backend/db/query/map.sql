@@ -13,7 +13,26 @@ SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.*
 FROM cte
-ORDER BY id DESC
+ORDER BY
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'id' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.id END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'id' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.id END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'title' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.title END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'title' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.title END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'type' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.type END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'type' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.type END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'width' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.width END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'width' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.width END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'height' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.height END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'height' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.height END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'created_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.created_at END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'created_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.created_at END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'last_updated_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.last_updated_at END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'last_updated_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.last_updated_at END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'is_private' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.is_private END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'is_private' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.is_private END DESC NULLS LAST,
+    cte.id DESC
 LIMIT sqlc.arg(page_limit)
     OFFSET sqlc.arg(page_offset);
 
@@ -23,6 +42,9 @@ SELECT * FROM maps WHERE id = ANY(@map_ids::int[]);
 
 -- name: GetMapById :one
 SELECT * FROM maps WHERE id = sqlc.arg(id);
+
+-- name: GetMapForUpdate :one
+SELECT * FROM maps WHERE id = sqlc.arg(id) FOR UPDATE;
 
 -- name: UpdateMap :one
 UPDATE maps

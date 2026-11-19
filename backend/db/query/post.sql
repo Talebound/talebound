@@ -46,6 +46,16 @@ SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.*
 FROM cte
+ORDER BY
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'title' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.title END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'title' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.title END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'created_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.created_at END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'created_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.created_at END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'last_updated_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.last_updated_at END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'last_updated_at' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.last_updated_at END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'created_at') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    cte.id DESC
 LIMIT sqlc.arg(page_limit)
 OFFSET sqlc.arg(page_offset);
 

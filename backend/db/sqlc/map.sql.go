@@ -413,6 +413,30 @@ func (q *Queries) GetMapById(ctx context.Context, id int32) (Map, error) {
 	return i, err
 }
 
+const getMapForUpdate = `-- name: GetMapForUpdate :one
+SELECT id, user_id, title, type, created_at, last_updated_at, last_updated_user_id, is_private, description, width, height, thumbnail_image_id FROM maps WHERE id = $1 FOR UPDATE
+`
+
+func (q *Queries) GetMapForUpdate(ctx context.Context, id int32) (Map, error) {
+	row := q.db.QueryRowContext(ctx, getMapForUpdate, id)
+	var i Map
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Title,
+		&i.Type,
+		&i.CreatedAt,
+		&i.LastUpdatedAt,
+		&i.LastUpdatedUserID,
+		&i.IsPrivate,
+		&i.Description,
+		&i.Width,
+		&i.Height,
+		&i.ThumbnailImageID,
+	)
+	return i, err
+}
+
 const getMapLayerByID = `-- name: GetMapLayerByID :one
 SELECT id, name, map_id, image_id, enabled, position, image_url FROM view_map_layers WHERE id = $1
 `
@@ -656,25 +680,44 @@ const getMaps = `-- name: GetMaps :many
 WITH cte AS (
     SELECT
         id, user_id, title, type, created_at, last_updated_at, last_updated_user_id, is_private, description, width, height, thumbnail_image_id, base_layer_image_id, thumbnail_image_url, entity_id, module_id, module_type, module_type_id, tags
-    FROM get_maps( $3::int[], $4, $5, $6, $7, 0, 0)
+    FROM get_maps( $5::int[], $6, $7, $1, $2, 0, 0)
 )
 SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.id, cte.user_id, cte.title, cte.type, cte.created_at, cte.last_updated_at, cte.last_updated_user_id, cte.is_private, cte.description, cte.width, cte.height, cte.thumbnail_image_id, cte.base_layer_image_id, cte.thumbnail_image_url, cte.entity_id, cte.module_id, cte.module_type, cte.module_type_id, cte.tags
 FROM cte
-ORDER BY id DESC
-LIMIT $2
-    OFFSET $1
+ORDER BY
+    CASE WHEN COALESCE($1::text, 'id') = 'id' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.id END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'id' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.id END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'title' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.title END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'title' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.title END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'type' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.type END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'type' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.type END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'width' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.width END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'width' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.width END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'height' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.height END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'height' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.height END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'created_at' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.created_at END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'created_at' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.created_at END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'last_updated_at' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.last_updated_at END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'last_updated_at' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.last_updated_at END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'is_private' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.is_private END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'id') = 'is_private' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.is_private END DESC NULLS LAST,
+    cte.id DESC
+LIMIT $4
+    OFFSET $3
 `
 
 type GetMapsParams struct {
+	OrderBy        sql.NullString `json:"order_by"`
+	OrderDirection sql.NullString `json:"order_direction"`
 	PageOffset     int32          `json:"page_offset"`
 	PageLimit      int32          `json:"page_limit"`
 	Tags           []int32        `json:"tags"`
 	ModuleID       sql.NullInt32  `json:"module_id"`
 	ModuleType     NullModuleType `json:"module_type"`
-	OrderBy        sql.NullString `json:"order_by"`
-	OrderDirection sql.NullString `json:"order_direction"`
 }
 
 type GetMapsRow struct {
@@ -702,13 +745,13 @@ type GetMapsRow struct {
 
 func (q *Queries) GetMaps(ctx context.Context, arg GetMapsParams) ([]GetMapsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getMaps,
+		arg.OrderBy,
+		arg.OrderDirection,
 		arg.PageOffset,
 		arg.PageLimit,
 		pq.Array(arg.Tags),
 		arg.ModuleID,
 		arg.ModuleType,
-		arg.OrderBy,
-		arg.OrderDirection,
 	)
 	if err != nil {
 		return nil, err
