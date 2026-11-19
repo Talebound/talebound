@@ -2,14 +2,11 @@ package maps
 
 import (
 	"context"
-	"database/sql"
 	db "github.com/the-medo/talebound-backend/db/sqlc"
 	"github.com/the-medo/talebound-backend/e"
 	"github.com/the-medo/talebound-backend/pb"
 	"github.com/the-medo/talebound-backend/validator"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -24,32 +21,9 @@ func (server *ServiceMaps) DeleteMapLayer(ctx context.Context, request *pb.Delet
 		return nil, err
 	}
 
-	mapLayer, err := server.Store.GetMapLayerByID(ctx, request.GetLayerId())
-	if err != nil {
-		return nil, err
+	if err := server.Store.DeleteMapLayerTx(ctx, request.GetMapId(), request.GetLayerId()); err != nil {
+		return nil, mapLayerError(err)
 	}
-	if mapLayer.Position == 1 {
-		return nil, status.Errorf(codes.PermissionDenied, "cannot delete main map layer!")
-	}
-
-	err = server.Store.DeleteMapPinsForMapLayer(ctx, sql.NullInt32{
-		Int32: request.GetLayerId(),
-		Valid: true,
-	})
-
-	err = server.Store.DeleteMapLayer(ctx, request.GetLayerId())
-	if err != nil {
-		return nil, err
-	}
-
-	err = server.Store.DecreaseMapLayerPositions(ctx, db.DecreaseMapLayerPositionsParams{
-		MapID:    mapLayer.MapID,
-		Position: mapLayer.Position,
-	})
-	if err != nil {
-		return nil, err
-	}
-
 	return &emptypb.Empty{}, nil
 }
 

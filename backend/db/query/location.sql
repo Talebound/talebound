@@ -13,7 +13,14 @@ SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.*
 FROM cte
-ORDER BY id DESC
+ORDER BY
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'id' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.id END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'id' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.id END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'name' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.name END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'name' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.name END DESC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE(sqlc.narg(order_by)::text, 'id') = 'description' AND COALESCE(UPPER(sqlc.narg(order_direction)::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    cte.id DESC
 LIMIT sqlc.arg(page_limit)
     OFFSET sqlc.arg(page_offset);
 
@@ -27,6 +34,9 @@ SELECT * FROM locations WHERE id = ANY(@location_ids::int[]);
 
 -- name: GetLocationById :one
 SELECT * FROM locations WHERE id = sqlc.arg(id);
+
+-- name: GetLocationForUpdate :one
+SELECT * FROM locations WHERE id = sqlc.arg(id) FOR UPDATE;
 
 -- name: GetViewLocationById :one
 SELECT * FROM view_locations WHERE id = sqlc.arg(id);

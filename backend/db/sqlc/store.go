@@ -9,6 +9,10 @@ import (
 // Store defines all functions to execute db queries and transactions
 type Store interface {
 	Querier
+	CreateLocationPostTx(ctx context.Context, locationID, userID int32) (Location, error)
+	CreateMapLayerTx(ctx context.Context, arg CreateMapLayerTxParams) (ViewMapLayer, error)
+	UpdateMapLayerTx(ctx context.Context, arg UpdateMapLayerTxParams) (ViewMapLayer, error)
+	DeleteMapLayerTx(ctx context.Context, mapID, layerID int32) error
 	CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error)
 	CreateWorldTx(ctx context.Context, arg CreateWorldTxParams) (CreateWorldTxResult, error)
 	CreateSystemTx(ctx context.Context, arg CreateSystemTxParams) (CreateSystemTxResult, error)

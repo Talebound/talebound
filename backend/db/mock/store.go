@@ -208,6 +208,21 @@ func (mr *MockStoreMockRecorder) CreateLocation(ctx, arg any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLocation", reflect.TypeOf((*MockStore)(nil).CreateLocation), ctx, arg)
 }
 
+// CreateLocationPostTx mocks base method.
+func (m *MockStore) CreateLocationPostTx(ctx context.Context, locationID, userID int32) (db.Location, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateLocationPostTx", ctx, locationID, userID)
+	ret0, _ := ret[0].(db.Location)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateLocationPostTx indicates an expected call of CreateLocationPostTx.
+func (mr *MockStoreMockRecorder) CreateLocationPostTx(ctx, locationID, userID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLocationPostTx", reflect.TypeOf((*MockStore)(nil).CreateLocationPostTx), ctx, locationID, userID)
+}
+
 // CreateMap mocks base method.
 func (m *MockStore) CreateMap(ctx context.Context, arg db.CreateMapParams) (db.Map, error) {
 	m.ctrl.T.Helper()
@@ -236,6 +251,21 @@ func (m *MockStore) CreateMapLayer(ctx context.Context, arg db.CreateMapLayerPar
 func (mr *MockStoreMockRecorder) CreateMapLayer(ctx, arg any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMapLayer", reflect.TypeOf((*MockStore)(nil).CreateMapLayer), ctx, arg)
+}
+
+// CreateMapLayerTx mocks base method.
+func (m *MockStore) CreateMapLayerTx(ctx context.Context, arg db.CreateMapLayerTxParams) (db.ViewMapLayer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMapLayerTx", ctx, arg)
+	ret0, _ := ret[0].(db.ViewMapLayer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateMapLayerTx indicates an expected call of CreateMapLayerTx.
+func (mr *MockStoreMockRecorder) CreateMapLayerTx(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMapLayerTx", reflect.TypeOf((*MockStore)(nil).CreateMapLayerTx), ctx, arg)
 }
 
 // CreateMapPin mocks base method.
@@ -735,6 +765,20 @@ func (m *MockStore) DeleteMapLayer(ctx context.Context, id int32) error {
 func (mr *MockStoreMockRecorder) DeleteMapLayer(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMapLayer", reflect.TypeOf((*MockStore)(nil).DeleteMapLayer), ctx, id)
+}
+
+// DeleteMapLayerTx mocks base method.
+func (m *MockStore) DeleteMapLayerTx(ctx context.Context, mapID, layerID int32) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMapLayerTx", ctx, mapID, layerID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMapLayerTx indicates an expected call of DeleteMapLayerTx.
+func (mr *MockStoreMockRecorder) DeleteMapLayerTx(ctx, mapID, layerID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMapLayerTx", reflect.TypeOf((*MockStore)(nil).DeleteMapLayerTx), ctx, mapID, layerID)
 }
 
 // DeleteMapLayersForMap mocks base method.
@@ -1555,6 +1599,21 @@ func (mr *MockStoreMockRecorder) GetLocationById(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLocationById", reflect.TypeOf((*MockStore)(nil).GetLocationById), ctx, id)
 }
 
+// GetLocationForUpdate mocks base method.
+func (m *MockStore) GetLocationForUpdate(ctx context.Context, id int32) (db.Location, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLocationForUpdate", ctx, id)
+	ret0, _ := ret[0].(db.Location)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLocationForUpdate indicates an expected call of GetLocationForUpdate.
+func (mr *MockStoreMockRecorder) GetLocationForUpdate(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLocationForUpdate", reflect.TypeOf((*MockStore)(nil).GetLocationForUpdate), ctx, id)
+}
+
 // GetLocations mocks base method.
 func (m *MockStore) GetLocations(ctx context.Context, arg db.GetLocationsParams) ([]db.GetLocationsRow, error) {
 	m.ctrl.T.Helper()
@@ -1628,6 +1687,21 @@ func (m *MockStore) GetMapById(ctx context.Context, id int32) (db.Map, error) {
 func (mr *MockStoreMockRecorder) GetMapById(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMapById", reflect.TypeOf((*MockStore)(nil).GetMapById), ctx, id)
+}
+
+// GetMapForUpdate mocks base method.
+func (m *MockStore) GetMapForUpdate(ctx context.Context, id int32) (db.Map, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMapForUpdate", ctx, id)
+	ret0, _ := ret[0].(db.Map)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMapForUpdate indicates an expected call of GetMapForUpdate.
+func (mr *MockStoreMockRecorder) GetMapForUpdate(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMapForUpdate", reflect.TypeOf((*MockStore)(nil).GetMapForUpdate), ctx, id)
 }
 
 // GetMapLayerByID mocks base method.
@@ -2748,6 +2822,21 @@ func (m *MockStore) UpdateMapLayer(ctx context.Context, arg db.UpdateMapLayerPar
 func (mr *MockStoreMockRecorder) UpdateMapLayer(ctx, arg any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMapLayer", reflect.TypeOf((*MockStore)(nil).UpdateMapLayer), ctx, arg)
+}
+
+// UpdateMapLayerTx mocks base method.
+func (m *MockStore) UpdateMapLayerTx(ctx context.Context, arg db.UpdateMapLayerTxParams) (db.ViewMapLayer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMapLayerTx", ctx, arg)
+	ret0, _ := ret[0].(db.ViewMapLayer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateMapLayerTx indicates an expected call of UpdateMapLayerTx.
+func (mr *MockStoreMockRecorder) UpdateMapLayerTx(ctx, arg any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMapLayerTx", reflect.TypeOf((*MockStore)(nil).UpdateMapLayerTx), ctx, arg)
 }
 
 // UpdateMapPin mocks base method.

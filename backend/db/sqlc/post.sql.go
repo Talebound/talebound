@@ -236,17 +236,29 @@ const getPosts = `-- name: GetPosts :many
 WITH cte AS (
     SELECT
         id, user_id, title, description, content, created_at, deleted_at, last_updated_at, last_updated_user_id, is_draft, is_private, thumbnail_img_id, thumbnail_img_url, entity_id, module_id, module_type, module_type_id, tags
-    FROM get_posts($3, $4, $5::int[], $6, $7, $8, $9, $10, 0, 0)
+    FROM get_posts($5, $6, $7::int[], $8, $9, $10, $1, $2, 0, 0)
 )
 SELECT
     CAST((SELECT count(*) FROM cte) as integer) as total_count,
     cte.id, cte.user_id, cte.title, cte.description, cte.content, cte.created_at, cte.deleted_at, cte.last_updated_at, cte.last_updated_user_id, cte.is_draft, cte.is_private, cte.thumbnail_img_id, cte.thumbnail_img_url, cte.entity_id, cte.module_id, cte.module_type, cte.module_type_id, cte.tags
 FROM cte
-LIMIT $2
-OFFSET $1
+ORDER BY
+    CASE WHEN COALESCE($1::text, 'created_at') = 'title' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.title END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'title' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.title END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'created_at' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.created_at END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'created_at' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.created_at END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'last_updated_at' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.last_updated_at END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'last_updated_at' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.last_updated_at END DESC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'ASC' THEN cte.description END ASC NULLS LAST,
+    CASE WHEN COALESCE($1::text, 'created_at') = 'description' AND COALESCE(UPPER($2::text), 'DESC') = 'DESC' THEN cte.description END DESC NULLS LAST,
+    cte.id DESC
+LIMIT $4
+OFFSET $3
 `
 
 type GetPostsParams struct {
+	OrderBy        sql.NullString `json:"order_by"`
+	OrderDirection sql.NullString `json:"order_direction"`
 	PageOffset     int32          `json:"page_offset"`
 	PageLimit      int32          `json:"page_limit"`
 	IsPrivate      sql.NullBool   `json:"is_private"`
@@ -255,8 +267,6 @@ type GetPostsParams struct {
 	UserID         sql.NullInt32  `json:"user_id"`
 	ModuleID       sql.NullInt32  `json:"module_id"`
 	ModuleType     NullModuleType `json:"module_type"`
-	OrderBy        sql.NullString `json:"order_by"`
-	OrderDirection sql.NullString `json:"order_direction"`
 }
 
 type GetPostsRow struct {
@@ -283,6 +293,8 @@ type GetPostsRow struct {
 
 func (q *Queries) GetPosts(ctx context.Context, arg GetPostsParams) ([]GetPostsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getPosts,
+		arg.OrderBy,
+		arg.OrderDirection,
 		arg.PageOffset,
 		arg.PageLimit,
 		arg.IsPrivate,
@@ -291,8 +303,6 @@ func (q *Queries) GetPosts(ctx context.Context, arg GetPostsParams) ([]GetPostsR
 		arg.UserID,
 		arg.ModuleID,
 		arg.ModuleType,
-		arg.OrderBy,
-		arg.OrderDirection,
 	)
 	if err != nil {
 		return nil, err
